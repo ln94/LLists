@@ -9,6 +9,7 @@
 #import "LAllListsViewController.h"
 #import "LAllListsViewCell.h"
 #import "LTableFooterView.h"
+#import "LSingleListViewController.h"
 
 @interface LAllListsViewController () <LTableViewCellDelegate, LAllListsViewCellDelegate>
 
@@ -25,6 +26,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    // Fetch Results Controller
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[List class]];
+    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    self.lists = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
+    [self.lists performFetch];
+    
     // Table View
     self.tableView.backgroundColor = C_WHITE;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -38,12 +45,6 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
-    // Fetch Results Controller
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[List class]];
-    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-    self.lists = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
-    [self.lists performFetch];
 }
 
 #pragma mark - UITableViewDataSource
@@ -130,6 +131,10 @@
 
 - (void)didSelectTableViewCell:(LAllListsViewCell *)cell {
     
+    // Open Single List screen
+    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:cell.list];
+//    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vc] animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

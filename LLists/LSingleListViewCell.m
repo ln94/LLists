@@ -74,6 +74,11 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     }
 }
 
+- (void)setItem:(Item *)item {
+    _item = item;
+    [self setText:item.text forEditingCell:NO];
+}
+
 #pragma mark - LDoneButtonDelegate
 
 - (void)didPressDoneButton:(LDoneButton *)button {

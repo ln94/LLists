@@ -15,7 +15,6 @@
     self = [super initWithFrame:rect_origin(frame.origin, s(kColorTagWidth, frame.size.height))];
     if (!self) return nil;
     
-    self.backgroundColor = C_RANDOM;
     self.alpha = 0.5;
 
     return self;

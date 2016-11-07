@@ -43,6 +43,8 @@
 	return keyPaths;
 }
 
+@dynamic color;
+
 @dynamic editing;
 
 - (BOOL)editingValue {
@@ -85,9 +87,23 @@
 
 @dynamic title;
 
+@dynamic items;
+
+- (NSMutableSet<Item*>*)itemsSet {
+	[self willAccessValueForKey:@"items"];
+
+	NSMutableSet<Item*> *result = (NSMutableSet<Item*>*)[self mutableSetValueForKey:@"items"];
+
+	[self didAccessValueForKey:@"items"];
+	return result;
+}
+
 @end
 
 @implementation ListAttributes 
++ (NSString *)color {
+	return @"color";
+}
 + (NSString *)editing {
 	return @"editing";
 }
@@ -96,6 +112,12 @@
 }
 + (NSString *)title {
 	return @"title";
+}
+@end
+
+@implementation ListRelationships 
++ (NSString *)items {
+	return @"items";
 }
 @end
 

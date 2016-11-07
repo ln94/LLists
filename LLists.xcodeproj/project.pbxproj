@@ -40,6 +40,8 @@
 		87F7466C1DD01EC200C6DF7C /* LSeparatorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7466B1DD01EC200C6DF7C /* LSeparatorButton.m */; };
 		87F746711DD01EE300C6DF7C /* LColorTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7466E1DD01EE300C6DF7C /* LColorTag.m */; };
 		87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746701DD01EE300C6DF7C /* LDoneButton.m */; };
+		87F746751DD0358F00C6DF7C /* _Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746741DD0358F00C6DF7C /* _Item.m */; };
+		87F746781DD0359900C6DF7C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746771DD0359900C6DF7C /* Item.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +83,10 @@
 		87F7466E1DD01EE300C6DF7C /* LColorTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LColorTag.m; sourceTree = "<group>"; };
 		87F7466F1DD01EE300C6DF7C /* LDoneButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDoneButton.h; sourceTree = "<group>"; };
 		87F746701DD01EE300C6DF7C /* LDoneButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDoneButton.m; sourceTree = "<group>"; };
+		87F746731DD0358F00C6DF7C /* _Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Item.h; path = Model/_Item.h; sourceTree = "<group>"; };
+		87F746741DD0358F00C6DF7C /* _Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Item.m; path = Model/_Item.m; sourceTree = "<group>"; };
+		87F746761DD0359900C6DF7C /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Item.h; path = Model/Item.h; sourceTree = "<group>"; };
+		87F746771DD0359900C6DF7C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Item.m; path = Model/Item.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,9 +122,9 @@
 			children = (
 				87F7461B1DD0150E00C6DF7C /* AppDelegate.h */,
 				87F7461C1DD0150E00C6DF7C /* AppDelegate.m */,
-				87F746661DD01E9700C6DF7C /* Utils */,
 				87F7465F1DD01E3000C6DF7C /* Managers */,
 				87F746531DD01DBA00C6DF7C /* Screens */,
+				87F746661DD01E9700C6DF7C /* Utils */,
 				87F746481DD01C8D00C6DF7C /* Model */,
 				87F746471DD01C8000C6DF7C /* Resources */,
 				87F746181DD0150E00C6DF7C /* Supporting Files */,
@@ -161,6 +167,8 @@
 		87F746491DD01CAC00C6DF7C /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				87F746761DD0359900C6DF7C /* Item.h */,
+				87F746771DD0359900C6DF7C /* Item.m */,
 				87F746391DD0179F00C6DF7C /* List.h */,
 				87F7463A1DD0179F00C6DF7C /* List.m */,
 			);
@@ -170,6 +178,8 @@
 		87F7464A1DD01CB400C6DF7C /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				87F746731DD0358F00C6DF7C /* _Item.h */,
+				87F746741DD0358F00C6DF7C /* _Item.m */,
 				87F746371DD0179F00C6DF7C /* _List.h */,
 				87F746381DD0179F00C6DF7C /* _List.m */,
 			);
@@ -179,8 +189,8 @@
 		87F746531DD01DBA00C6DF7C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				87F7465B1DD01E1000C6DF7C /* Single List */,
 				87F746541DD01DE300C6DF7C /* All Lists */,
+				87F7465B1DD01E1000C6DF7C /* Single List */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -328,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F746781DD0359900C6DF7C /* Item.m in Sources */,
 				87F746621DD01E6F00C6DF7C /* LSettingsManager.m in Sources */,
 				87F7463C1DD0179F00C6DF7C /* List.m in Sources */,
 				87F746461DD01B6C00C6DF7C /* LLists.xcdatamodeld in Sources */,
@@ -336,6 +347,7 @@
 				87F746511DD01DB500C6DF7C /* LAllListsViewCell.m in Sources */,
 				87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */,
 				87F746711DD01EE300C6DF7C /* LColorTag.m in Sources */,
+				87F746751DD0358F00C6DF7C /* _Item.m in Sources */,
 				87F746521DD01DB500C6DF7C /* LAllListsViewController.m in Sources */,
 				87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */,
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
@@ -522,6 +534,7 @@
 				87F746311DD0150E00C6DF7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		87F746331DD0175E00C6DF7C /* Build configuration list for PBXAggregateTarget "Mogenerator" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +543,7 @@
 				87F746351DD0175E00C6DF7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

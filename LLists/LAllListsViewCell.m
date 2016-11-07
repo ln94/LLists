@@ -29,7 +29,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    // Text View
+    // Text Field
     self.textField = [[UITextField alloc] initFullInSuperview:self.contentView insets:inset_bottom(kSeparatorHeight)];
     self.textField.font = F_TITLE;
     self.textField.textColor = C_MAIN_TEXT;
@@ -62,11 +62,14 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
 - (void)setList:(List *)list {
     _list = list;
     self.textField.text = list.title;
+    self.colorTag.backgroundColor = list.color;
 }
 
 #pragma mark - GR
 
 - (void)singleTapped {
+//    LOG(@"%@", self.colorTag.backgroundColor);
+    
     // Open list or finish editing
     if (self.delegate) {
         [self.delegate didSelectTableViewCell:self];

@@ -12,7 +12,9 @@
 
 @interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
 
-@property (nonatomic) NSMutableArray <NSString *> *text;
+@property (nonatomic, strong) List *list;
+
+@property (nonatomic) NSFetchedResultsController<Item *> *items;
 
 @property (nonatomic) UITextView *editingTextView;
 
@@ -20,13 +22,29 @@
 
 @implementation LSingleListViewController
 
+- (instancetype)initWithList:(List *)list {
+    self = [super init];
+    if (!self) return nil;
+    
+    self.list = list;
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.text = [NSMutableArray arrayWithArray:@[
-                  @"Hey cunt",
-                  @"Sup\nMotherfuckers\nY\nI\nO"
-                  ]];
+    // DEBUG:
+//    Item *item = [Item create];
+//    item.text = @"Sup cunts";
+//    [item addListsObject:self.list];
+    
+    // Fetch Results Controller
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[Item class]];
+    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    request.predicate = [NSPredicate predicateWithFormat:@"%@ IN lists" argumentArray:@[self.list]];
+    self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
+    [self.items performFetch];
     
     // Table View
     self.tableView.backgroundColor = C_WHITE;
@@ -50,12 +68,14 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.text.count;
+    return self.items.numberOfObjects;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LSingleListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LSingleListViewCell reuseIdentifier]];
-    [cell setText:self.text[indexPath.row] forEditingCell:(self.editingTextView.tag == indexPath.row)];
+    cell.item = [self.items objectAtIndexPath:indexPath];
+    
+//    [cell setText:self.text[indexPath.row] forEditingCell:(self.editingTextView.tag == indexPath.row)];
     
     return cell;
 }
@@ -63,18 +83,18 @@
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [LSingleListViewCell rowHeightForText:self.text[indexPath.row]];
+    return [LSingleListViewCell rowHeightForText:[self.items objectAtIndexPath:indexPath].text];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    LSingleListViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    self.editingTextView.frame = [cell textViewFrame];
-    self.editingTextView.tag = indexPath.row;
-    self.editingTextView.text = self.text[indexPath.row];
-    self.editingTextView.hidden = NO;
-    [self.editingTextView becomeFirstResponder];
+//    
+//    LSingleListViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//    
+//    self.editingTextView.frame = [cell textViewFrame];
+//    self.editingTextView.tag = indexPath.row;
+////    self.editingTextView.text = self.text[indexPath.row];
+//    self.editingTextView.hidden = NO;
+//    [self.editingTextView becomeFirstResponder];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -98,7 +118,7 @@
         return NO;
     }
     
-    self.text[textView.tag] = newText;
+//    self.text[textView.tag] = newText;
     
     CGFloat newHeight = [LSingleListViewCell rowHeightForText:newText];
     

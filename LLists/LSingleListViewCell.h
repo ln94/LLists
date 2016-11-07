@@ -12,6 +12,8 @@ static const CGFloat kTextContainerInsetY = 7;
 
 @interface LSingleListViewCell : LTableViewCell
 
+@property (nonatomic, strong) Item *item;
+
 + (NSString *)reuseIdentifier;
 
 + (CGFloat)rowHeightForText:(NSString *)text;

@@ -17,6 +17,8 @@
 #import "Model.h"
 #import "Constants.h"
 
+#import "AppDelegate.h"
+
 #import "LListsManager.h"
 #import "LSettingsManager.h"
 

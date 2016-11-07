@@ -10,5 +10,6 @@
 #define Model_h
 
 #import "List.h"
+#import "Item.h"
 
 #endif /* Model_h */

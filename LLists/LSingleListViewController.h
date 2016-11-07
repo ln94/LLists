@@ -10,4 +10,6 @@
 
 @interface LSingleListViewController : UITableViewController
 
+- (instancetype)initWithList:(List *)list;
+
 @end

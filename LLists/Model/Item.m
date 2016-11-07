@@ -1,12 +1,12 @@
-#import "Entity.h"
+#import "Item.h"
 
-@interface Entity ()
+@interface Item ()
 
 // Private interface goes here.
 
 @end
 
-@implementation Entity
+@implementation Item
 
 // Custom logic goes here.
 

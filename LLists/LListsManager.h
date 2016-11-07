@@ -12,6 +12,6 @@
 
 @interface LListsManager : NSObject <Singleton>
 
-- (void)createDefaultLists;
+- (void)createDefaultLists:(void (^)(BOOL success))completion;
 
 @end
