@@ -1,0 +1,23 @@
+//
+//  PrefixHeader.pch
+//  LLists
+//
+//  Created by Lana Shatonova on 7/11/16.
+//  Copyright © 2016 Lana. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import <RoamToolkit/RoamToolkit.h>
+
+#import "Model.h"
+#import "Constants.h"
+
+#import "LListsManager.h"
+#import "LSettingsManager.h"
+
+#endif /* PrefixHeader_pch */
