@@ -8,7 +8,7 @@
 
 #import "LSingleListViewController.h"
 #import "LSingleListViewCell.h"
-
+#import "LTextView.h"
 
 @interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
 
@@ -16,7 +16,7 @@
 
 @property (nonatomic) NSFetchedResultsController<Item *> *items;
 
-@property (nonatomic) UITextView *editingTextView;
+@property (nonatomic) LTextView *editingTextView;
 
 @end
 
@@ -48,19 +48,21 @@
     
     // Table View
     self.tableView.backgroundColor = C_WHITE;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     self.tableView.tableFooterView = [[UIView alloc] init];
+    
     [self.tableView registerClass:[LSingleListViewCell class] forCellReuseIdentifier:[LSingleListViewCell reuseIdentifier]];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
     //  Editing Text View
-    self.editingTextView = [[UITextView alloc] initInSuperview:self.view];
+    self.editingTextView = [[LTextView alloc] initInSuperview:self.view];
     self.editingTextView.tag = -1;
-    self.editingTextView.backgroundColor = C_CLEAR;
-    self.editingTextView.textColor = C_CLEAR;
+    self.editingTextView.backgroundColor = C_WHITE;
+    self.editingTextView.textColor = C_MAIN_TEXT;
     self.editingTextView.font = F_MAIN_TEXT;
-    self.editingTextView.textContainerInset = i(kTextContainerInsetY, kPaddingTiny, kTextContainerInsetY, 0);
     self.editingTextView.hidden = YES;
     self.editingTextView.delegate = self;
 }
@@ -75,8 +77,6 @@
     LSingleListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LSingleListViewCell reuseIdentifier]];
     cell.item = [self.items objectAtIndexPath:indexPath];
     
-//    [cell setText:self.text[indexPath.row] forEditingCell:(self.editingTextView.tag == indexPath.row)];
-    
     return cell;
 }
 
@@ -87,19 +87,21 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    LSingleListViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    
-//    self.editingTextView.frame = [cell textViewFrame];
-//    self.editingTextView.tag = indexPath.row;
-////    self.editingTextView.text = self.text[indexPath.row];
-//    self.editingTextView.hidden = NO;
-//    [self.editingTextView becomeFirstResponder];
+    
+    LSingleListViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    self.editingTextView.frame = [cell textViewFrame];
+    self.editingTextView.tag = indexPath.row;
+    self.editingTextView.text = cell.item.text;
+    self.editingTextView.hidden = NO;
+    [self.editingTextView becomeFirstResponder];
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [DataStore save];
+    
     [self.editingTextView resignFirstResponder];
     self.editingTextView.hidden = YES;
     
@@ -113,25 +115,14 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSString *newText = [textView.text stringByReplacingCharactersInRange:range withString:text];
+    [self.items objectAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]].text = newText;
     
-    if (newText.length >= kTextViewTextLengthMax) {
-        return NO;
-    }
-    
-//    self.text[textView.tag] = newText;
-    
-    CGFloat newHeight = [LSingleListViewCell rowHeightForText:newText];
-    
-    if (newHeight != self.editingTextView.height) {
-        // Update whole table
+    CGFloat newHeight = [(LTextView *)textView heightForText:newText];
+    if (newHeight != textView.height && newHeight <= kTextViewHeighthMax) {
+        // Update height
         self.editingTextView.height = newHeight;
         [self.tableView reloadData];
     }
-    else {
-        // Update only cell
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:textView.tag inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    
     return YES;
 }
 

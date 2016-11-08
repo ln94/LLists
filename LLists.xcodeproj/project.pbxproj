@@ -42,6 +42,7 @@
 		87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746701DD01EE300C6DF7C /* LDoneButton.m */; };
 		87F746751DD0358F00C6DF7C /* _Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746741DD0358F00C6DF7C /* _Item.m */; };
 		87F746781DD0359900C6DF7C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746771DD0359900C6DF7C /* Item.m */; };
+		87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7467A1DD1429800C6DF7C /* LTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,8 @@
 		87F746741DD0358F00C6DF7C /* _Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Item.m; path = Model/_Item.m; sourceTree = "<group>"; };
 		87F746761DD0359900C6DF7C /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Item.h; path = Model/Item.h; sourceTree = "<group>"; };
 		87F746771DD0359900C6DF7C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Item.m; path = Model/Item.m; sourceTree = "<group>"; };
+		87F746791DD1429800C6DF7C /* LTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTextView.h; sourceTree = "<group>"; };
+		87F7467A1DD1429800C6DF7C /* LTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +234,8 @@
 		87F746661DD01E9700C6DF7C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				87F746791DD1429800C6DF7C /* LTextView.h */,
+				87F7467A1DD1429800C6DF7C /* LTextView.m */,
 				87F746631DD01E9200C6DF7C /* LTableFooterView.h */,
 				87F746641DD01E9200C6DF7C /* LTableFooterView.m */,
 				87F746671DD01EAB00C6DF7C /* LTableViewCell.h */,
@@ -352,6 +357,7 @@
 				87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */,
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
 				87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */,
+				87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */,
 				87F7465E1DD01E2C00C6DF7C /* LListsManager.m in Sources */,
 				87F7461A1DD0150E00C6DF7C /* main.m in Sources */,
 				87F7466C1DD01EC200C6DF7C /* LSeparatorButton.m in Sources */,

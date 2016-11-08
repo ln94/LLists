@@ -13,7 +13,7 @@
 
 @interface LAllListsViewController () <LTableViewCellDelegate, LAllListsViewCellDelegate>
 
-@property (nonatomic) NSFetchedResultsController *lists;
+@property (nonatomic) NSFetchedResultsController<List *> *lists;
 
 @property (nonatomic) LTableFooterView *tableFooter;
 
@@ -133,7 +133,6 @@
     
     // Open Single List screen
     LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:cell.list];
-//    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vc] animated:YES completion:nil];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

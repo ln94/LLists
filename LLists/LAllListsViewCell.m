@@ -44,7 +44,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     self.colorTag = [[LColorTag alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:inset_left(kPaddingSmall)];
     
     // GR
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapped)];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapped:)];
     singleTap.numberOfTapsRequired = 1;
     [self addGestureRecognizer:singleTap];
     
@@ -67,7 +67,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
 
 #pragma mark - GR
 
-- (void)singleTapped {
+- (void)singleTapped:(UITapGestureRecognizer *)gr {
 //    LOG(@"%@", self.colorTag.backgroundColor);
     
     // Open list or finish editing
@@ -98,6 +98,10 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     
     self.list.editing = NO;
     [DataStore save];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    return YES;
 }
 
 @end

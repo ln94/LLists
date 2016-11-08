@@ -8,8 +8,6 @@
 
 #import "LTableViewCell.h"
 
-static const CGFloat kTextContainerInsetY = 7;
-
 @interface LSingleListViewCell : LTableViewCell
 
 @property (nonatomic, strong) Item *item;
@@ -19,6 +17,5 @@ static const CGFloat kTextContainerInsetY = 7;
 + (CGFloat)rowHeightForText:(NSString *)text;
 
 - (CGRect)textViewFrame;
-- (void)setText:(NSString *)text forEditingCell:(BOOL)editing;
 
 @end

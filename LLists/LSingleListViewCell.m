@@ -8,12 +8,13 @@
 
 #import "LSingleListViewCell.h"
 #import "LDoneButton.h"
+#import "LTextView.h"
 
 static NSString *const reuseIdentifier = @"singleListViewCell";
 
 @interface LSingleListViewCell () <LDoneButtonDelegate>
 
-@property (nonatomic) UITextView *textView;
+@property (nonatomic) LTextView *textView;
 @property (nonatomic) LDoneButton *doneButton;
 
 @end
@@ -28,17 +29,16 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.contentView edge:UIViewEdgeLeft length:kDoneButtonLength + kPaddingMed];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.contentView edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
     self.doneButton.delegate = self;
     
     // Text View
-    self.textView = [[UITextView alloc] initFullInSuperview:self.contentView insets:inset_left(self.doneButton.right)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self.contentView insets:i(0, 0, kSeparatorHeight, kTextFieldLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
     self.textView.textColor = C_MAIN_TEXT;
     self.textView.textAlignment = NSTextAlignmentLeft;
-    self.textView.textContainerInset = i(kTextContainerInsetY, kPaddingTiny, kTextContainerInsetY, 0);
     self.textView.userInteractionEnabled = NO;
-    
+
     return self;
 }
 
@@ -48,35 +48,16 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    return [cell textViewHeightForText:text] + 2 * kTextContainerInsetY;
-}
-
-- (CGFloat)textViewHeightForText:(NSString *)text {
-    
-    if (text.isEmpty)
-        text = @"A";
-    
-    CGRect rect = [text boundingRectWithSize:s(self.textView.width + 20, 1000) options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) attributes:@{NSFontAttributeName:F_MAIN_TEXT} context:nil];
-    
-    return rect.size.height;
+    return [cell.textView heightForText:text] + kSeparatorHeight;
 }
 
 - (CGRect)textViewFrame {
     return rect_origin(p(self.textView.left, self.frame.origin.y), self.textView.size);
 }
 
-- (void)setText:(NSString *)text forEditingCell:(BOOL)editing {
-    self.textView.text = text;
-    
-    // If editing, scroll to bottom
-    if (self.textView.contentSize.height > self.textView.height) {
-        [self.textView setContentOffset:p(0, editing ? self.textView.contentSize.height - self.textView.height : 0) animated:(editing ? NO : YES)];
-    }
-}
-
 - (void)setItem:(Item *)item {
     _item = item;
-    [self setText:item.text forEditingCell:NO];
+    self.textView.text = item.text;
 }
 
 #pragma mark - LDoneButtonDelegate
