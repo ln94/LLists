@@ -10,4 +10,6 @@
 
 @interface LColorTag : UIButton
 
+@property (nonatomic) UIColor *color;
+
 @end

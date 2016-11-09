@@ -7,15 +7,20 @@
 //
 
 #import "LAllListsViewController.h"
-#import "LAllListsViewCell.h"
-#import "LTableFooterView.h"
+#import "LListTableViewCell.h"
 #import "LSingleListViewController.h"
+#import "LHeaderView.h"
+#import "LAddListView.h"
 
-@interface LAllListsViewController () <LTableViewCellDelegate, LAllListsViewCellDelegate>
+@interface LAllListsViewController () <UITableViewDataSource, UITableViewDelegate, LHeaderViewDelegate>
 
 @property (nonatomic) NSFetchedResultsController<List *> *lists;
 
-@property (nonatomic) LTableFooterView *tableFooter;
+@property (nonatomic) UITableView *tableView;
+
+@property (nonatomic) LHeaderView *header;
+
+@property (nonatomic) LAddListView *addListView;
 
 @property (nonatomic) List *movingList;
 
@@ -32,19 +37,24 @@
     self.lists = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
     [self.lists performFetch];
     
+    // Header
+    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight - kSeparatorHeight insets:inset_top(LLists.statusBarHeight)];
+    self.header.delegate = self;
+    
     // Table View
+    self.tableView = [[UITableView alloc] initFullInSuperview:self.view insets:inset_top(self.header.bottom)];
     self.tableView.backgroundColor = C_WHITE;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight = kAllListsViewCellHeight;
     
-    self.tableFooter = [[LTableFooterView alloc] initWithSize:s(self.tableView.width, kAllListsViewCellHeight - kSeparatorHeight)];
-    self.tableFooter.textField.font = F_TITLE;
-    self.tableView.tableFooterView = self.tableFooter;
-    
-    [self.tableView registerClass:[LAllListsViewCell class] forCellReuseIdentifier:[LAllListsViewCell reuseIdentifier]];
+    [self.tableView registerClass:[LListTableViewCell class] forCellReuseIdentifier:[LListTableViewCell reuseIdentifier]];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    // Add List View
+    self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight insets:inset_top(self.header.top)];
+    self.addListView.hidden = YES;
 }
 
 #pragma mark - UITableViewDataSource
@@ -58,9 +68,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    LAllListsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LAllListsViewCell reuseIdentifier]];
+    LListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LListTableViewCell reuseIdentifier]];
     cell.list = [self.lists objectAtIndexPath:indexPath];
-    cell.delegate = self;
+//    cell.delegate = self;
     
     if (cell.list == self.movingList) {
         cell.alpha = 0.5;
@@ -78,11 +88,11 @@
 
 #pragma mark - LTableViewCellDelegate
 
-- (void)tableViewCell:(LTableViewCell *)cell didPressSeparator:(LSeparatorButton *)separator {
-    // Add empty cell between
-}
-
-- (void)tableViewCell:(LTableViewCell *)cell longPressed:(UILongPressGestureRecognizer *)longPress {
+//- (void)tableViewCell:(LTableViewCell *)cell didPressSeparator:(LSeparatorButton *)separator {
+//    // Add empty cell between
+//}
+//
+//- (void)tableViewCell:(LTableViewCell *)cell longPressed:(UILongPressGestureRecognizer *)longPress {
     // Move cell in the list
 //    switch (longPress.state) {
 //            
@@ -124,16 +134,21 @@
 //        default:
 //            break;
 //    }
-}
-
+//}
 
 #pragma mark - LAllListsViewCellDelegate
 
-- (void)didSelectTableViewCell:(LAllListsViewCell *)cell {
+//- (void)didSelectTableViewCell:(LAllListsViewCell *)cell {
+//    
+//    // Open Single List screen
+//    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:cell.list];
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
+
+#pragma mark - LHeaderViewDelegate
+
+- (void)didPressAddButton {
     
-    // Open Single List screen
-    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:cell.list];
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

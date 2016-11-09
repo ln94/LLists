@@ -17,5 +17,7 @@
 
 @property (nonatomic, readonly) UIViewController *topViewController;
 
+@property (nonatomic) CGFloat statusBarHeight;
+
 @end
 

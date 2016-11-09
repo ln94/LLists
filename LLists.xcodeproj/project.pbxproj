@@ -43,6 +43,10 @@
 		87F746751DD0358F00C6DF7C /* _Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746741DD0358F00C6DF7C /* _Item.m */; };
 		87F746781DD0359900C6DF7C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746771DD0359900C6DF7C /* Item.m */; };
 		87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7467A1DD1429800C6DF7C /* LTextView.m */; };
+		87F746851DD2C2C800C6DF7C /* LHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746841DD2C2C800C6DF7C /* LHeaderView.m */; };
+		87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746871DD2D10800C6DF7C /* LAddListView.m */; };
+		87F7468B1DD2D20600C6DF7C /* LListCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7468A1DD2D20600C6DF7C /* LListCellView.m */; };
+		87F7468F1DD2D3DA00C6DF7C /* LListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +94,14 @@
 		87F746771DD0359900C6DF7C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Item.m; path = Model/Item.m; sourceTree = "<group>"; };
 		87F746791DD1429800C6DF7C /* LTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTextView.h; sourceTree = "<group>"; };
 		87F7467A1DD1429800C6DF7C /* LTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTextView.m; sourceTree = "<group>"; };
+		87F746831DD2C2C800C6DF7C /* LHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHeaderView.h; sourceTree = "<group>"; };
+		87F746841DD2C2C800C6DF7C /* LHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHeaderView.m; sourceTree = "<group>"; };
+		87F746861DD2D10800C6DF7C /* LAddListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAddListView.h; sourceTree = "<group>"; };
+		87F746871DD2D10800C6DF7C /* LAddListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAddListView.m; sourceTree = "<group>"; };
+		87F746891DD2D20600C6DF7C /* LListCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListCellView.h; sourceTree = "<group>"; };
+		87F7468A1DD2D20600C6DF7C /* LListCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListCellView.m; sourceTree = "<group>"; };
+		87F7468D1DD2D3DA00C6DF7C /* LListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListTableViewCell.h; sourceTree = "<group>"; };
+		87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +137,7 @@
 			children = (
 				87F7461B1DD0150E00C6DF7C /* AppDelegate.h */,
 				87F7461C1DD0150E00C6DF7C /* AppDelegate.m */,
+				87F7464B1DD01D3C00C6DF7C /* Constants.h */,
 				87F7465F1DD01E3000C6DF7C /* Managers */,
 				87F746531DD01DBA00C6DF7C /* Screens */,
 				87F746661DD01E9700C6DF7C /* Utils */,
@@ -148,7 +161,6 @@
 		87F746471DD01C8000C6DF7C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				87F7464B1DD01D3C00C6DF7C /* Constants.h */,
 				87F746271DD0150E00C6DF7C /* Assets.xcassets */,
 				87F746291DD0150E00C6DF7C /* LaunchScreen.storyboard */,
 				87F746401DD019B000C6DF7C /* RoamToolkit.framework */,
@@ -203,8 +215,7 @@
 			children = (
 				87F7464F1DD01DB500C6DF7C /* LAllListsViewController.h */,
 				87F746501DD01DB500C6DF7C /* LAllListsViewController.m */,
-				87F7464D1DD01DB500C6DF7C /* LAllListsViewCell.h */,
-				87F7464E1DD01DB500C6DF7C /* LAllListsViewCell.m */,
+				87F7468C1DD2D3A000C6DF7C /* Cells */,
 			);
 			name = "All Lists";
 			sourceTree = "<group>";
@@ -234,6 +245,8 @@
 		87F746661DD01E9700C6DF7C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				87F746831DD2C2C800C6DF7C /* LHeaderView.h */,
+				87F746841DD2C2C800C6DF7C /* LHeaderView.m */,
 				87F746791DD1429800C6DF7C /* LTextView.h */,
 				87F7467A1DD1429800C6DF7C /* LTextView.m */,
 				87F746631DD01E9200C6DF7C /* LTableFooterView.h */,
@@ -248,6 +261,21 @@
 				87F746701DD01EE300C6DF7C /* LDoneButton.m */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		87F7468C1DD2D3A000C6DF7C /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				87F7464D1DD01DB500C6DF7C /* LAllListsViewCell.h */,
+				87F7464E1DD01DB500C6DF7C /* LAllListsViewCell.m */,
+				87F746861DD2D10800C6DF7C /* LAddListView.h */,
+				87F746871DD2D10800C6DF7C /* LAddListView.m */,
+				87F746891DD2D20600C6DF7C /* LListCellView.h */,
+				87F7468A1DD2D20600C6DF7C /* LListCellView.m */,
+				87F7468D1DD2D3DA00C6DF7C /* LListTableViewCell.h */,
+				87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,6 +376,7 @@
 				87F7463C1DD0179F00C6DF7C /* List.m in Sources */,
 				87F746461DD01B6C00C6DF7C /* LLists.xcdatamodeld in Sources */,
 				87F746651DD01E9200C6DF7C /* LTableFooterView.m in Sources */,
+				87F7468F1DD2D3DA00C6DF7C /* LListTableViewCell.m in Sources */,
 				87F7463B1DD0179F00C6DF7C /* _List.m in Sources */,
 				87F746511DD01DB500C6DF7C /* LAllListsViewCell.m in Sources */,
 				87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */,
@@ -356,9 +385,12 @@
 				87F746521DD01DB500C6DF7C /* LAllListsViewController.m in Sources */,
 				87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */,
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
+				87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */,
 				87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */,
 				87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */,
 				87F7465E1DD01E2C00C6DF7C /* LListsManager.m in Sources */,
+				87F7468B1DD2D20600C6DF7C /* LListCellView.m in Sources */,
+				87F746851DD2C2C800C6DF7C /* LHeaderView.m in Sources */,
 				87F7461A1DD0150E00C6DF7C /* main.m in Sources */,
 				87F7466C1DD01EC200C6DF7C /* LSeparatorButton.m in Sources */,
 				87F746691DD01EAB00C6DF7C /* LTableViewCell.m in Sources */,

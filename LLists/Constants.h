@@ -25,10 +25,16 @@ static const CGFloat kPaddingMed = 20;
 
 // Item Sizes
 static const CGFloat kAllListsViewCellHeight = 43;
-static const CGFloat kSeparatorHeight = 10;
+
+static const CGFloat kSeparatorHeight = 7;
+
 static const CGFloat kDoneButtonLength = 20;
+
 static const CGFloat kColorTagWidth = 15;
+
 static const CGFloat kTextFieldLeftViewWidth = 36;
 static const CGFloat kTextViewHeighthMax = 300;
+
+static const CGFloat kHeaderViewHeight = 35;
 
 #endif

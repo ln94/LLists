@@ -21,11 +21,13 @@
     //DEBUG:
 //    SettingsManager.firstTimeUse = YES;
     
+    self.statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    
     if (SettingsManager.firstTimeUse) {
         [self firstTimeLaunch];
     }
     else {
-        [self launchWithRootViewController:[[UINavigationController alloc] initWithRootViewController:[[LAllListsViewController alloc] init]]];
+        [self launchWithRootViewController:[[LAllListsViewController alloc] init]];
     }
     
     return YES;
