@@ -35,9 +35,6 @@
 		87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746581DD01E0A00C6DF7C /* LSingleListViewController.m */; };
 		87F7465E1DD01E2C00C6DF7C /* LListsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7465D1DD01E2C00C6DF7C /* LListsManager.m */; };
 		87F746621DD01E6F00C6DF7C /* LSettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746611DD01E6F00C6DF7C /* LSettingsManager.m */; };
-		87F746651DD01E9200C6DF7C /* LTableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746641DD01E9200C6DF7C /* LTableFooterView.m */; };
-		87F746691DD01EAB00C6DF7C /* LTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746681DD01EAB00C6DF7C /* LTableViewCell.m */; };
-		87F7466C1DD01EC200C6DF7C /* LSeparatorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7466B1DD01EC200C6DF7C /* LSeparatorButton.m */; };
 		87F746711DD01EE300C6DF7C /* LColorTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7466E1DD01EE300C6DF7C /* LColorTag.m */; };
 		87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746701DD01EE300C6DF7C /* LDoneButton.m */; };
 		87F746751DD0358F00C6DF7C /* _Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746741DD0358F00C6DF7C /* _Item.m */; };
@@ -46,7 +43,7 @@
 		87F746851DD2C2C800C6DF7C /* LHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746841DD2C2C800C6DF7C /* LHeaderView.m */; };
 		87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746871DD2D10800C6DF7C /* LAddListView.m */; };
 		87F7468B1DD2D20600C6DF7C /* LListCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7468A1DD2D20600C6DF7C /* LListCellView.m */; };
-		87F7468F1DD2D3DA00C6DF7C /* LListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */; };
+		87F746921DD3B38800C6DF7C /* LSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746911DD3B38800C6DF7C /* LSeparator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,12 +75,6 @@
 		87F7465D1DD01E2C00C6DF7C /* LListsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListsManager.m; sourceTree = "<group>"; };
 		87F746601DD01E6F00C6DF7C /* LSettingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSettingsManager.h; sourceTree = "<group>"; };
 		87F746611DD01E6F00C6DF7C /* LSettingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSettingsManager.m; sourceTree = "<group>"; };
-		87F746631DD01E9200C6DF7C /* LTableFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTableFooterView.h; sourceTree = "<group>"; };
-		87F746641DD01E9200C6DF7C /* LTableFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTableFooterView.m; sourceTree = "<group>"; };
-		87F746671DD01EAB00C6DF7C /* LTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTableViewCell.h; sourceTree = "<group>"; };
-		87F746681DD01EAB00C6DF7C /* LTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTableViewCell.m; sourceTree = "<group>"; };
-		87F7466A1DD01EC200C6DF7C /* LSeparatorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSeparatorButton.h; sourceTree = "<group>"; };
-		87F7466B1DD01EC200C6DF7C /* LSeparatorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSeparatorButton.m; sourceTree = "<group>"; };
 		87F7466D1DD01EE300C6DF7C /* LColorTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LColorTag.h; sourceTree = "<group>"; };
 		87F7466E1DD01EE300C6DF7C /* LColorTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LColorTag.m; sourceTree = "<group>"; };
 		87F7466F1DD01EE300C6DF7C /* LDoneButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDoneButton.h; sourceTree = "<group>"; };
@@ -100,8 +91,8 @@
 		87F746871DD2D10800C6DF7C /* LAddListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAddListView.m; sourceTree = "<group>"; };
 		87F746891DD2D20600C6DF7C /* LListCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListCellView.h; sourceTree = "<group>"; };
 		87F7468A1DD2D20600C6DF7C /* LListCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListCellView.m; sourceTree = "<group>"; };
-		87F7468D1DD2D3DA00C6DF7C /* LListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListTableViewCell.h; sourceTree = "<group>"; };
-		87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListTableViewCell.m; sourceTree = "<group>"; };
+		87F746901DD3B38800C6DF7C /* LSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSeparator.h; sourceTree = "<group>"; };
+		87F746911DD3B38800C6DF7C /* LSeparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSeparator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				87F746271DD0150E00C6DF7C /* Assets.xcassets */,
-				87F746291DD0150E00C6DF7C /* LaunchScreen.storyboard */,
 				87F746401DD019B000C6DF7C /* RoamToolkit.framework */,
+				87F746291DD0150E00C6DF7C /* LaunchScreen.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -249,12 +240,8 @@
 				87F746841DD2C2C800C6DF7C /* LHeaderView.m */,
 				87F746791DD1429800C6DF7C /* LTextView.h */,
 				87F7467A1DD1429800C6DF7C /* LTextView.m */,
-				87F746631DD01E9200C6DF7C /* LTableFooterView.h */,
-				87F746641DD01E9200C6DF7C /* LTableFooterView.m */,
-				87F746671DD01EAB00C6DF7C /* LTableViewCell.h */,
-				87F746681DD01EAB00C6DF7C /* LTableViewCell.m */,
-				87F7466A1DD01EC200C6DF7C /* LSeparatorButton.h */,
-				87F7466B1DD01EC200C6DF7C /* LSeparatorButton.m */,
+				87F746901DD3B38800C6DF7C /* LSeparator.h */,
+				87F746911DD3B38800C6DF7C /* LSeparator.m */,
 				87F7466D1DD01EE300C6DF7C /* LColorTag.h */,
 				87F7466E1DD01EE300C6DF7C /* LColorTag.m */,
 				87F7466F1DD01EE300C6DF7C /* LDoneButton.h */,
@@ -272,8 +259,6 @@
 				87F746871DD2D10800C6DF7C /* LAddListView.m */,
 				87F746891DD2D20600C6DF7C /* LListCellView.h */,
 				87F7468A1DD2D20600C6DF7C /* LListCellView.m */,
-				87F7468D1DD2D3DA00C6DF7C /* LListTableViewCell.h */,
-				87F7468E1DD2D3DA00C6DF7C /* LListTableViewCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -375,8 +360,6 @@
 				87F746621DD01E6F00C6DF7C /* LSettingsManager.m in Sources */,
 				87F7463C1DD0179F00C6DF7C /* List.m in Sources */,
 				87F746461DD01B6C00C6DF7C /* LLists.xcdatamodeld in Sources */,
-				87F746651DD01E9200C6DF7C /* LTableFooterView.m in Sources */,
-				87F7468F1DD2D3DA00C6DF7C /* LListTableViewCell.m in Sources */,
 				87F7463B1DD0179F00C6DF7C /* _List.m in Sources */,
 				87F746511DD01DB500C6DF7C /* LAllListsViewCell.m in Sources */,
 				87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */,
@@ -392,8 +375,7 @@
 				87F7468B1DD2D20600C6DF7C /* LListCellView.m in Sources */,
 				87F746851DD2C2C800C6DF7C /* LHeaderView.m in Sources */,
 				87F7461A1DD0150E00C6DF7C /* main.m in Sources */,
-				87F7466C1DD01EC200C6DF7C /* LSeparatorButton.m in Sources */,
-				87F746691DD01EAB00C6DF7C /* LTableViewCell.m in Sources */,
+				87F746921DD3B38800C6DF7C /* LSeparator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,6 +17,7 @@
 #define C_MAIN_TEXT C_GRAY(0.15)
 #define C_SEPARATOR C_GRAY(0.86)
 #define C_ICON C_GRAY(0.83)
+#define C_SHADOW C_BLACK_ALPHA(0.25)
 
 // Padding
 static const CGFloat kPaddingTiny = 5;
@@ -36,5 +37,12 @@ static const CGFloat kTextFieldLeftViewWidth = 36;
 static const CGFloat kTextViewHeighthMax = 300;
 
 static const CGFloat kHeaderViewHeight = 35;
+static const CGFloat KHeaderViewAddButtonWidth = 41;
+
+// Animation
+
+static const UIViewAnimationOptions showingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;
+static const UIViewAnimationOptions hidingAnimation = UIViewAnimationOptionTransitionFlipFromRight;
+
 
 #endif

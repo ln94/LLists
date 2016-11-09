@@ -7,7 +7,7 @@
 //
 
 #import "LListCellView.h"
-#import "LSeparatorButton.h"
+#import "LSeparator.h"
 
 @implementation LListCellView
 
@@ -24,13 +24,13 @@
     self.textField.returnKeyType = UIReturnKeyDone;
     
     self.textField.leftViewMode = UITextFieldViewModeAlways;
-    self.textField.leftView = [[UIView alloc] initWithSize:s(kTextFieldLeftViewWidth, self.height)];
+    self.textField.leftView = [[UIView alloc] initWithSize:s(kTextFieldLeftViewWidth, self.textField.height)];
     
     // Color Tag
     self.colorTag = [[LColorTag alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:inset_left(kPaddingSmall)];
     
     // Separator
-    LSeparatorButton *separator = [[LSeparatorButton alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
+    LSeparator *separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
 
     // Long Press
 //    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressed:)];

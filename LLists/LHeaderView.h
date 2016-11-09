@@ -8,18 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol LHeaderViewDelegate;
-
 @interface LHeaderView : UIView
 
-@property (nonatomic) id<LHeaderViewDelegate> delegate;
-
-@end
-
-
-@protocol LHeaderViewDelegate <NSObject>
-
-@required
-- (void)didPressAddButton;
+@property (nonatomic) UIButton *addButton;
 
 @end

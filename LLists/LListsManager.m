@@ -54,8 +54,28 @@
     }];
 }
 
-- (void)setListsColors {
+- (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position {
+    [self changeListIndexesFrom:position by:1];
     
+    List *list = [List create];
+    list.title = title;
+    list.index = [NSNumber numberWithInteger:position];
+    list.color = C_RANDOM;
+    
+    [DataStore save];
+}
+
+- (void)changeListIndexesFrom:(NSInteger)index by:(NSInteger)value {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[List class]];
+    request.predicate = [NSPredicate predicateWithFormat:@"index >= %@", [NSNumber numberWithInteger:index]];
+    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    
+    NSFetchRequestController *frc = [NSFetchRequestController controllerWithFetchRequest:request];
+    [frc performFetch];
+    
+    for (List *object in frc.fetchedObjects) {
+        object.index = [NSNumber numberWithInteger:(object.indexValue + value)];
+    }
 }
 
 @end

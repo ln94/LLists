@@ -10,4 +10,6 @@
 
 @interface LAddListView : LListCellView
 
+- (void)setShowingColorTag:(BOOL)showing completion:(void (^)())completion;
+
 @end

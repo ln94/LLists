@@ -6,23 +6,12 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import "LTableViewCell.h"
+#import <UIKit/UIKit.h>
 
-@protocol LAllListsViewCellDelegate;
-
-@interface LAllListsViewCell : LTableViewCell
+@interface LAllListsViewCell : UITableViewCell
 
 @property (nonatomic) List *list;
 
-@property (nonatomic) id<LTableViewCellDelegate, LAllListsViewCellDelegate> delegate;
-
 + (NSString *)reuseIdentifier;
-
-@end
-
-@protocol LAllListsViewCellDelegate <NSObject>
-
-@required
-- (void)didSelectTableViewCell:(LAllListsViewCell *)cell;
 
 @end

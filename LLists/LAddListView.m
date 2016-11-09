@@ -26,6 +26,7 @@ static const CGFloat duration = 0.4;
     // Text Field
     NSDictionary *attributes = @{ NSForegroundColorAttributeName:C_SEPARATOR };
     self.textField.attributedPlaceholder = [NSAttributedString attributedStringWithAttributes:attributes format:@"New List"];
+    self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     // Plus Icon
     self.plusIconButton = [[UIButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kPaddingTiny, kPaddingSmall)];
@@ -33,7 +34,7 @@ static const CGFloat duration = 0.4;
                     NSForegroundColorAttributeName:C_ICON };
     NSAttributedString *plusIconTitle = [NSAttributedString attributedStringWithAttributes:attributes format:@"+"];
     [self.plusIconButton setAttributedTitle:plusIconTitle forState:UIControlStateNormal];
-    [self.plusIconButton addTarget:self action:@selector(didPressPlusIconButton)];
+    self.plusIconButton.userInteractionEnabled = NO;
     
     // Color Tag
     self.colorTag.backgroundColor = C_ICON;
@@ -44,24 +45,15 @@ static const CGFloat duration = 0.4;
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+- (void)setShowingColorTag:(BOOL)showing completion:(void (^)())completion {
+    UIView *fromView = showing ? self.plusIconButton : self.colorTag;
+    UIView *toView = showing ? self.colorTag : self.plusIconButton;
     
-    self.colorTag.hidden = NO;
-    [UIView transitionFromView:self.plusIconButton toView:self.colorTag duration:duration options:UIViewAnimationOptionTransitionFlipFromLeft completion:^(BOOL finished) {
-        self.plusIconButton.hidden = YES;
+    toView.hidden = NO;
+    [UIView transitionFromView:fromView toView:toView duration:duration options:(showing ? showingAnimation : hidingAnimation) completion:^(BOOL finished) {
+        fromView.hidden = YES;
+        if (completion) completion();
     }];
-    
-    return YES;
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    
-    self.plusIconButton.hidden = NO;
-    [UIView transitionFromView:self.colorTag toView:self.plusIconButton duration:duration options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
-        self.colorTag.hidden = YES;
-    }];
-    
-    return YES;
 }
 
 @end

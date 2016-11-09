@@ -6,9 +6,9 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import "LTableViewCell.h"
+#import <UIKit/UIKit.h>
 
-@interface LSingleListViewCell : LTableViewCell
+@interface LSingleListViewCell : UITableViewCell
 
 @property (nonatomic, strong) Item *item;
 
