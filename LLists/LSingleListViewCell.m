@@ -7,14 +7,14 @@
 //
 
 #import "LSingleListViewCell.h"
+#import "LItemCellView.h"
 #import "LDoneButton.h"
-#import "LTextView.h"
 
 static NSString *const reuseIdentifier = @"singleListViewCell";
 
 @interface LSingleListViewCell () <LDoneButtonDelegate>
 
-@property (nonatomic) LTextView *textView;
+@property (nonatomic) LItemCellView *itemView;
 @property (nonatomic) LDoneButton *doneButton;
 
 @end
@@ -22,23 +22,19 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 @implementation LSingleListViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
-    
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (!self) return nil;
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    // Item View
+    self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView];
+    self.itemView.textView.userInteractionEnabled = NO;
+    
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.contentView edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth];
     self.doneButton.delegate = self;
     
-    // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self.contentView insets:i(0, 0, kSeparatorHeight, kTextFieldLeftViewWidth)];
-    self.textView.font = F_MAIN_TEXT;
-    self.textView.textColor = C_MAIN_TEXT;
-    self.textView.textAlignment = NSTextAlignmentLeft;
-    self.textView.userInteractionEnabled = NO;
-
     return self;
 }
 
@@ -48,16 +44,16 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    return [cell.textView heightForText:text] + kSeparatorHeight;
+    return [cell.itemView.textView heightForText:text];
 }
 
 - (CGRect)textViewFrame {
-    return rect_origin(p(self.textView.left, self.frame.origin.y), self.textView.size);
+    return rect_origin(p(self.itemView.textView.left, self.frame.origin.y), self.itemView.textView.size);
 }
 
 - (void)setItem:(Item *)item {
     _item = item;
-    self.textView.text = item.text;
+    self.itemView.textView.text = item.text;
 }
 
 #pragma mark - LDoneButtonDelegate

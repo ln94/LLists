@@ -6,9 +6,9 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "LTableViewController.h"
 
-@interface LSingleListViewController : UITableViewController
+@interface LSingleListViewController : LTableViewController
 
 - (instancetype)initWithList:(List *)list;
 

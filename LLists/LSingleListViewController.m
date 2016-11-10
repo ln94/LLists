@@ -1,14 +1,15 @@
 //
 //  LSingleListViewController.m
-//  
+//  LLists
 //
 //  Created by Lana Shatonova on 29/10/16.
-//
+//  Copyright © 2016 Lana. All rights reserved.
 //
 
 #import "LSingleListViewController.h"
 #import "LSingleListViewCell.h"
-#import "LTextView.h"
+#import "LAddItemView.h"
+
 
 @interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
 
@@ -16,9 +17,12 @@
 
 @property (nonatomic) NSFetchedResultsController<Item *> *items;
 
+@property (nonatomic) LAddItemView *addItemView;
+
 @property (nonatomic) LTextView *editingTextView;
 
 @end
+
 
 @implementation LSingleListViewController
 
@@ -34,10 +38,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // DEBUG:
-//    Item *item = [Item create];
-//    item.text = @"Sup cunts";
-//    [item addListsObject:self.list];
+    // Header
+    [self.header.addButton addTarget:self action:@selector(didPressAddButton)];
+    [self.header.backButton addTarget:self action:@selector(didPressBackButton)];
     
     // Fetch Results Controller
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[Item class]];
@@ -47,24 +50,34 @@
     [self.items performFetch];
     
     // Table View
-    self.tableView.backgroundColor = C_WHITE;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    self.tableView.tableFooterView = [[UIView alloc] init];
-    
     [self.tableView registerClass:[LSingleListViewCell class] forCellReuseIdentifier:[LSingleListViewCell reuseIdentifier]];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
     //  Editing Text View
-    self.editingTextView = [[LTextView alloc] initInSuperview:self.view];
+    self.editingTextView = [[LTextView alloc] initInSuperview:self.tableView];
     self.editingTextView.tag = -1;
     self.editingTextView.backgroundColor = C_WHITE;
     self.editingTextView.textColor = C_MAIN_TEXT;
     self.editingTextView.font = F_MAIN_TEXT;
     self.editingTextView.hidden = YES;
     self.editingTextView.delegate = self;
+    
+    // Add Item View
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight];
+    self.addItemView.hidden = YES;
+    
+    // GR
+    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideAddItemView)];
+    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
+    [self.shadowView addGestureRecognizer:swipeUp];
+    
+    
+    [self.view bringSubviewToFront:self.header];
+}
+
+- (void)didPressBackButton {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -109,6 +122,51 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.editingTextView.tag inSection:0];
     self.editingTextView.tag = -1;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+#pragma mark - Add List View
+
+- (void)didPressAddButton {
+    [self showAddItemView];
+}
+
+- (void)showAddItemView {
+    // Hide Add Button
+    [self.header setShowingAddButton:NO];
+    
+    // Show Add Item View
+    self.addItemView.hidden = NO;
+    
+    [UIView animateWithDuration:addViewAnimationDuration animations:^{
+        self.addItemView.top = self.header.bottom;
+        self.shadowView.hidden = NO;
+        
+    } completion:^(BOOL finished) {
+        // Show keyboard
+        [self.addItemView.textView becomeFirstResponder];
+        
+        [self.addItemView setShowingPlusButton:YES completion:nil];
+    }];
+}
+
+- (void)hideAddItemView {
+    // Hide keyboard
+    [self.addItemView.textView resignFirstResponder];
+    
+    // Hide Add Item View
+    [self.addItemView setShowingPlusButton:NO completion:^{
+        [UIView animateWithDuration:addViewAnimationDuration animations:^{
+            self.addItemView.bottom = self.header.bottom;
+            self.shadowView.hidden = YES;
+            
+        } completion:^(BOOL finished) {
+            self.addItemView.hidden = YES;
+        }];
+        
+        // Show Add button
+        [self.header setShowingAddButton:YES];
+    }];
 }
 
 #pragma mark - UITextViewDelegate

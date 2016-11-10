@@ -6,8 +6,8 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "LTableViewController.h"
 
-@interface LAllListsViewController : UIViewController
+@interface LAllListsViewController : LTableViewController
 
 @end

@@ -10,6 +10,8 @@
 
 @interface LTextView : UITextView
 
+@property (nonatomic, readonly) CGFloat minHeight;
+
 - (CGFloat)heightForText:(NSString *)text;
 
 @end

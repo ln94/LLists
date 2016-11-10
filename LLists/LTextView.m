@@ -6,6 +6,8 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
+static const CGFloat kTextContainerInsetBottom = 7;
+
 #import "LTextView.h"
 
 @implementation LTextView
@@ -14,10 +16,12 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    self.textContainerInset = insets_y(7);
+    self.returnKeyType = UIReturnKeyDefault;
+    self.textContainerInset = i(kPaddingTiny, 0, kTextContainerInsetBottom, 0);
     
     return self;
 }
+
 - (CGFloat)heightForText:(NSString *)text {
     
     CGFloat boundingWidth = self.width - self.textContainerInset.left - self.textContainerInset.right - kPaddingSmall;
@@ -29,6 +33,10 @@
     CGFloat height = rect.size.height + self.textContainerInset.top + self.textContainerInset.bottom;
 //    LOG(@"--- %.2f", height);
     return height;
+}
+
+- (CGFloat)minHeight {
+    return [self heightForText:@"A"];
 }
 
 @end

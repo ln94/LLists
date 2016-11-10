@@ -7,15 +7,15 @@
 //
 
 #import "LAddListView.h"
-#import "LColorTag.h"
+#import "LIconButton.h"
 
-static const CGFloat duration = 0.4;
 
 @interface LAddListView ()
 
-@property (nonatomic) UIButton *plusIconButton;
+@property (nonatomic) LIconButton *plusButton;
 
 @end
+
 
 @implementation LAddListView
 
@@ -29,12 +29,9 @@ static const CGFloat duration = 0.4;
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     // Plus Icon
-    self.plusIconButton = [[UIButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kPaddingTiny, kPaddingSmall)];
-    attributes = @{ NSFontAttributeName:[UIFont systemFontOfSize:28],
-                    NSForegroundColorAttributeName:C_ICON };
-    NSAttributedString *plusIconTitle = [NSAttributedString attributedStringWithAttributes:attributes format:@"+"];
-    [self.plusIconButton setAttributedTitle:plusIconTitle forState:UIControlStateNormal];
-    self.plusIconButton.userInteractionEnabled = NO;
+    self.plusButton = [[LIconButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kPaddingTiny, kPaddingSmall)];
+    self.plusButton.icon = LIconPlus;
+    self.plusButton.userInteractionEnabled = NO;
     
     // Color Tag
     self.colorTag.backgroundColor = C_ICON;
@@ -46,11 +43,11 @@ static const CGFloat duration = 0.4;
 #pragma mark - UITextFieldDelegate
 
 - (void)setShowingColorTag:(BOOL)showing completion:(void (^)())completion {
-    UIView *fromView = showing ? self.plusIconButton : self.colorTag;
-    UIView *toView = showing ? self.colorTag : self.plusIconButton;
+    UIView *fromView = showing ? self.plusButton : self.colorTag;
+    UIView *toView = showing ? self.colorTag : self.plusButton;
     
     toView.hidden = NO;
-    [UIView transitionFromView:fromView toView:toView duration:duration options:(showing ? showingAnimation : hidingAnimation) completion:^(BOOL finished) {
+    [UIView transitionFromView:fromView toView:toView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) completion:^(BOOL finished) {
         fromView.hidden = YES;
         if (completion) completion();
     }];

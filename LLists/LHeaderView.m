@@ -20,18 +20,29 @@
     
     self.backgroundColor = C_WHITE;
     
-    // Plus Icon
-    self.addButton = [[UIButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:KHeaderViewAddButtonWidth insets:inset_bottom(kPaddingTiny)];
-    NSDictionary *attributes = @{ NSFontAttributeName:[UIFont systemFontOfSize:28],
-                    NSForegroundColorAttributeName:C_ICON };
-    NSAttributedString *addButtonTitle = [NSAttributedString attributedStringWithAttributes:attributes format:@"+"];
-    [self.addButton setAttributedTitle:addButtonTitle forState:UIControlStateNormal];
+    // Add Button
+    self.addButton = [[LIconButton alloc] initCenterInSuperview:self size:s(KHeaderViewAddButtonWidth, self.height) insets:inset_bottom(kPaddingTiny)];
+    self.addButton.icon = LIconPlus;
+    
+    self.showingAddButton = YES;
+    
+    // Back Button
+    self.backButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:KHeaderViewAddButtonWidth insets:inset_bottom(kPaddingTiny)];
+    self.backButton.icon = LIconBack;
     
     // Separator
     UIView *separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:1];
     separator.backgroundColor = C_SEPARATOR;
     
     return self;
+}
+
+- (void)setShowingAddButton:(BOOL)showingAddButton {
+    _showingAddButton = showingAddButton;
+    
+    [UIView transitionWithView:self.addButton duration:plusButtonAnimationDuration options:(showingAddButton ? showingAnimation : hidingAnimation) animations:^{
+        self.addButton.hidden = !showingAddButton;
+    } completion:nil];
 }
 
 @end

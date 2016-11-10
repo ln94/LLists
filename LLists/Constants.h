@@ -40,9 +40,11 @@ static const CGFloat kHeaderViewHeight = 35;
 static const CGFloat KHeaderViewAddButtonWidth = 41;
 
 // Animation
+static const CGFloat addViewAnimationDuration = 0.3;
+static const CGFloat plusButtonAnimationDuration = 0.4;
+static const CGFloat viewControllerTransitionDuration = 0.3;
 
 static const UIViewAnimationOptions showingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;
 static const UIViewAnimationOptions hidingAnimation = UIViewAnimationOptionTransitionFlipFromRight;
-
 
 #endif

@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LIconButton.h"
 
 @interface LHeaderView : UIView
 
-@property (nonatomic) UIButton *addButton;
+@property (nonatomic) LIconButton *addButton;
+@property (nonatomic) BOOL showingAddButton;
+
+@property (nonatomic) LIconButton *backButton;
 
 @end
