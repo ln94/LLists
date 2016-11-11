@@ -26,7 +26,7 @@
     self.backgroundColor = C_WHITE;
     
     // Plus Button
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kCellLeftViewWidth];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
@@ -50,7 +50,7 @@
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
     CGFloat newHeigth = self.textView.height + by + kSeparatorBottomLineHeight;
-    self.height = newHeigth <= kSingleListViewCellMinHeight ? kSingleListViewCellMinHeight : newHeigth;
+    self.height = newHeigth <= kSingleListCellMinHeight ? kSingleListCellMinHeight : newHeigth;
     
     [self.plusButton centerInSuperview];
     self.plusButton.x = 0;

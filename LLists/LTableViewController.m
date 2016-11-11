@@ -27,7 +27,7 @@
     self.transitioningDelegate = self.transition;
     
     // Header
-    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kHeaderViewHeight insets:inset_top(LLists.statusBarHeight)];
+    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kHeaderViewHeight];
     
     // Table View
     self.tableView = [[UITableView alloc] initFullInSuperview:self.view insets:inset_top(self.header.bottom)];

@@ -16,11 +16,11 @@
     if (!self) return nil;
     
     // Delete Button
-    self.deleteButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:20 insets:i(0, kPaddingSmall, kSeparatorHeight, 0)];
+    self.deleteButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:i(0, kPaddingTiny, kSeparatorHeight, 0)];
     self.deleteButton.icon = LIconCross;
-    
+//    self.deleteButton.backgroundColor = C_RANDOM;
     // Edit Button
-    self.editButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:45 insets:inset_bottom(kSeparatorHeight)];
+    self.editButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:inset_bottom(kSeparatorHeight)];
     self.editButton.right = self.deleteButton.left;
     self.editButton.icon = LIconCircle;
     

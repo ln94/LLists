@@ -65,7 +65,7 @@
     self.editingTextView.lDelegate = self;
     
     // Add Item View
-    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListViewCellMinHeight+kSeparatorBottomLineHeight insets:inset_top(LLists.statusBarHeight)];
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListCellMinHeight+kSeparatorBottomLineHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
     
     // GR

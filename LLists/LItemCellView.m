@@ -17,7 +17,7 @@
     self.backgroundColor = C_CLEAR;
     
     // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorBottomLineHeight, kCellLeftViewWidth)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorBottomLineHeight, kSingleListCellLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
     
     // Separator

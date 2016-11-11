@@ -27,27 +27,30 @@ static const CGFloat kPaddingSmall = 12;
 static const CGFloat kPaddingMed = 20;
 
 // Item Sizes
-static const CGFloat kAllListsViewCellHeight = 47;
-static const CGFloat kSingleListViewCellMinHeight = 43;
+static const CGFloat kAllListsCellHeight = 47;
+static const CGFloat kAllListsCellLeftViewWidth = 36;
+
+static const CGFloat kSingleListCellMinHeight = 43;
+static const CGFloat kSingleListCellLeftViewWidth = 43;
 
 static const CGFloat kSeparatorTopLineHeight = 0.75;
 static const CGFloat kSeparatorBottomLineHeight = 0.25;
 static const CGFloat kSeparatorHeight = 7;
 
-static const CGFloat kDoneButtonLength = 20;
+static const CGFloat kIconHeight = 18;
 
 static const CGFloat kColorTagWidth = 15;
 
-static const CGFloat kCellLeftViewWidth = 36;
+static const CGFloat kDoneButtonLength = 20;
+
 static const CGFloat kTextViewHeighthMax = 300;
 
-static const CGFloat kHeaderViewHeight = 50;
-static const CGFloat kHeaderViewMiddleButtonWidth = 60;
-static const CGFloat kHeaderViewSideButtonWidth = 75;
-static const CGFloat kHeaderViewSideButtonInset = 15;
+static const CGFloat kHeaderViewHeight = 70;
+static const CGFloat kHeaderViewButtonWidth = 85;
+static const CGFloat kHeaderViewButtonHeight = 50;
 
 static const CGFloat kRightSwipeViewWidth = 100;
-static const CGFloat kSwipeViewIconButtonWidth = 30;
+static const CGFloat kSwipeViewIconButtonWidth = 50;
 
 // Animation
 static const CGFloat addViewAnimationDuration = 0.3;

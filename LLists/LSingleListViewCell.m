@@ -35,7 +35,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.rightSwipeView = [[UIView alloc] init];
     
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kCellLeftViewWidth insets:inset_left(2)];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth insets:inset_left(2)];
     self.doneButton.delegate = self;
     
     // Text View
@@ -51,7 +51,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
     CGFloat height = [cell.itemView.textView heightForText:text] + kSeparatorBottomLineHeight;
-    return height >= kSingleListViewCellMinHeight ? height : kSingleListViewCellMinHeight + kSeparatorBottomLineHeight;
+    return height >= kSingleListCellMinHeight ? height : kSingleListCellMinHeight + kSeparatorBottomLineHeight;
 }
 
 - (CGRect)getTextViewFrame {

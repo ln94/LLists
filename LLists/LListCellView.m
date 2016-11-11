@@ -20,7 +20,7 @@
     self.colorTag = [[LColorTag alloc] initInSuperview:self edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kSeparatorHeight, kPaddingSmall)];
     
     // Text Field
-    self.textField = [[LTextField alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorHeight, kCellLeftViewWidth)];
+    self.textField = [[LTextField alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorHeight, kAllListsCellLeftViewWidth)];
     self.textField.font = F_TITLE;
     
     // Separator

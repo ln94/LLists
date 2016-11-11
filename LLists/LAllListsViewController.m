@@ -44,7 +44,7 @@
     self.lists.delegate = self;
     
     // Table View
-    self.tableView.rowHeight = kAllListsViewCellHeight;
+    self.tableView.rowHeight = kAllListsCellHeight;
     [self.tableView registerClass:[LAllListsViewCell class] forCellReuseIdentifier:[LAllListsViewCell reuseIdentifier]];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -56,7 +56,7 @@
     self.emptyView.text = @"List of Lists is empty";
     
     // Add List View
-    self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight insets:inset_top(LLists.statusBarHeight)];
+    self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsCellHeight insets:inset_top(LLists.statusBarHeight)];
     self.addListView.hidden = YES;
     self.addListView.textField.delegate = self;
     

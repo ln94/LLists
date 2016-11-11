@@ -6,8 +6,15 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-static const CGFloat kLength = 13.5;
 #import "LIconButton.h"
+
+
+@interface LIconButton ()
+
+@property (nonatomic) UIButton *iconView;
+
+@end
+
 
 @implementation LIconButton
 
@@ -17,6 +24,10 @@ static const CGFloat kLength = 13.5;
     
     self.backgroundColor = C_CLEAR;
 //    self.backgroundColor = C_RANDOM;
+    
+    // Icon View
+    self.iconView = [[UIButton alloc] initFullInSuperview:self];
+    self.iconView.userInteractionEnabled = NO;
     
     return self;
 }
@@ -46,28 +57,35 @@ static const CGFloat kLength = 13.5;
     }
 }
 
+- (void)moveIcon:(LMoveDirection)direction by:(CGFloat)by {
+    
+    self.iconView.x += direction == LMoveDirectionLeft ? -by : by;
+}
+
+
+#pragma mark - Draw
 
 - (void)drawPlus {
     CGFloat lineWidth = 1.8;
-    CGFloat lineLength = kLength + 3;
+    CGFloat lineLength = kIconHeight;
     
-    UIView *line1 = [[UIView alloc] initCenterInSuperview:self size:s(lineWidth, lineLength)];
+    UIView *line1 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineWidth, lineLength)];
     line1.backgroundColor = C_ICON;
     
-    UIView *line2 = [[UIView alloc] initCenterInSuperview:self size:s(lineLength, lineWidth)];
+    UIView *line2 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineLength, lineWidth)];
     line2.backgroundColor = C_ICON;
 }
 
 - (void)drawBack {
     CGFloat lineWidth = 2;
-    CGFloat lineLength = kLength;
+    CGFloat lineLength = kIconHeight - 2.5;
     
-    UIView *line1 = [[UIView alloc] initCenterInSuperview:self size:s(lineWidth, lineLength)];
+    UIView *line1 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineWidth, lineLength)];
     line1.backgroundColor = C_ICON;
     line1.bottom = self.height/2 + 3;
     line1.rotation = M_PI_4;
     
-    UIView *line2 = [[UIView alloc] initCenterInSuperview:self size:s(lineWidth, lineLength)];
+    UIView *line2 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineWidth, lineLength)];
     line2.backgroundColor = C_ICON;
     line2.top = self.height/2 - 3;
     line2.rotation = -M_PI_4;
@@ -75,9 +93,9 @@ static const CGFloat kLength = 13.5;
 
 - (void)drawCircle {
     CGFloat lineWidth = 1.8;
-    CGFloat width = kLength + 4;
+    CGFloat width = kIconHeight;
     
-    UIView *circle = [[UIView alloc] initCenterInSuperview:self size:size_square(width)];
+    UIView *circle = [[UIView alloc] initCenterInSuperview:self.iconView size:size_square(width)];
     circle.backgroundColor = C_CLEAR;
     circle.layer.borderColor = C_ICON.CGColor;
     circle.layer.borderWidth = lineWidth;
@@ -85,18 +103,16 @@ static const CGFloat kLength = 13.5;
 }
 
 - (void)drawCross {
-    UIButton *fakeButton = [[UIButton alloc] initFullInSuperview:self];
-    
     CGFloat lineWidth = 2;
-    CGFloat lineLength = kLength + 6;
+    CGFloat lineLength = kIconHeight + 2.5;
     
-    UIView *line1 = [[UIView alloc] initCenterInSuperview:fakeButton size:s(lineWidth, lineLength)];
+    UIView *line1 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineWidth, lineLength)];
     line1.backgroundColor = C_ICON;
     
-    UIView *line2 = [[UIView alloc] initCenterInSuperview:fakeButton size:s(lineLength, lineWidth)];
+    UIView *line2 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineLength, lineWidth)];
     line2.backgroundColor = C_ICON;
 
-    fakeButton.rotation = M_PI_4;
+    self.iconView.rotation = M_PI_4;
 }
 
 @end

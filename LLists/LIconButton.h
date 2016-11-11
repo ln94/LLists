@@ -15,8 +15,15 @@ typedef NS_ENUM(NSInteger, LIcon) {
     LIconCross
 };
 
+typedef NS_ENUM(NSInteger, LMoveDirection) {
+    LMoveDirectionLeft = 0,
+    LMoveDirectionRight
+};
+
 @interface LIconButton : UIButton
 
 @property (nonatomic) LIcon icon;
+
+- (void)moveIcon:(LMoveDirection)direction by:(CGFloat)by;
 
 @end

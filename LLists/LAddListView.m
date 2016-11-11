@@ -29,7 +29,7 @@
     self.textField.placeholder = @"New List";
     
     // Plus Icon
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kCellLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kAllListsCellLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
