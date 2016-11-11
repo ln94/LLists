@@ -10,17 +10,42 @@ static const CGFloat kTextContainerInsetBottom = 7;
 
 #import "LTextView.h"
 
+@interface LTextView () <UITextViewDelegate>
+
+@property (nonatomic) UILabel *placeholderLabel;
+
+@end
+
 @implementation LTextView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
+    self.backgroundColor = C_CLEAR;
+    
     self.returnKeyType = UIReturnKeyDefault;
     self.textContainerInset = i(kPaddingTiny, 0, kTextContainerInsetBottom, 0);
+    self.delegate = self;
+    
+    // Placeholder
+    self.placeholderLabel = [[UILabel alloc] initInSuperview:self];
+    self.placeholderLabel.textColor = C_SEPARATOR;
     
     return self;
 }
+
+#pragma mark - Placeholder
+
+- (void)setPlaceholder:(NSString *)placeholder {
+    _placeholder = placeholder;
+    
+    [self.placeholderLabel setEdge:UIViewEdgeTop length:[self minHeight] insets:inset_left(kPaddingTiny)];
+    self.placeholderLabel.font = self.font;
+    self.placeholderLabel.text = placeholder;
+}
+
+#pragma mark - Height
 
 - (CGFloat)heightForText:(NSString *)text {
     
@@ -37,6 +62,28 @@ static const CGFloat kTextContainerInsetBottom = 7;
 
 - (CGFloat)minHeight {
     return [self heightForText:@"A"];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSString *newText = [self.text stringByReplacingCharactersInRange:range withString:text];
+    self.placeholderLabel.hidden = !newText.isEmpty;
+    
+    if ([self.lDelegate respondsToSelector:@selector(textViewShouldChangeText:to:)]) {
+        [self.lDelegate textViewShouldChangeText:self to:newText];
+    }
+    
+    CGFloat newHeight = [self heightForText:newText];
+    if (newHeight != self.height && newHeight <= kTextViewHeighthMax) {
+        // Update height
+        if (self.lDelegate) {
+            [self.lDelegate textViewShouldChangeHeight:self by:newHeight - self.height];
+        }
+        
+        self.height = newHeight;
+    }
+    return YES;
 }
 
 @end

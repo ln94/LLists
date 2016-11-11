@@ -44,7 +44,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    return [cell.itemView.textView heightForText:text];
+    return [cell.itemView.textView heightForText:text] + 0.1;
 }
 
 - (CGRect)textViewFrame {

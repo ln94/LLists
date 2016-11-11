@@ -12,13 +12,17 @@
 #import "LSingleListViewController.h"
 
 
-@interface LAllListsViewController () <UITextFieldDelegate>
+@interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LSwipeCellDelegate>
 
 @property (nonatomic) NSFetchedResultsController<List *> *lists;
 
 @property (nonatomic) LAddListView *addListView;
 
 @property (nonatomic) List *movingList;
+
+@property (nonatomic) LSwipeCell *swipedCell;
+
+@property (nonatomic) UIAlertController *deleteListAlert;
 
 @end
 
@@ -37,6 +41,7 @@
     request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     self.lists = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
     [self.lists performFetch];
+    self.lists.delegate = self;
     
     // Table View
     self.tableView.rowHeight = kAllListsViewCellHeight;
@@ -45,9 +50,21 @@
     self.tableView.delegate = self;
     
     // Add List View
-    self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight insets:inset_top(self.header.top - kSeparatorHeight)];
+    self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight insets:inset_top(LLists.statusBarHeight)];
     self.addListView.hidden = YES;
     self.addListView.textField.delegate = self;
+    
+    // Delete List Alert
+    self.deleteListAlert = [UIAlertController alertControllerWithTitle:@"Delete List" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self unswipeCell];
+    }];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list completion:nil];
+        [self unswipeCell];
+    }];
+    [self.deleteListAlert addAction:cancelAction];
+    [self.deleteListAlert addAction:deleteAction];
     
     // GR
     UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideAddListView)];
@@ -56,6 +73,15 @@
     
     
     [self.view bringSubviewToFront:self.header];
+}
+
+#pragma mark - Actions
+
+- (void)unswipeCell {
+    if (self.swipedCell) {
+        self.swipedCell.swiped = NO;
+        self.swipedCell = nil;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -71,28 +97,40 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LAllListsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LAllListsViewCell reuseIdentifier]];
     cell.list = [self.lists objectAtIndexPath:indexPath];
-
+    cell.delegate = self;
+    
     return cell;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Open Single List screen
-    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:[self.lists objectAtIndexPath:indexPath]];
-    [self presentViewController:vc animated:YES completion:nil];
-}
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    // Open Single List screen
+//    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:[self.lists objectAtIndexPath:indexPath]];
+//    [self presentViewController:vc animated:YES completion:nil];
+//}
 
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // Hide keyboard
     [self.tableView endEditing:YES];
     
+    // Hide swiped view
+    [self unswipeCell];
+    
+    // Open Add List view if scrolled at the top
     if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
         [self showAddListView];
     }
 }
 
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView reloadData];
+}
 
 #pragma mark - Add List View
 
@@ -160,8 +198,8 @@
             self.addListView.textField.text = @"";
             
             // Update table view
-            [self.lists performFetch];
-            [self.tableView reloadData];
+//            [self.lists performFetch];
+//            [self.tableView reloadData];
         }
     }
     
@@ -169,7 +207,19 @@
 }
 
 
-#pragma mark - LTableViewCellDelegate
+#pragma mark - LSwipeCellDelegate
+
+- (void)didSwipeCell:(LSwipeCell *)cell {
+    // Hide previously swiped cell
+    [self unswipeCell];
+    self.swipedCell = cell.swiped ? cell : nil;
+}
+
+- (void)didPressDeleteButtonForCell:(LSwipeCell *)cell {
+    // Show alert
+    self.deleteListAlert.message = string(@"Are you sure you want to delete list '%@'?", ((LAllListsViewCell *)self.swipedCell).list.title);
+    [self presentViewController:self.deleteListAlert animated:YES completion:nil];
+}
 
 //- (void)tableViewCell:(LTableViewCell *)cell didPressSeparator:(LSeparatorButton *)separator {
 //    // Add empty cell between

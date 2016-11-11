@@ -54,6 +54,8 @@
     }];
 }
 
+#pragma mark - List
+
 - (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position {
     [self changeListIndexesFrom:position by:1];
     
@@ -61,8 +63,12 @@
     list.title = title;
     list.index = [NSNumber numberWithInteger:position];
     list.color = C_RANDOM;
+}
+
+- (void)deleteList:(List *)list completion:(void (^)(BOOL))completion {
+    [self changeListIndexesFrom:[list.index integerValue]+1 by:-1];
     
-    [DataStore save];
+    [list destroy];
 }
 
 - (void)changeListIndexesFrom:(NSInteger)index by:(NSInteger)value {

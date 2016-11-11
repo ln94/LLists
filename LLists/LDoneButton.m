@@ -31,7 +31,7 @@
     
     CGFloat kFilledCircleLength = kDoneButtonLength - 6;
     self.filledCircle = [[UIView alloc] initCenterInSuperview:self.blankCircle size:size_square(kFilledCircleLength)];
-    self.filledCircle.backgroundColor = C_DARK_GRAY;
+    self.filledCircle.backgroundColor = C_ICON;
     self.filledCircle.layer.cornerRadius = kFilledCircleLength / 2;
     self.filledCircle.layer.borderWidth = 0;
     self.filledCircle.hidden = YES;

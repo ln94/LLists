@@ -11,7 +11,7 @@
 #import "LAddItemView.h"
 
 
-@interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate>
+@interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, LTextViewDelegate>
 
 @property (nonatomic, strong) List *list;
 
@@ -47,6 +47,7 @@
     request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     request.predicate = [NSPredicate predicateWithFormat:@"%@ IN lists" argumentArray:@[self.list]];
     self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
+    self.items.delegate = self;
     [self.items performFetch];
     
     // Table View
@@ -54,17 +55,21 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    // Empty View
+    self.emptyView.text = @"Your List is empty";
+    
     //  Editing Text View
     self.editingTextView = [[LTextView alloc] initInSuperview:self.tableView];
+    self.editingTextView.backgroundColor = C_WHITE;
     self.editingTextView.tag = -1;
     self.editingTextView.backgroundColor = C_WHITE;
     self.editingTextView.textColor = C_MAIN_TEXT;
     self.editingTextView.font = F_MAIN_TEXT;
     self.editingTextView.hidden = YES;
-    self.editingTextView.delegate = self;
+    self.editingTextView.lDelegate = self;
     
     // Add Item View
-    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight];
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight + kSeparatorLineHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
     
     // GR
@@ -72,13 +77,31 @@
     swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
     [self.shadowView addGestureRecognizer:swipeUp];
     
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didPressBackButton)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
     
+    // Views rearrangement
     [self.view bringSubviewToFront:self.header];
+    
+    if (!self.items.numberOfObjects) {
+        self.emptyView.hidden = NO;
+    }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (!self.items.numberOfObjects) {
+        run_delayed(0.2, ^{
+            [self showAddItemView];
+        });
+    }
+}
 - (void)didPressBackButton {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 #pragma mark - UITableViewDataSource
 
@@ -110,7 +133,16 @@
     [self.editingTextView becomeFirstResponder];
 }
 
+
 #pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.tableView setEditing:NO];
+    
+    if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
+        [self showAddItemView];
+    }
+}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [DataStore save];
@@ -122,6 +154,14 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.editingTextView.tag inSection:0];
     self.editingTextView.tag = -1;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView reloadData];
+    self.emptyView.hidden = self.items.numberOfObjects;
 }
 
 
@@ -169,19 +209,15 @@
     }];
 }
 
-#pragma mark - UITextViewDelegate
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    NSString *newText = [textView.text stringByReplacingCharactersInRange:range withString:text];
-    [self.items objectAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]].text = newText;
-    
-    CGFloat newHeight = [(LTextView *)textView heightForText:newText];
-    if (newHeight != textView.height && newHeight <= kTextViewHeighthMax) {
-        // Update height
-        self.editingTextView.height = newHeight;
-        [self.tableView reloadData];
-    }
-    return YES;
+#pragma mark - LTextViewDelegate
+
+- (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text{
+    [self.items objectAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]].text = text;
+}
+
+- (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
+    [self.tableView reloadData];
 }
 
 @end

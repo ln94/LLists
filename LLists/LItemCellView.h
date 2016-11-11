@@ -12,5 +12,6 @@
 @interface LItemCellView : UIView
 
 @property (nonatomic) LTextView *textView;
+@property (nonatomic) UIView *separator;
 
 @end

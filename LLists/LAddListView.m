@@ -23,13 +23,15 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
+    self.backgroundColor = C_WHITE;
+    
     // Text Field
     NSDictionary *attributes = @{ NSForegroundColorAttributeName:C_SEPARATOR };
     self.textField.attributedPlaceholder = [NSAttributedString attributedStringWithAttributes:attributes format:@"New List"];
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     // Plus Icon
-    self.plusButton = [[LIconButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kPaddingTiny, kPaddingSmall)];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:inset_left(kPaddingSmall)];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     

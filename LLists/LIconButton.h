@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger, LIcon) {
     LIconPlus = 0,
     LIconBack,
-    LIconCircle
+    LIconCircle,
+    LIconCross
 };
 
 @interface LIconButton : UIButton

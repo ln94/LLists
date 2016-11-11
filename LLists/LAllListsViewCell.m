@@ -8,6 +8,7 @@
 
 #import "LAllListsViewCell.h"
 #import "LListCellView.h"
+#import "LListCellRightSwipeView.h"
 
 static NSString *const reuseIdentifier = @"allListsViewCell";
 
@@ -15,6 +16,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
 @interface LAllListsViewCell ()
 
 @property (nonatomic, strong) LListCellView *listView;
+@property (nonatomic, strong) LListCellRightSwipeView *swipeView;
 
 @end
 
@@ -29,9 +31,17 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     
     // List View
     self.listView = [[LListCellView alloc] initFullInSuperview:self.contentView];
+    self.mainView = self.listView;
+    
+    // Right Swipe View
+    self.swipeView = [[LListCellRightSwipeView alloc] initInSuperview:self.contentView edge:UIViewEdgeRight length:[LListCellRightSwipeView width] insets:inset_right(-[LListCellRightSwipeView width])];
+    self.rightSwipeView = self.swipeView;
     
     // Text Field
     self.listView.textField.userInteractionEnabled = NO;
+    
+    // Delete Button
+    [self.swipeView.deleteButton addTarget:self action:@selector(didPressDeleteButton)];
     
     return self;
 }
@@ -44,6 +54,15 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     _list = list;
     self.listView.textField.text = list.title;
     self.listView.colorTag.color = list.color;
+}
+
+
+#pragma mark - Delete List
+
+- (void)didPressDeleteButton {
+    if (self.delegate) {
+        [self.delegate didPressDeleteButtonForCell:self];
+    }
 }
 
 @end

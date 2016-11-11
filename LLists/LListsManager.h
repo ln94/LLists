@@ -13,7 +13,8 @@
 @interface LListsManager : NSObject <Singleton>
 
 - (void)createDefaultLists:(void (^)(BOOL success))completion;
+
 - (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position;
-- (void)changeListIndexesFrom:(NSInteger)index by:(NSInteger)value;
+- (void)deleteList:(List *)list completion:(void (^)(BOOL success))completion;
 
 @end

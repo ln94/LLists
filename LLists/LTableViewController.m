@@ -12,6 +12,7 @@
 @interface LTableViewController ()
 
 @property (nonatomic, strong) LTransition *transition;
+
 @end
 
 @implementation LTableViewController
@@ -26,7 +27,7 @@
     self.transitioningDelegate = self.transition;
     
     // Header
-    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight - kSeparatorHeight insets:inset_top(LLists.statusBarHeight)];
+    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kHeaderViewHeight insets:inset_top(LLists.statusBarHeight)];
     
     // Table View
     self.tableView = [[UITableView alloc] initFullInSuperview:self.view insets:inset_top(self.header.bottom)];
@@ -37,6 +38,10 @@
     self.shadowView = [[UIView alloc] initFullInSuperview:self.view insets:inset_top(self.tableView.top)];
     self.shadowView.backgroundColor = C_SHADOW;
     self.shadowView.hidden = YES;
+    
+    // Empty View
+    self.emptyView = [[LEmptyView alloc] initFullInSuperview:self.tableView];
+    self.emptyView.hidden = YES;
 }
 
 @end

@@ -28,6 +28,9 @@
 		87D3C1A71DD4138B0038895D /* LPresentingTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1A61DD4138B0038895D /* LPresentingTransition.m */; };
 		87D3C1AB1DD414390038895D /* LTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1AA1DD414390038895D /* LTransition.m */; };
 		87D3C1AE1DD4158E0038895D /* LDismissingTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1AD1DD4158E0038895D /* LDismissingTransition.m */; };
+		87D3C1B11DD532480038895D /* LEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1B01DD532480038895D /* LEmptyView.m */; };
+		87D3C1B51DD546340038895D /* LSwipeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1B41DD546340038895D /* LSwipeCell.m */; };
+		87D3C1B91DD54B080038895D /* LListCellRightSwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1B81DD54B080038895D /* LListCellRightSwipeView.m */; };
 		87F7461A1DD0150E00C6DF7C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746191DD0150E00C6DF7C /* main.m */; };
 		87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7461C1DD0150E00C6DF7C /* AppDelegate.m */; };
 		87F746281DD0150E00C6DF7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87F746271DD0150E00C6DF7C /* Assets.xcassets */; };
@@ -68,6 +71,12 @@
 		87D3C1AA1DD414390038895D /* LTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTransition.m; sourceTree = "<group>"; };
 		87D3C1AC1DD4158E0038895D /* LDismissingTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LDismissingTransition.h; sourceTree = "<group>"; };
 		87D3C1AD1DD4158E0038895D /* LDismissingTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDismissingTransition.m; sourceTree = "<group>"; };
+		87D3C1AF1DD532480038895D /* LEmptyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEmptyView.h; sourceTree = "<group>"; };
+		87D3C1B01DD532480038895D /* LEmptyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEmptyView.m; sourceTree = "<group>"; };
+		87D3C1B31DD546340038895D /* LSwipeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSwipeCell.h; sourceTree = "<group>"; };
+		87D3C1B41DD546340038895D /* LSwipeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSwipeCell.m; sourceTree = "<group>"; };
+		87D3C1B71DD54B080038895D /* LListCellRightSwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListCellRightSwipeView.h; sourceTree = "<group>"; };
+		87D3C1B81DD54B080038895D /* LListCellRightSwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListCellRightSwipeView.m; sourceTree = "<group>"; };
 		87F746151DD0150E00C6DF7C /* LLists.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LLists.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87F746191DD0150E00C6DF7C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		87F7461B1DD0150E00C6DF7C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -128,11 +137,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		87D3C1931DD3ECF80038895D /* Cell Utils */ = {
+		87D3C1931DD3ECF80038895D /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				87F746901DD3B38800C6DF7C /* LSeparator.h */,
-				87F746911DD3B38800C6DF7C /* LSeparator.m */,
 				87D3C1A21DD404AA0038895D /* LIconButton.h */,
 				87D3C1A31DD404AA0038895D /* LIconButton.m */,
 				87F7466D1DD01EE300C6DF7C /* LColorTag.h */,
@@ -140,7 +147,7 @@
 				87F7466F1DD01EE300C6DF7C /* LDoneButton.h */,
 				87F746701DD01EE300C6DF7C /* LDoneButton.m */,
 			);
-			name = "Cell Utils";
+			name = Buttons;
 			sourceTree = "<group>";
 		};
 		87D3C1941DD3ED020038895D /* Text View */ = {
@@ -195,6 +202,46 @@
 				87D3C1AD1DD4158E0038895D /* LDismissingTransition.m */,
 			);
 			name = Transition;
+			sourceTree = "<group>";
+		};
+		87D3C1B21DD532610038895D /* Empty View */ = {
+			isa = PBXGroup;
+			children = (
+				87D3C1AF1DD532480038895D /* LEmptyView.h */,
+				87D3C1B01DD532480038895D /* LEmptyView.m */,
+			);
+			name = "Empty View";
+			sourceTree = "<group>";
+		};
+		87D3C1B61DD5494C0038895D /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				87D3C1B31DD546340038895D /* LSwipeCell.h */,
+				87D3C1B41DD546340038895D /* LSwipeCell.m */,
+				87F746901DD3B38800C6DF7C /* LSeparator.h */,
+				87F746911DD3B38800C6DF7C /* LSeparator.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		87D3C1BA1DD54C350038895D /* Table Cell */ = {
+			isa = PBXGroup;
+			children = (
+				87F7464D1DD01DB500C6DF7C /* LAllListsViewCell.h */,
+				87F7464E1DD01DB500C6DF7C /* LAllListsViewCell.m */,
+				87D3C1B71DD54B080038895D /* LListCellRightSwipeView.h */,
+				87D3C1B81DD54B080038895D /* LListCellRightSwipeView.m */,
+			);
+			name = "Table Cell";
+			sourceTree = "<group>";
+		};
+		87D3C1BB1DD54C410038895D /* Add View */ = {
+			isa = PBXGroup;
+			children = (
+				87F746861DD2D10800C6DF7C /* LAddListView.h */,
+				87F746871DD2D10800C6DF7C /* LAddListView.m */,
+			);
+			name = "Add View";
 			sourceTree = "<group>";
 		};
 		87F7460C1DD0150E00C6DF7C = {
@@ -326,9 +373,11 @@
 			isa = PBXGroup;
 			children = (
 				87D3C1971DD3ED210038895D /* View Controller */,
+				87D3C1B21DD532610038895D /* Empty View */,
 				87D3C1951DD3ED0E0038895D /* Header */,
 				87D3C1941DD3ED020038895D /* Text View */,
-				87D3C1931DD3ECF80038895D /* Cell Utils */,
+				87D3C1B61DD5494C0038895D /* Cell */,
+				87D3C1931DD3ECF80038895D /* Buttons */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -336,12 +385,10 @@
 		87F7468C1DD2D3A000C6DF7C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				87F7464D1DD01DB500C6DF7C /* LAllListsViewCell.h */,
-				87F7464E1DD01DB500C6DF7C /* LAllListsViewCell.m */,
-				87F746861DD2D10800C6DF7C /* LAddListView.h */,
-				87F746871DD2D10800C6DF7C /* LAddListView.m */,
 				87F746891DD2D20600C6DF7C /* LListCellView.h */,
 				87F7468A1DD2D20600C6DF7C /* LListCellView.m */,
+				87D3C1BA1DD54C350038895D /* Table Cell */,
+				87D3C1BB1DD54C410038895D /* Add View */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -448,7 +495,9 @@
 				87F746461DD01B6C00C6DF7C /* LLists.xcdatamodeld in Sources */,
 				87F7463B1DD0179F00C6DF7C /* _List.m in Sources */,
 				87F746511DD01DB500C6DF7C /* LAllListsViewCell.m in Sources */,
+				87D3C1B11DD532480038895D /* LEmptyView.m in Sources */,
 				87F746721DD01EE300C6DF7C /* LDoneButton.m in Sources */,
+				87D3C1B51DD546340038895D /* LSwipeCell.m in Sources */,
 				87F746711DD01EE300C6DF7C /* LColorTag.m in Sources */,
 				87D3C1A41DD404AA0038895D /* LIconButton.m in Sources */,
 				87D3C1A71DD4138B0038895D /* LPresentingTransition.m in Sources */,
@@ -456,6 +505,7 @@
 				87D3C1AB1DD414390038895D /* LTransition.m in Sources */,
 				87F746521DD01DB500C6DF7C /* LAllListsViewController.m in Sources */,
 				87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */,
+				87D3C1B91DD54B080038895D /* LListCellRightSwipeView.m in Sources */,
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
 				87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */,
 				87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */,

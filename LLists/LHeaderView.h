@@ -15,5 +15,6 @@
 @property (nonatomic) BOOL showingAddButton;
 
 @property (nonatomic) LIconButton *backButton;
+@property (nonatomic) LIconButton *settingsButton;
 
 @end

@@ -10,7 +10,7 @@
 #import "LIconButton.h"
 
 
-@interface LAddItemView () <UITextViewDelegate>
+@interface LAddItemView () <LTextViewDelegate>
 
 @property (nonatomic) LIconButton *plusButton;
 
@@ -24,12 +24,13 @@
     if (!self) return nil;
     
     // Plus Button
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth insets:inset_bottom(kPaddingTiny)];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
     // Text View
-    self.textView.delegate = self;
+    self.textView.placeholder = @"New Item";
+    self.textView.lDelegate = self;
     
     return self;
 }
@@ -44,11 +45,15 @@
     }];
 }
 
-#pragma mark - UITextViewDelegate
+#pragma mark - LTextViewDelegate
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    return YES;
+- (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
+    self.height += by;
+    
+    [self.plusButton centerInSuperview];
+    self.plusButton.x = 0;
+    
+    [self.separator setEdge:UIViewEdgeBottom length:1];
 }
-
 
 @end

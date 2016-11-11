@@ -21,14 +21,18 @@
     self.backgroundColor = C_WHITE;
     
     // Add Button
-    self.addButton = [[LIconButton alloc] initCenterInSuperview:self size:s(KHeaderViewAddButtonWidth, self.height) insets:inset_bottom(kPaddingTiny)];
+    self.addButton = [[LIconButton alloc] initCenterInSuperview:self size:s(kHeaderViewMiddleButtonWidth, self.height)];
     self.addButton.icon = LIconPlus;
     
     self.showingAddButton = YES;
     
     // Back Button
-    self.backButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:KHeaderViewAddButtonWidth insets:inset_bottom(kPaddingTiny)];
+    self.backButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kHeaderViewSideButtonWidth insets:inset_left(-kHeaderViewSideButtonInset-4)];
     self.backButton.icon = LIconBack;
+    
+    // Settings Button
+    self.settingsButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kHeaderViewSideButtonWidth insets:inset_right(-kHeaderViewSideButtonInset)];
+    self.settingsButton.icon = LIconCircle;
     
     // Separator
     UIView *separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:1];

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "LHeaderView.h"
+#import "LEmptyView.h"
 
 @interface LTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
@@ -16,5 +17,7 @@
 @property (nonatomic) UITableView *tableView;
 
 @property (nonatomic) UIView *shadowView;
+
+@property (nonatomic) LEmptyView *emptyView;
 
 @end

@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    self.backgroundColor = C_WHITE;
+    self.backgroundColor = C_CLEAR;
     
     // Text Field
     self.textField = [[UITextField alloc] initFullInSuperview:self insets:inset_bottom(kSeparatorHeight)];

@@ -6,9 +6,9 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "LSwipeCell.h"
 
-@interface LAllListsViewCell : UITableViewCell
+@interface LAllListsViewCell : LSwipeCell
 
 @property (nonatomic) List *list;
 
