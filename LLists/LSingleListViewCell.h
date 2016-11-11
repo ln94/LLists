@@ -6,9 +6,9 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "LSwipeCell.h"
 
-@interface LSingleListViewCell : UITableViewCell
+@interface LSingleListViewCell : LSwipeCell
 
 @property (nonatomic, strong) Item *item;
 
@@ -16,6 +16,8 @@
 
 + (CGFloat)rowHeightForText:(NSString *)text;
 
-- (CGRect)textViewFrame;
+- (CGRect)getTextViewFrame;
+
+- (void)setTextViewShowing:(BOOL)showing;
 
 @end

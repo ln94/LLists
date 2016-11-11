@@ -17,6 +17,9 @@
     self.backgroundColor = C_CLEAR;
     self.textColor = C_MAIN_TEXT;
     self.returnKeyType = UIReturnKeyDone;
+    self.autocapitalizationType = UITextAutocapitalizationTypeWords;
+    self.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.spellCheckingType = UITextSpellCheckingTypeYes;
     self.clearButtonMode = UITextFieldViewModeWhileEditing;
     
     return self;

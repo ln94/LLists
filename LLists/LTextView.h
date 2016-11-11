@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LSingleListViewCell.h"
 
 @protocol LTextViewDelegate;
 
 @interface LTextView : UITextView
 
 @property (nonatomic) NSString *placeholder;
-
 @property (nonatomic, readonly) CGFloat minHeight;
+
+@property (nonatomic) LSingleListViewCell *cell;
 
 @property (nonatomic, strong) id<LTextViewDelegate> lDelegate;
 
@@ -29,5 +31,8 @@
 
 @optional
 - (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text;
+- (void)textViewShouldBeginEditing:(LTextView *)textView;
+- (void)textViewShouldEndEditing:(LTextView *)textView;
+- (void)textViewDidChangeHeight:(LTextView *)textView;
 
 @end

@@ -11,7 +11,7 @@
 #import "LAddItemView.h"
 
 
-@interface LSingleListViewController () <NSFetchedResultsControllerDelegate, LTextViewDelegate, LShadowViewDelegate>
+@interface LSingleListViewController () <NSFetchedResultsControllerDelegate, LTextViewDelegate, LShadowViewDelegate, LSwipeCellDelegate>
 
 @property (nonatomic, strong) List *list;
 
@@ -59,16 +59,13 @@
     
     //  Editing Text View
     self.editingTextView = [[LTextView alloc] initInSuperview:self.tableView];
-    self.editingTextView.backgroundColor = C_WHITE;
     self.editingTextView.tag = -1;
-    self.editingTextView.backgroundColor = C_WHITE;
-    self.editingTextView.textColor = C_MAIN_TEXT;
     self.editingTextView.font = F_MAIN_TEXT;
     self.editingTextView.hidden = YES;
     self.editingTextView.lDelegate = self;
     
     // Add Item View
-    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight + kSeparatorOneLineHeight insets:inset_top(LLists.statusBarHeight)];
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListViewCellMinHeight+kSeparatorBottomLineHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
     
     // GR
@@ -131,7 +128,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LSingleListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LSingleListViewCell reuseIdentifier]];
+    cell.backgroundColor = C_CLEAR;
     cell.item = [self.items objectAtIndexPath:indexPath];
+    cell.delegate = self;
     
     return cell;
 }
@@ -140,17 +139,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [LSingleListViewCell rowHeightForText:[self.items objectAtIndexPath:indexPath].text];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    LSingleListViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    self.editingTextView.frame = [cell textViewFrame];
-    self.editingTextView.tag = indexPath.row;
-    self.editingTextView.text = cell.item.text;
-    self.editingTextView.hidden = NO;
-    [self.editingTextView becomeFirstResponder];
 }
 
 
@@ -251,12 +239,30 @@
 
 #pragma mark - LTextViewDelegate
 
-- (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text{
+- (void)textViewShouldBeginEditing:(LTextView *)textView {
+    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
+    [cell setTextViewShowing:NO];
+}
+
+- (void)textViewShouldEndEditing:(LTextView *)textView {
+    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
+    [cell setTextViewShowing:YES];
+}
+
+- (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text {
     [self.items objectAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]].text = text;
 }
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
     [self.tableView reloadData];
+    
+    // Rearrange text view position
+    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
+    textView.frame = [cell getTextViewFrame];
+}
+
+- (void)textViewDidChangeHeight:(LTextView *)textView {
+    textView.frame = [textView.cell getTextViewFrame];
 }
 
 
@@ -282,6 +288,29 @@
     else {
         [self addNewItem];
     }
+}
+
+
+#pragma mark - LSwipeCellDelegate
+
+- (void)didTapCell:(LSwipeCell *)cell {
+    self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
+    self.editingTextView.tag = [self.tableView indexPathForCell:cell].row;
+    self.editingTextView.text = ((LSingleListViewCell *)cell).item.text;
+    self.editingTextView.hidden = NO;
+    [self.editingTextView becomeFirstResponder];
+}
+
+- (void)didSwipeCell:(LSwipeCell *)cell {
+    
+}
+
+- (void)didPressDeleteButtonForCell:(LSwipeCell *)cell {
+    
+}
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LSwipeCell *)cell {
+    
 }
 
 @end

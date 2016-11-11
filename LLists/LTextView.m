@@ -26,6 +26,9 @@ static const CGFloat kTextContainerInsetBottom = 7;
     self.textColor = C_MAIN_TEXT;
     self.textAlignment = NSTextAlignmentLeft;
     self.returnKeyType = UIReturnKeyDefault;
+    self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+    self.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.spellCheckingType = UITextSpellCheckingTypeYes;
     self.textContainerInset = i(kPaddingTiny, 0, kTextContainerInsetBottom, 0);
     self.delegate = self;
     
@@ -77,13 +80,39 @@ static const CGFloat kTextContainerInsetBottom = 7;
     
     CGFloat newHeight = [self heightForText:newText];
     if (newHeight != self.height && newHeight <= kTextViewHeighthMax) {
+        
         // Update height
         if (self.lDelegate) {
             [self.lDelegate textViewShouldChangeHeight:self by:newHeight - self.height];
         }
         
         self.height = newHeight;
+        
+        if (![self.superview isKindOfClass:[UITableView class]]) {
+            self.centerY = self.superview.height / 2;
+        }
+        
+        if ([self.lDelegate respondsToSelector:@selector(textViewDidChangeHeight::)]) {
+            [self.lDelegate textViewDidChangeHeight:self];
+        }
     }
+    
+    return YES;
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    if ([self.lDelegate respondsToSelector:@selector(textViewShouldBeginEditing:)]) {
+        [self.lDelegate textViewShouldBeginEditing:self];
+    }
+    
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    if ([self.lDelegate respondsToSelector:@selector(textViewShouldEndEditing:)]) {
+        [self.lDelegate textViewShouldEndEditing:self];
+    }
+    
     return YES;
 }
 

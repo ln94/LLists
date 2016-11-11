@@ -29,11 +29,17 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     
     // Item View
     self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView];
-    self.itemView.textView.userInteractionEnabled = NO;
+    self.mainView = self.itemView;
+    
+    // Right Swipe View
+    self.rightSwipeView = [[UIView alloc] init];
     
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kCellLeftViewWidth];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kCellLeftViewWidth insets:inset_left(2)];
     self.doneButton.delegate = self;
+    
+    // Text View
+    self.itemView.textView.userInteractionEnabled = NO;
     
     return self;
 }
@@ -44,16 +50,22 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    return [cell.itemView.textView heightForText:text] + 0.1;
+    CGFloat height = [cell.itemView.textView heightForText:text] + kSeparatorBottomLineHeight;
+    return height >= kSingleListViewCellMinHeight ? height : kSingleListViewCellMinHeight + kSeparatorBottomLineHeight;
 }
 
-- (CGRect)textViewFrame {
-    return rect_origin(p(self.itemView.textView.left, self.frame.origin.y), self.itemView.textView.size);
+- (CGRect)getTextViewFrame {
+    CGFloat height = self.itemView.textView.height < self.height ? self.itemView.textView.height : self.itemView.height;
+    return r(self.itemView.textView.left, self.frame.origin.y + self.itemView.textView.frame.origin.y, self.itemView.textView.width, height);
 }
 
 - (void)setItem:(Item *)item {
     _item = item;
     self.itemView.textView.text = item.text;
+}
+
+- (void)setTextViewShowing:(BOOL)showing {
+    self.itemView.textView.hidden = !showing;
 }
 
 #pragma mark - LDoneButtonDelegate

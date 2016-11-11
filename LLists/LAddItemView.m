@@ -23,12 +23,16 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
+    self.backgroundColor = C_WHITE;
+    
     // Plus Button
     self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kCellLeftViewWidth];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
     // Text View
+    self.textView.height = [self.textView heightForText:@""];
+    self.textView.centerY = self.height / 2;
     self.textView.placeholder = @"New Item";
     self.textView.lDelegate = self;
     
@@ -45,12 +49,11 @@
 #pragma mark - LTextViewDelegate
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
-    self.height += by;
+    CGFloat newHeigth = self.textView.height + by + kSeparatorBottomLineHeight;
+    self.height = newHeigth <= kSingleListViewCellMinHeight ? kSingleListViewCellMinHeight : newHeigth;
     
     [self.plusButton centerInSuperview];
     self.plusButton.x = 0;
-    
-    [self.separator setEdge:UIViewEdgeBottom length:1];
 }
 
 @end

@@ -28,8 +28,10 @@ static const CGFloat kPaddingMed = 20;
 
 // Item Sizes
 static const CGFloat kAllListsViewCellHeight = 47;
+static const CGFloat kSingleListViewCellMinHeight = 43;
 
-static const CGFloat kSeparatorOneLineHeight = 0.75;
+static const CGFloat kSeparatorTopLineHeight = 0.75;
+static const CGFloat kSeparatorBottomLineHeight = 0.25;
 static const CGFloat kSeparatorHeight = 7;
 
 static const CGFloat kDoneButtonLength = 20;

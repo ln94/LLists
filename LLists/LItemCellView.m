@@ -14,14 +14,14 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    self.backgroundColor = C_WHITE;
+    self.backgroundColor = C_CLEAR;
     
     // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorOneLineHeight, kCellLeftViewWidth)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorBottomLineHeight, kCellLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
     
     // Separator
-    self.separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorOneLineHeight];
+    self.separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorBottomLineHeight];
     self.separator.backgroundColor = C_SEPARATOR;
     
     return self;
