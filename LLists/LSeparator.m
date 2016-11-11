@@ -16,10 +16,10 @@
     
     self.backgroundColor = C_WHITE;
     
-    UIView *topLine = [[UIView alloc] initInSuperview:self edge:UIViewEdgeTop length:kSeparatorLineHeight];
+    UIView *topLine = [[UIView alloc] initInSuperview:self edge:UIViewEdgeTop length:kSeparatorOneLineHeight];
     topLine.backgroundColor = C_SEPARATOR;
     
-    UIView *bottomLine = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:0.3];
+    UIView *bottomLine = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorOneLineHeight - 0.5];
     bottomLine.backgroundColor = C_SEPARATOR;
     
     return self;

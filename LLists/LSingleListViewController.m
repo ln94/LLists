@@ -11,10 +11,11 @@
 #import "LAddItemView.h"
 
 
-@interface LSingleListViewController () <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, LTextViewDelegate>
+@interface LSingleListViewController () <NSFetchedResultsControllerDelegate, LTextViewDelegate, LShadowViewDelegate>
 
 @property (nonatomic, strong) List *list;
 
+@property (nonatomic) NSFetchedResultsController<Position *> *positions;
 @property (nonatomic) NSFetchedResultsController<Item *> *items;
 
 @property (nonatomic) LAddItemView *addItemView;
@@ -42,18 +43,16 @@
     [self.header.addButton addTarget:self action:@selector(didPressAddButton)];
     [self.header.backButton addTarget:self action:@selector(didPressBackButton)];
     
-    // Fetch Results Controller
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[Item class]];
-    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
-    request.predicate = [NSPredicate predicateWithFormat:@"%@ IN lists" argumentArray:@[self.list]];
-    self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:request];
-    self.items.delegate = self;
-    [self.items performFetch];
+    // Fetch Results Controllers
+    [self setupPositionFRC];
     
     // Table View
     [self.tableView registerClass:[LSingleListViewCell class] forCellReuseIdentifier:[LSingleListViewCell reuseIdentifier]];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    // Shadow View
+    self.shadowView.delegate = self;
     
     // Empty View
     self.emptyView.text = @"Your List is empty";
@@ -69,39 +68,60 @@
     self.editingTextView.lDelegate = self;
     
     // Add Item View
-    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight + kSeparatorLineHeight insets:inset_top(LLists.statusBarHeight)];
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:self.editingTextView.minHeight + kSeparatorOneLineHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
     
     // GR
-    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideAddItemView)];
-    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
-    [self.shadowView addGestureRecognizer:swipeUp];
-    
     UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didPressBackButton)];
     swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swipeRight];
     
-    // Views rearrangement
-    [self.view bringSubviewToFront:self.header];
     
-    if (!self.items.numberOfObjects) {
-        self.emptyView.hidden = NO;
-    }
+    [self.view bringSubviewToFront:self.header];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     if (!self.items.numberOfObjects) {
-        run_delayed(0.2, ^{
+        self.emptyView.hidden = NO;
+        
+        run_delayed(0.25, ^{
             [self showAddItemView];
         });
     }
 }
+
 - (void)didPressBackButton {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)setupPositionFRC {
+    // Get position
+    NSFetchRequest *positionRequest = [NSFetchRequest fetchRequestWithEntity:[Position class]];
+    positionRequest.predicate = [NSPredicate predicateWithKey:@"list" value:self.list];
+    positionRequest.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    self.positions = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:positionRequest];
+    [self.positions performFetch];
+    self.positions.delegate = self;
+    
+    [self setupItemFRC];
+}
+
+- (void)setupItemFRC {
+    // Update item current position
+    for (Position *position in self.positions.fetchedObjects) {
+        position.item.currentIndex = position.index;
+    }
+    
+    // Get items
+    NSFetchRequest *itemRequest = [NSFetchRequest fetchRequestWithEntity:[Item class]];
+    itemRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN lists" argumentArray:@[self.list]];
+    itemRequest.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"currentIndex" ascending:YES];
+    self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:itemRequest];
+//    self.items.delegate = self;
+    [self.items performFetch];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -160,8 +180,11 @@
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView reloadData];
-    self.emptyView.hidden = self.items.numberOfObjects;
+    if (controller == self.positions) {
+        [self setupItemFRC];
+        [self.tableView reloadData];
+        self.emptyView.hidden = self.items.numberOfObjects;
+    }
 }
 
 
@@ -190,7 +213,7 @@
     }];
 }
 
-- (void)hideAddItemView {
+- (void)hideAddItemView:(void (^)())completion {
     // Hide keyboard
     [self.addItemView.textView resignFirstResponder];
     
@@ -202,6 +225,10 @@
             
         } completion:^(BOOL finished) {
             self.addItemView.hidden = YES;
+            
+            if (completion) {
+                completion();
+            }
         }];
         
         // Show Add button
@@ -209,6 +236,18 @@
     }];
 }
 
+- (void)addNewItem {
+    if (!self.addItemView.textView.text.isEmpty) {
+        // Save new list
+        NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
+        [ListsManager saveItemWithText:self.addItemView.textView.text onPosition:position inList:self.list];
+        
+        // Hide and clear Add List View
+        [self hideAddItemView:^{
+            self.addItemView.textView.text = @"";
+        }];
+    }
+}
 
 #pragma mark - LTextViewDelegate
 
@@ -218,6 +257,31 @@
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
     [self.tableView reloadData];
+}
+
+
+#pragma mark - LShadowViewDelegate
+
+- (void)shadowViewDidSwipeUp {
+    [self hideAddItemView:nil];
+}
+
+- (void)shadowViewDidTap {
+    if (self.addItemView.textView.text.isEmpty) {
+        [self hideAddItemView:nil];
+    }
+    else {
+        [self addNewItem];
+    }
+}
+
+- (void)shadowViewDidSwipeDown {
+    if (self.addItemView.textView.text.isEmpty) {
+        [self hideAddItemView:nil];
+    }
+    else {
+        [self addNewItem];
+    }
 }
 
 @end

@@ -32,7 +32,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.itemView.textView.userInteractionEnabled = NO;
     
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kCellLeftViewWidth];
     self.doneButton.delegate = self;
     
     return self;

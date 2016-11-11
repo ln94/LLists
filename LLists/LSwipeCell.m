@@ -13,6 +13,8 @@
 
 @property (nonatomic) UISwipeGestureRecognizer *swipeLeft;
 @property (nonatomic) UISwipeGestureRecognizer *swipeRight;
+@property (nonatomic) UITapGestureRecognizer *tap;
+@property (nonatomic) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -23,6 +25,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (!self) return nil;
     
+    self.backgroundColor = C_CLEAR;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.swiped = NO;
@@ -34,6 +37,10 @@
     self.swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeRight)];
     self.swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    
+    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress:)];
+    
     return self;
 }
 
@@ -42,6 +49,8 @@
     
     [mainView addGestureRecognizer:self.swipeLeft];
     [mainView addGestureRecognizer:self.swipeRight];
+    [mainView addGestureRecognizer:self.tap];
+    [mainView addGestureRecognizer:self.longPress];
 }
 
 #pragma mark - Swipe
@@ -82,6 +91,22 @@
     
     if (self.delegate) {
         [self.delegate didSwipeCell:self];
+    }
+}
+
+#pragma mark - Tap
+
+- (void)didTap:(UITapGestureRecognizer *)tap {
+    if (self.delegate) {
+        [self.delegate didTapCell:self];
+    }
+}
+
+#pragma mark - Long Press
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress {
+    if (self.delegate) {
+        [self.delegate didLongPress:longPress cell:self];
     }
 }
 

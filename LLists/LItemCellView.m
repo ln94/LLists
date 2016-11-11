@@ -17,13 +17,11 @@
     self.backgroundColor = C_WHITE;
     
     // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorLineHeight, kTextFieldLeftViewWidth)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorOneLineHeight, kCellLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
-    self.textView.textColor = C_MAIN_TEXT;
-    self.textView.textAlignment = NSTextAlignmentLeft;
     
     // Separator
-    self.separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorLineHeight];
+    self.separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorOneLineHeight];
     self.separator.backgroundColor = C_SEPARATOR;
     
     return self;

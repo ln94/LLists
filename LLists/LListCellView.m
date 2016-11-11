@@ -7,7 +7,6 @@
 //
 
 #import "LListCellView.h"
-#import "LSeparator.h"
 
 @implementation LListCellView
 
@@ -17,24 +16,15 @@
     
     self.backgroundColor = C_CLEAR;
     
-    // Text Field
-    self.textField = [[UITextField alloc] initFullInSuperview:self insets:inset_bottom(kSeparatorHeight)];
-    self.textField.font = F_TITLE;
-    self.textField.textColor = C_MAIN_TEXT;
-    self.textField.returnKeyType = UIReturnKeyDone;
-    
-    self.textField.leftViewMode = UITextFieldViewModeAlways;
-    self.textField.leftView = [[UIView alloc] initWithSize:s(kTextFieldLeftViewWidth, self.textField.height)];
-    
     // Color Tag
-    self.colorTag = [[LColorTag alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:inset_left(kPaddingSmall)];
+    self.colorTag = [[LColorTag alloc] initInSuperview:self edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kSeparatorHeight, kPaddingSmall)];
+    
+    // Text Field
+    self.textField = [[LTextField alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorHeight, kCellLeftViewWidth)];
+    self.textField.font = F_TITLE;
     
     // Separator
-    LSeparator *separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
-
-    // Long Press
-//    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressed:)];
-//    [self addGestureRecognizer:longPress];
+    self.separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
     
     return self;
 }

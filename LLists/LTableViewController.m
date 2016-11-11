@@ -33,10 +33,10 @@
     self.tableView = [[UITableView alloc] initFullInSuperview:self.view insets:inset_top(self.header.bottom)];
     self.tableView.backgroundColor = C_WHITE;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsMultipleSelection = NO;
     
     // Shadow View
-    self.shadowView = [[UIView alloc] initFullInSuperview:self.view insets:inset_top(self.tableView.top)];
-    self.shadowView.backgroundColor = C_SHADOW;
+    self.shadowView = [[LShadowView alloc] initFullInSuperview:self.view insets:inset_top(self.tableView.top)];
     self.shadowView.hidden = YES;
     
     // Empty View

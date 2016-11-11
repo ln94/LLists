@@ -26,12 +26,10 @@
     self.backgroundColor = C_WHITE;
     
     // Text Field
-    NSDictionary *attributes = @{ NSForegroundColorAttributeName:C_SEPARATOR };
-    self.textField.attributedPlaceholder = [NSAttributedString attributedStringWithAttributes:attributes format:@"New List"];
-    self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.textField.placeholder = @"New List";
     
     // Plus Icon
-    self.plusButton = [[LIconButton alloc] initInSuperview:self.textField.leftView edge:UIViewEdgeLeft length:kColorTagWidth insets:inset_left(kPaddingSmall)];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kCellLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
@@ -42,16 +40,23 @@
     return self;
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Animation
 
-- (void)setShowingColorTag:(BOOL)showing completion:(void (^)())completion {
+- (void)animateColorTagShowing:(BOOL)showing completion:(void (^)())completion {
     UIView *fromView = showing ? self.plusButton : self.colorTag;
     UIView *toView = showing ? self.colorTag : self.plusButton;
     
-    toView.hidden = NO;
-    [UIView transitionFromView:fromView toView:toView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) completion:^(BOOL finished) {
+    [UIView transitionWithView:fromView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:^{
         fromView.hidden = YES;
-        if (completion) completion();
+    } completion:nil];
+    
+    [UIView transitionWithView:toView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:^{
+        toView.hidden = NO;
+    } completion:^(BOOL finished) {
+        
+        if (completion) {
+            completion();
+        }
     }];
 }
 

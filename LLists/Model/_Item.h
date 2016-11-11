@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class List;
+@class Position;
 
 @interface ItemID : NSManagedObjectID {}
 @end
@@ -22,16 +23,19 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 @property (nonatomic, readonly, strong) ItemID *objectID;
 
-@property (nonatomic, strong, nullable) NSNumber* index;
+@property (nonatomic, strong, nullable) NSNumber* currentIndex;
 
-@property (atomic) int16_t indexValue;
-- (int16_t)indexValue;
-- (void)setIndexValue:(int16_t)value_;
+@property (atomic) uint16_t currentIndexValue;
+- (uint16_t)currentIndexValue;
+- (void)setCurrentIndexValue:(uint16_t)value_;
 
 @property (nonatomic, strong, nullable) NSString* text;
 
 @property (nonatomic, strong, nullable) NSSet<List*> *lists;
 - (nullable NSMutableSet<List*>*)listsSet;
+
+@property (nonatomic, strong, nullable) NSSet<Position*> *positions;
+- (nullable NSMutableSet<Position*>*)positionsSet;
 
 @end
 
@@ -43,13 +47,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface _Item (PositionsCoreDataGeneratedAccessors)
+- (void)addPositions:(NSSet<Position*>*)value_;
+- (void)removePositions:(NSSet<Position*>*)value_;
+- (void)addPositionsObject:(Position*)value_;
+- (void)removePositionsObject:(Position*)value_;
+
+@end
+
 @interface _Item (CoreDataGeneratedPrimitiveAccessors)
 
-- (NSNumber*)primitiveIndex;
-- (void)setPrimitiveIndex:(NSNumber*)value;
+- (NSNumber*)primitiveCurrentIndex;
+- (void)setPrimitiveCurrentIndex:(NSNumber*)value;
 
-- (int16_t)primitiveIndexValue;
-- (void)setPrimitiveIndexValue:(int16_t)value_;
+- (uint16_t)primitiveCurrentIndexValue;
+- (void)setPrimitiveCurrentIndexValue:(uint16_t)value_;
 
 - (NSString*)primitiveText;
 - (void)setPrimitiveText:(NSString*)value;
@@ -57,15 +69,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableSet<List*>*)primitiveLists;
 - (void)setPrimitiveLists:(NSMutableSet<List*>*)value;
 
+- (NSMutableSet<Position*>*)primitivePositions;
+- (void)setPrimitivePositions:(NSMutableSet<Position*>*)value;
+
 @end
 
 @interface ItemAttributes: NSObject 
-+ (NSString *)index;
++ (NSString *)currentIndex;
 + (NSString *)text;
 @end
 
 @interface ItemRelationships: NSObject
 + (NSString *)lists;
++ (NSString *)positions;
 @end
 
 NS_ASSUME_NONNULL_END

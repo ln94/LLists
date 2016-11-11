@@ -17,8 +17,9 @@
 #define C_MAIN_TEXT C_GRAY(0.15)
 #define C_SEPARATOR C_GRAY(0.82)
 #define C_ICON C_GRAY(0.75)
-#define C_SHADOW C_BLACK_ALPHA(0.25)
-#define C_SELECTED C_GRAY(0.9)
+#define C_SHADOW C_BLACK_ALPHA(0.2)
+#define C_SELECTED C_GRAY(0.95)
+#define C_EMPTY_VIEW C_GRAY(0.98)
 
 // Padding
 static const CGFloat kPaddingTiny = 5;
@@ -26,19 +27,19 @@ static const CGFloat kPaddingSmall = 12;
 static const CGFloat kPaddingMed = 20;
 
 // Item Sizes
-static const CGFloat kAllListsViewCellHeight = 43;
+static const CGFloat kAllListsViewCellHeight = 47;
 
-static const CGFloat kSeparatorLineHeight = 0.75;
+static const CGFloat kSeparatorOneLineHeight = 0.75;
 static const CGFloat kSeparatorHeight = 7;
 
 static const CGFloat kDoneButtonLength = 20;
 
 static const CGFloat kColorTagWidth = 15;
 
-static const CGFloat kTextFieldLeftViewWidth = 36;
+static const CGFloat kCellLeftViewWidth = 36;
 static const CGFloat kTextViewHeighthMax = 300;
 
-static const CGFloat kHeaderViewHeight = 40;
+static const CGFloat kHeaderViewHeight = 50;
 static const CGFloat kHeaderViewMiddleButtonWidth = 60;
 static const CGFloat kHeaderViewSideButtonWidth = 75;
 static const CGFloat kHeaderViewSideButtonInset = 15;

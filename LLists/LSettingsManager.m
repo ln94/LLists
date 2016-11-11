@@ -17,11 +17,14 @@ static NSString *const L_FIRST_TIME_USE_KEY = @"L_FIRST_TIME_USE";
 
 - (void)setup {
     
-    NSDictionary *defaultPreferences = @{
-                                         L_FIRST_TIME_USE_KEY: @(YES)
-                                         };
-    
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary *defaultPreferences = @{
+                                             L_FIRST_TIME_USE_KEY: @(YES)
+                                             };
+        
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
+    });
 }
 
 - (void)save {

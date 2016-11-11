@@ -27,8 +27,6 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (!self) return nil;
     
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     // List View
     self.listView = [[LListCellView alloc] initFullInSuperview:self.contentView];
     self.mainView = self.listView;
@@ -38,6 +36,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     self.rightSwipeView = self.swipeView;
     
     // Text Field
+    self.listView.textField.placeholder = @"List Title";
     self.listView.textField.userInteractionEnabled = NO;
     
     // Delete Button

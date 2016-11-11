@@ -28,5 +28,7 @@
 @required
 - (void)didSwipeCell:(LSwipeCell *)cell;
 - (void)didPressDeleteButtonForCell:(LSwipeCell *)cell;
+- (void)didTapCell:(LSwipeCell *)cell;
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LSwipeCell *)cell;
 
 @end

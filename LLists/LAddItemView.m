@@ -24,7 +24,7 @@
     if (!self) return nil;
     
     // Plus Button
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kTextFieldLeftViewWidth];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kCellLeftViewWidth];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
@@ -37,10 +37,7 @@
 
 - (void)setShowingPlusButton:(BOOL)showing completion:(void (^)())completion {
     
-    [UIView transitionWithView:self.plusButton duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:^{
-        self.plusButton.hidden = !showing;
-    } completion:^(BOOL finished) {
-        self.plusButton.hidden = NO;
+    [UIView transitionWithView:self.plusButton duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:nil completion:^(BOOL finished) {
         if (completion) completion();
     }];
 }

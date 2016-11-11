@@ -23,7 +23,8 @@ static const CGFloat kTextContainerInsetBottom = 7;
     if (!self) return nil;
     
     self.backgroundColor = C_CLEAR;
-    
+    self.textColor = C_MAIN_TEXT;
+    self.textAlignment = NSTextAlignmentLeft;
     self.returnKeyType = UIReturnKeyDefault;
     self.textContainerInset = i(kPaddingTiny, 0, kTextContainerInsetBottom, 0);
     self.delegate = self;

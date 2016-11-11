@@ -20,7 +20,7 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    self.backgroundColor = C_WHITE;
+    self.backgroundColor = C_EMPTY_VIEW;
     
     // Label
     self.textLabel = [[UILabel alloc] initFullInSuperview:self];

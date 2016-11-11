@@ -12,7 +12,7 @@
 #import "LSingleListViewController.h"
 
 
-@interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LSwipeCellDelegate>
+@interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LShadowViewDelegate, LSwipeCellDelegate>
 
 @property (nonatomic) NSFetchedResultsController<List *> *lists;
 
@@ -49,6 +49,12 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    // Shadow View
+    self.shadowView.delegate = self;
+    
+    // Empty View
+    self.emptyView.text = @"List of Lists is empty";
+    
     // Add List View
     self.addListView = [[LAddListView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kAllListsViewCellHeight insets:inset_top(LLists.statusBarHeight)];
     self.addListView.hidden = YES;
@@ -66,13 +72,17 @@
     [self.deleteListAlert addAction:cancelAction];
     [self.deleteListAlert addAction:deleteAction];
     
-    // GR
-    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideAddListView)];
-    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
-    [self.shadowView addGestureRecognizer:swipeUp];
-    
     
     [self.view bringSubviewToFront:self.header];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (!self.lists.numberOfObjects) {
+        self.emptyView.hidden = NO;
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - Actions
@@ -96,18 +106,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LAllListsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LAllListsViewCell reuseIdentifier]];
+    cell.backgroundColor = C_CLEAR;
     cell.list = [self.lists objectAtIndexPath:indexPath];
     cell.delegate = self;
     
     return cell;
 }
-
-
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    // Open Single List screen
-//    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:[self.lists objectAtIndexPath:indexPath]];
-//    [self presentViewController:vc animated:YES completion:nil];
-//}
 
 
 #pragma mark - UIScrollViewDelegate
@@ -132,7 +136,7 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - Add List View
+#pragma mark - Add List
 
 - (void)didPressAddButton {
     [self showAddListView];
@@ -150,19 +154,22 @@
         self.shadowView.hidden = NO;
         
     } completion:^(BOOL finished) {
-        // Show keyboard
-        [self.addListView.textField becomeFirstResponder];
         
-        [self.addListView setShowingColorTag:YES completion:nil];
+        [self.addListView animateColorTagShowing:YES completion:^{
+            // Show keyboard
+            run_main(^{
+                [self.addListView.textField becomeFirstResponder];
+            });
+        }];
     }];
 }
 
-- (void)hideAddListView {
+- (void)hideAddListView:(void (^)())completion {
     // Hide keyboard
     [self.addListView.textField resignFirstResponder];
     
     // Hide Add List View
-    [self.addListView setShowingColorTag:NO completion:^{
+    [self.addListView animateColorTagShowing:NO completion:^{
         
         [UIView animateWithDuration:addViewAnimationDuration animations:^{
             self.addListView.bottom = self.header.bottom;
@@ -170,6 +177,10 @@
             
         } completion:^(BOOL finished) {
             self.addListView.hidden = YES;
+            
+            if (completion) {
+                completion();
+            }
         }];
         
         // Show Add button
@@ -177,33 +188,54 @@
     }];
 }
 
+- (void)addNewList {
+    if (!self.addListView.textField.text.isEmpty) {
+        // Save new list
+        NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
+        [ListsManager saveListWithTitle:self.addListView.textField.text onPosition:position];
+        
+        // Hide and clear Add List View
+        [self hideAddListView:^{
+            self.addListView.textField.text = @"";
+        }];
+    }
+}
 
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     if (textField == self.addListView.textField) {
-        // Add List View text field
-        
-        if (textField.text.isEmpty) {
-            // Hide Add List View
-            [self hideAddListView];
-        }
-        else {
-            // Save new list
-            [ListsManager saveListWithTitle:textField.text onPosition:[self.tableView.indexPathsForVisibleRows firstObject].row];
-            
-            // Hide and clear Add List View
-            [self hideAddListView];
-            self.addListView.textField.text = @"";
-            
-            // Update table view
-//            [self.lists performFetch];
-//            [self.tableView reloadData];
-        }
+        // Add List
+        [self addNewList];
     }
     
     return YES;
+}
+
+
+#pragma mark - LShadowViewDelegate
+
+- (void)shadowViewDidSwipeUp {
+    [self hideAddListView:nil];
+}
+
+- (void)shadowViewDidTap {
+    if (self.addListView.textField.text.isEmpty) {
+        [self hideAddListView:nil];
+    }
+    else {
+        [self addNewList];
+    }
+}
+
+- (void)shadowViewDidSwipeDown {
+    if (self.addListView.textField.text.isEmpty) {
+        [self hideAddListView:nil];
+    }
+    else {
+        [self addNewList];
+    }
 }
 
 
@@ -221,11 +253,15 @@
     [self presentViewController:self.deleteListAlert animated:YES completion:nil];
 }
 
-//- (void)tableViewCell:(LTableViewCell *)cell didPressSeparator:(LSeparatorButton *)separator {
-//    // Add empty cell between
-//}
-//
-//- (void)tableViewCell:(LTableViewCell *)cell longPressed:(UILongPressGestureRecognizer *)longPress {
+- (void)didTapCell:(LSwipeCell *)cell {
+    cell.backgroundColor = C_SELECTED;
+    
+    // Open Single List screen
+    LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:((LAllListsViewCell *)cell).list];
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LSwipeCell *)cell {
     // Move cell in the list
 //    switch (longPress.state) {
 //            
@@ -267,6 +303,6 @@
 //        default:
 //            break;
 //    }
-//}
+}
 
 @end

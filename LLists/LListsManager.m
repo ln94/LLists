@@ -84,4 +84,45 @@
     }
 }
 
+
+#pragma mark - Item
+
+- (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list {
+    [self changeItemIndexesFrom:position by:1 inList:list];
+    
+    Position *pos = [Position create];
+    pos.index = [NSNumber numberWithInteger:position];
+    pos.list = list;
+    
+    Item *item = [Item create];
+    item.text = text;
+    [item addPositionsObject:pos];
+    [item addListsObject:list];
+}
+
+- (void)changeItemIndexesFrom:(NSInteger)index by:(NSInteger)value inList:(List *)list {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntity:[Position class]];
+    NSPredicate *predicate1 = [NSPredicate predicateWithKey:@"list" value:list];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"index >= %@", [NSNumber numberWithInteger:index]];
+    request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate1, predicate2]];
+    request.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
+    
+    NSFetchRequestController *frc = [NSFetchRequestController controllerWithFetchRequest:request];
+    [frc performFetch];
+    
+    for (Position *object in frc.fetchedObjects) {
+        object.index = [NSNumber numberWithInteger:(object.indexValue + value)];
+    }
+}
+
 @end
+
+
+
+
+
+
+
+
+
+

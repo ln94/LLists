@@ -21,7 +21,7 @@
     self.backgroundColor = C_WHITE;
     
     // Add Button
-    self.addButton = [[LIconButton alloc] initCenterInSuperview:self size:s(kHeaderViewMiddleButtonWidth, self.height)];
+    self.addButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kHeaderViewSideButtonWidth insets:inset_right(-kHeaderViewSideButtonInset)];
     self.addButton.icon = LIconPlus;
     
     self.showingAddButton = YES;
@@ -31,7 +31,7 @@
     self.backButton.icon = LIconBack;
     
     // Settings Button
-    self.settingsButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kHeaderViewSideButtonWidth insets:inset_right(-kHeaderViewSideButtonInset)];
+    self.settingsButton = [[LIconButton alloc] initCenterInSuperview:self size:s(kHeaderViewMiddleButtonWidth, self.height)];
     self.settingsButton.icon = LIconCircle;
     
     // Separator
@@ -44,7 +44,7 @@
 - (void)setShowingAddButton:(BOOL)showingAddButton {
     _showingAddButton = showingAddButton;
     
-    [UIView transitionWithView:self.addButton duration:plusButtonAnimationDuration options:(showingAddButton ? showingAnimation : hidingAnimation) animations:^{
+    [UIView transitionWithView:self.addButton duration:plusButtonAnimationDuration options:(showingAddButton ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft) animations:^{
         self.addButton.hidden = !showingAddButton;
     } completion:nil];
 }

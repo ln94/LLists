@@ -26,12 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) id color;
 
-@property (nonatomic, strong, nullable) NSNumber* editing;
-
-@property (atomic) BOOL editingValue;
-- (BOOL)editingValue;
-- (void)setEditingValue:(BOOL)value_;
-
 @property (nonatomic, strong, nullable) NSNumber* index;
 
 @property (atomic) uint16_t indexValue;
@@ -58,12 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (id)primitiveColor;
 - (void)setPrimitiveColor:(id)value;
 
-- (NSNumber*)primitiveEditing;
-- (void)setPrimitiveEditing:(NSNumber*)value;
-
-- (BOOL)primitiveEditingValue;
-- (void)setPrimitiveEditingValue:(BOOL)value_;
-
 - (NSNumber*)primitiveIndex;
 - (void)setPrimitiveIndex:(NSNumber*)value;
 
@@ -80,7 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ListAttributes: NSObject 
 + (NSString *)color;
-+ (NSString *)editing;
 + (NSString *)index;
 + (NSString *)title;
 @end

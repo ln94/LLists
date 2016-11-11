@@ -23,7 +23,7 @@
     
     self.statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     
-    if (SettingsManager.firstTimeUse) {
+    if (SettingsManager.firstTimeUse && ![List all].count) {
         [self firstTimeLaunch];
     }
     else {
@@ -42,7 +42,7 @@
     [ListsManager createDefaultLists:^(BOOL success) {
         SettingsManager.firstTimeUse = NO;
         if (success) {
-            [self launchWithRootViewController:[[UINavigationController alloc] initWithRootViewController:[[LAllListsViewController alloc] init]]];
+            [self launchWithRootViewController:[[LAllListsViewController alloc] init]];
         }
         else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"-_-" message:@"\nFailed to create default lists...\nYou still can create your own!" preferredStyle:UIAlertControllerStyleAlert];

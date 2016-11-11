@@ -11,5 +11,6 @@
 
 #import "List.h"
 #import "Item.h"
+#import "Position.h"
 
 #endif /* Model_h */

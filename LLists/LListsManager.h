@@ -17,4 +17,6 @@
 - (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position;
 - (void)deleteList:(List *)list completion:(void (^)(BOOL success))completion;
 
+- (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list;
+
 @end

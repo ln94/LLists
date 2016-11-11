@@ -12,7 +12,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     
-    self = [super initWithFrame:rect_origin(frame.origin, s(kColorTagWidth, frame.size.height))];
+    self = [super initWithFrame:frame];
     if (!self) return nil;
     
     self.alpha = 0.5;

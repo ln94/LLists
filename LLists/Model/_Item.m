@@ -29,8 +29,8 @@
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 
-	if ([key isEqualToString:@"indexValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"index"];
+	if ([key isEqualToString:@"currentIndexValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"currentIndex"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -38,24 +38,24 @@
 	return keyPaths;
 }
 
-@dynamic index;
+@dynamic currentIndex;
 
-- (int16_t)indexValue {
-	NSNumber *result = [self index];
-	return [result shortValue];
+- (uint16_t)currentIndexValue {
+	NSNumber *result = [self currentIndex];
+	return [result unsignedShortValue];
 }
 
-- (void)setIndexValue:(int16_t)value_ {
-	[self setIndex:@(value_)];
+- (void)setCurrentIndexValue:(uint16_t)value_ {
+	[self setCurrentIndex:@(value_)];
 }
 
-- (int16_t)primitiveIndexValue {
-	NSNumber *result = [self primitiveIndex];
-	return [result shortValue];
+- (uint16_t)primitiveCurrentIndexValue {
+	NSNumber *result = [self primitiveCurrentIndex];
+	return [result unsignedShortValue];
 }
 
-- (void)setPrimitiveIndexValue:(int16_t)value_ {
-	[self setPrimitiveIndex:@(value_)];
+- (void)setPrimitiveCurrentIndexValue:(uint16_t)value_ {
+	[self setPrimitiveCurrentIndex:@(value_)];
 }
 
 @dynamic text;
@@ -71,11 +71,22 @@
 	return result;
 }
 
+@dynamic positions;
+
+- (NSMutableSet<Position*>*)positionsSet {
+	[self willAccessValueForKey:@"positions"];
+
+	NSMutableSet<Position*> *result = (NSMutableSet<Position*>*)[self mutableSetValueForKey:@"positions"];
+
+	[self didAccessValueForKey:@"positions"];
+	return result;
+}
+
 @end
 
 @implementation ItemAttributes 
-+ (NSString *)index {
-	return @"index";
++ (NSString *)currentIndex {
+	return @"currentIndex";
 }
 + (NSString *)text {
 	return @"text";
@@ -85,6 +96,9 @@
 @implementation ItemRelationships 
 + (NSString *)lists {
 	return @"lists";
+}
++ (NSString *)positions {
+	return @"positions";
 }
 @end
 

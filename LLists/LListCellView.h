@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "LColorTag.h"
+#import "LTextField.h"
+#import "LSeparator.h"
 
 @interface LListCellView : UIView
 
-@property (nonatomic) UITextField *textField;
-@property (nonatomic) LColorTag *colorTag;
+@property (nonatomic, strong) LColorTag *colorTag;
+@property (nonatomic, strong) LTextField *textField;
+@property (nonatomic, strong) LSeparator *separator;
 
 @end

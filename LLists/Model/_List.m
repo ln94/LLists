@@ -29,11 +29,6 @@
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 
-	if ([key isEqualToString:@"editingValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"editing"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 	if ([key isEqualToString:@"indexValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"index"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -44,26 +39,6 @@
 }
 
 @dynamic color;
-
-@dynamic editing;
-
-- (BOOL)editingValue {
-	NSNumber *result = [self editing];
-	return [result boolValue];
-}
-
-- (void)setEditingValue:(BOOL)value_ {
-	[self setEditing:@(value_)];
-}
-
-- (BOOL)primitiveEditingValue {
-	NSNumber *result = [self primitiveEditing];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveEditingValue:(BOOL)value_ {
-	[self setPrimitiveEditing:@(value_)];
-}
 
 @dynamic index;
 
@@ -103,9 +78,6 @@
 @implementation ListAttributes 
 + (NSString *)color {
 	return @"color";
-}
-+ (NSString *)editing {
-	return @"editing";
 }
 + (NSString *)index {
 	return @"index";
