@@ -27,12 +27,12 @@
 @protocol LTextViewDelegate <NSObject>
 
 @required
-- (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by;
+- (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height;
 
 @optional
+- (void)textViewDidChangeHeight:(LTextView *)textView;
 - (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text;
 - (void)textViewShouldBeginEditing:(LTextView *)textView;
 - (void)textViewShouldEndEditing:(LTextView *)textView;
-- (void)textViewDidChangeHeight:(LTextView *)textView;
 
 @end

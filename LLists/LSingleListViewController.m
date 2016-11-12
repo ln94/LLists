@@ -67,6 +67,7 @@
     // Add Item View
     self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListCellMinHeight+kSeparatorBottomLineHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
+    [self.addItemView.plusButton addTarget:self action:@selector(addNewItem)];
     
     // GR
     UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didPressBackButton)];
@@ -155,13 +156,10 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [DataStore save];
     
-    [self.editingTextView resignFirstResponder];
-    self.editingTextView.hidden = YES;
-    
     // Reload last edited cell
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.editingTextView.tag inSection:0];
-    self.editingTextView.tag = -1;
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadRowsAtIndexPaths:@[[self.tableView indexPathForCell:self.editingTextView.cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    [self.editingTextView resignFirstResponder];
 }
 
 
@@ -225,32 +223,37 @@
 }
 
 - (void)addNewItem {
-    if (!self.addItemView.textView.text.isEmpty) {
+    NSString *text = [ListsManager updateText:self.addItemView.textView.text];
+    
+    if (!text.isEmpty) {
         // Save new list
         NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
-        [ListsManager saveItemWithText:self.addItemView.textView.text onPosition:position inList:self.list];
-        
-        // Hide and clear Add List View
-        [self hideAddItemView:^{
-            self.addItemView.textView.text = @"";
-        }];
+        [ListsManager saveItemWithText:text onPosition:position inList:self.list];
     }
+    
+    // Hide and clear Add List View
+    [self hideAddItemView:^{
+        self.addItemView.textView.text = @"";
+    }];
 }
 
 #pragma mark - LTextViewDelegate
 
 - (void)textViewShouldBeginEditing:(LTextView *)textView {
-    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
-    [cell setTextViewShowing:NO];
+    [textView.cell setTextViewShowing:NO];
 }
 
 - (void)textViewShouldEndEditing:(LTextView *)textView {
-    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
-    [cell setTextViewShowing:YES];
+    [textView.cell setTextViewShowing:YES];
+    
+    textView.cell.item.text = [ListsManager updateText:textView.text];
+    textView.cell = nil;
+    
+    textView.hidden = YES;
 }
 
 - (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text {
-    [self.items objectAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]].text = text;
+    textView.cell.item.text = text;
 }
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
@@ -295,8 +298,7 @@
 
 - (void)didTapCell:(LSwipeCell *)cell {
     self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
-    self.editingTextView.tag = [self.tableView indexPathForCell:cell].row;
-    self.editingTextView.text = ((LSingleListViewCell *)cell).item.text;
+    self.editingTextView.cell = (LSingleListViewCell *)cell;
     self.editingTextView.hidden = NO;
     [self.editingTextView becomeFirstResponder];
 }

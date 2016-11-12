@@ -16,7 +16,9 @@ static const CGFloat kTextContainerInsetBottom = 7;
 
 @end
 
-@implementation LTextView
+@implementation LTextView {
+    BOOL changedHeight;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -36,10 +38,12 @@ static const CGFloat kTextContainerInsetBottom = 7;
     self.placeholderLabel = [[UILabel alloc] initInSuperview:self];
     self.placeholderLabel.textColor = C_SEPARATOR;
     
+    changedHeight = NO;
+    
     return self;
 }
 
-#pragma mark - Placeholder
+#pragma mark - Setter
 
 - (void)setPlaceholder:(NSString *)placeholder {
     _placeholder = placeholder;
@@ -47,6 +51,14 @@ static const CGFloat kTextContainerInsetBottom = 7;
     [self.placeholderLabel setEdge:UIViewEdgeTop length:[self minHeight] insets:inset_left(kPaddingTiny)];
     self.placeholderLabel.font = self.font;
     self.placeholderLabel.text = placeholder;
+}
+
+- (void)setCell:(LSingleListViewCell *)cell {
+    _cell = cell;
+    
+    if (cell) {
+        self.text = cell.item.text;
+    }
 }
 
 #pragma mark - Height
@@ -65,7 +77,7 @@ static const CGFloat kTextContainerInsetBottom = 7;
 }
 
 - (CGFloat)minHeight {
-    return [self heightForText:@"A"];
+    return [self heightForText:@""];
 }
 
 #pragma mark - UITextViewDelegate
@@ -81,18 +93,14 @@ static const CGFloat kTextContainerInsetBottom = 7;
     CGFloat newHeight = [self heightForText:newText];
     if (newHeight != self.height && newHeight <= kTextViewHeighthMax) {
         
-        // Update height
         if (self.lDelegate) {
-            [self.lDelegate textViewShouldChangeHeight:self by:newHeight - self.height];
+            [self.lDelegate textViewShouldChangeHeight:self to:newHeight];
         }
         
+        // Update height
         self.height = newHeight;
         
-        if (![self.superview isKindOfClass:[UITableView class]]) {
-            self.centerY = self.superview.height / 2;
-        }
-        
-        if ([self.lDelegate respondsToSelector:@selector(textViewDidChangeHeight::)]) {
+        if ([self.lDelegate respondsToSelector:@selector(textViewDidChangeHeight:)]) {
             [self.lDelegate textViewDidChangeHeight:self];
         }
     }

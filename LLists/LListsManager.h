@@ -19,4 +19,6 @@
 
 - (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list;
 
+- (NSString *)updateText:(NSString *)text;
+
 @end

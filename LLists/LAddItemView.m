@@ -7,12 +7,8 @@
 //
 
 #import "LAddItemView.h"
-#import "LIconButton.h"
-
 
 @interface LAddItemView () <LTextViewDelegate>
-
-@property (nonatomic) LIconButton *plusButton;
 
 @end
 
@@ -28,11 +24,11 @@
     // Plus Button
     self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth];
     self.plusButton.icon = LIconPlus;
-    self.plusButton.userInteractionEnabled = NO;
     
     // Text View
     self.textView.height = [self.textView heightForText:@""];
     self.textView.centerY = self.height / 2;
+    
     self.textView.placeholder = @"New Item";
     self.textView.lDelegate = self;
     
@@ -48,12 +44,23 @@
 
 #pragma mark - LTextViewDelegate
 
-- (void)textViewShouldChangeHeight:(LTextView *)textView by:(CGFloat)by {
-    CGFloat newHeigth = self.textView.height + by + kSeparatorBottomLineHeight;
-    self.height = newHeigth <= kSingleListCellMinHeight ? kSingleListCellMinHeight : newHeigth;
+- (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
     
-    [self.plusButton centerInSuperview];
-    self.plusButton.x = 0;
+    if (height + kSeparatorBottomLineHeight < kSingleListCellMinHeight) {
+        
+        self.height = kSingleListCellMinHeight;
+    }
+    else {
+        self.height = height + kSeparatorBottomLineHeight;
+        self.textView.top = 0;
+    }
+}
+
+- (void)textViewDidChangeHeight:(LTextView *)textView {
+    
+    if (textView.height < self.height - kSeparatorBottomLineHeight) {
+        self.textView.centerY = (kSingleListCellMinHeight - kSeparatorBottomLineHeight) / 2;
+    }
 }
 
 @end

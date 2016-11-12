@@ -61,7 +61,12 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 - (void)setItem:(Item *)item {
     _item = item;
+    
     self.itemView.textView.text = item.text;
+    
+    //
+    self.itemView.textView.height = [self.itemView.textView heightForText:@""];
+    self.itemView.textView.centerY = self.height / 2;
 }
 
 - (void)setTextViewShowing:(BOOL)showing {

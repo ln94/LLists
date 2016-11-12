@@ -57,12 +57,14 @@
 #pragma mark - List
 
 - (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position {
-    [self changeListIndexesFrom:position by:1];
-    
-    List *list = [List create];
-    list.title = title;
-    list.index = [NSNumber numberWithInteger:position];
-    list.color = C_RANDOM;
+    if (!title.isEmpty) {
+        [self changeListIndexesFrom:position by:1];
+        
+        List *list = [List create];
+        list.title = title;
+        list.index = [NSNumber numberWithInteger:position];
+        list.color = C_RANDOM;
+    }
 }
 
 - (void)deleteList:(List *)list completion:(void (^)(BOOL))completion {
@@ -88,16 +90,18 @@
 #pragma mark - Item
 
 - (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list {
-    [self changeItemIndexesFrom:position by:1 inList:list];
-    
-    Position *pos = [Position create];
-    pos.index = [NSNumber numberWithInteger:position];
-    pos.list = list;
-    
-    Item *item = [Item create];
-    item.text = text;
-    [item addPositionsObject:pos];
-    [item addListsObject:list];
+    if (!text.isEmpty) {
+        [self changeItemIndexesFrom:position by:1 inList:list];
+        
+        Position *pos = [Position create];
+        pos.index = [NSNumber numberWithInteger:position];
+        pos.list = list;
+        
+        Item *item = [Item create];
+        item.text = text;
+        [item addPositionsObject:pos];
+        [item addListsObject:list];
+    }
 }
 
 - (void)changeItemIndexesFrom:(NSInteger)index by:(NSInteger)value inList:(List *)list {
@@ -113,6 +117,34 @@
     for (Position *object in frc.fetchedObjects) {
         object.index = [NSNumber numberWithInteger:(object.indexValue + value)];
     }
+}
+
+#pragma mark - Utils
+
+- (NSString *)updateText:(NSString *)text {
+    if (text.isEmpty) {
+        return text;
+    }
+    
+    // Beginning
+    NSRange range = NSMakeRange(0, 1);
+    while ([text characterAtIndex:0] == ' ' || [text characterAtIndex:0] == '\n') {
+        text = [text stringByReplacingCharactersInRange:range withString:@""];
+        if (text.isEmpty) {
+            return text;
+        }
+    }
+    
+    // End
+    while ([text characterAtIndex:text.length-1] == ' ' || [text characterAtIndex:text.length-1] == '\n') {
+        range = NSMakeRange(text.length - 1, 1);
+        text = [text stringByReplacingCharactersInRange:range withString:@""];
+        if (text.isEmpty) {
+            return text;
+        }
+    }
+    
+    return text;
 }
 
 @end

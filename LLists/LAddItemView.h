@@ -6,10 +6,12 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "LItemCellView.h"
+#import "LIconButton.h"
 
 @interface LAddItemView : LItemCellView
+
+@property (nonatomic) LIconButton *plusButton;
 
 - (void)setShowingPlusButton:(BOOL)showing completion:(void (^)())completion;
 
