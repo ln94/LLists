@@ -14,4 +14,6 @@
 @property (nonatomic) LTextView *textView;
 @property (nonatomic) UIView *separator;
 
+- (void)centerTextView;
+
 @end

@@ -30,7 +30,6 @@
     self.textView.centerY = self.height / 2;
     
     self.textView.placeholder = @"New Item";
-    self.textView.lDelegate = self;
     
     return self;
 }
@@ -46,20 +45,16 @@
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
     
-    if (height + kSeparatorBottomLineHeight < kSingleListCellMinHeight) {
-        
-        self.height = kSingleListCellMinHeight;
-    }
-    else {
-        self.height = height + kSeparatorBottomLineHeight;
-        self.textView.top = 0;
-    }
+    self.height = height + kSeparatorBottomLineHeight > kSingleListCellMinHeight ? height + kSeparatorBottomLineHeight : kSingleListCellMinHeight;
 }
 
 - (void)textViewDidChangeHeight:(LTextView *)textView {
     
-    if (textView.height < self.height - kSeparatorBottomLineHeight) {
+    if (textView.height + kSeparatorBottomLineHeight < self.height) {
         self.textView.centerY = (kSingleListCellMinHeight - kSeparatorBottomLineHeight) / 2;
+    }
+    else {
+        self.textView.top = 0;
     }
 }
 

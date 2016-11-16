@@ -157,7 +157,7 @@
     [DataStore save];
     
     // Reload last edited cell
-    [self.tableView reloadRowsAtIndexPaths:@[[self.tableView indexPathForCell:self.editingTextView.cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [self.tableView reloadRowsAtIndexPaths:@[[self.tableView indexPathForCell:self.editingTextView.cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [self.editingTextView resignFirstResponder];
 }
