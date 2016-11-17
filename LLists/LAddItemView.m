@@ -17,12 +17,12 @@
     self.backgroundColor = C_WHITE;
     
     // Plus Button
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth insets:inset_bottom(1)];
     self.plusButton.icon = LIconPlus;
     
     // Text View
     self.textView.height = [self.textView heightForText:@""];
-    self.textView.centerY = self.height / 2;
+    [self centerTextView];
     
     self.textView.placeholder = @"New Item";
     

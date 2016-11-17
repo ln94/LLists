@@ -29,22 +29,18 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // Item View
-    self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView insets:inset_bottom(1)];
+    self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView];
     self.mainView = self.itemView;
     
     // Right Swipe View
     self.rightSwipeView = [[UIView alloc] init];
     
     // Done Button
-    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth insets:inset_left(2)];
+    self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth insets:i(0, 0, 1, 2)];
     self.doneButton.delegate = self;
     
     // Text View
     self.itemView.textView.userInteractionEnabled = NO;
-    
-    // Separator
-    self.separator = [[UIView alloc] initInSuperview:self.itemView edge:UIViewEdgeBottom length:kSeparatorSingleHeight];
-    self.separator.backgroundColor = C_SEPARATOR;
     
     return self;
 }
@@ -58,7 +54,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     LTextView *sampleTextView = [[LTextView alloc] initWithSize:s(screenWidth - kSingleListCellLeftViewWidth, 0)];
     sampleTextView.font = F_MAIN_TEXT;
     
-    CGFloat height = ceilf([sampleTextView heightForText:text]) + 1;
+    CGFloat height = [sampleTextView heightForText:text] + 1;
     return height > kSingleListCellMinHeight ? height : kSingleListCellMinHeight;
 }
 

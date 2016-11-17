@@ -21,20 +21,26 @@
     self.backgroundColor = C_CLEAR;
     
     // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self insets:inset_left(kSingleListCellLeftViewWidth)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, 1, kSingleListCellLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
     self.textView.lDelegate = self;
+    
+    // Separator
+    UIView *separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorSingleHeight];
+    separator.backgroundColor = C_SEPARATOR;
     
     return self;
 }
 
 - (void)centerTextView {
-    if (self.textView.height > self.height) {
+    // Fix height if it's too big
+    if (self.textView.height + 1 > self.height) {
+        LOG(@"- Fix height");
         self.textView.height = [self.textView heightForText:self.textView.text];
     }
     
-    if (self.textView.height < self.height) {
-        self.textView.centerY = self.height / 2;
+    if (self.textView.height + 1 < self.height) {
+        self.textView.centerY = (self.height - 1) / 2;
     }
     else {
         self.textView.top = 0;
@@ -44,7 +50,7 @@
 #pragma mark - LTextViewDelegate
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
-    self.height = height > kSingleListCellMinHeight ? height : kSingleListCellMinHeight;
+    self.height = height + 1 > kSingleListCellMinHeight ? height + 1: kSingleListCellMinHeight;
 }
 
 - (void)textViewDidChangeHeight:(LTextView *)textView {
