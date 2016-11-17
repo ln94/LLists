@@ -151,6 +151,11 @@
     
     // Hide Text View for editing cell
     textView.hidden = self.editingTextView.tag == indexPath.row;
+    
+    // Rearrange Editing Text View position
+    if (self.editingTextView.tag == indexPath.row) {
+        self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
+    }
 }
 
 
@@ -242,6 +247,8 @@
     // Hide and clear Add List View
     [self hideAddItemView:^{
         self.addItemView.textView.text = @"";
+        self.addItemView.textView.height = [self.addItemView.textView heightForText:@""];
+        self.addItemView.height = self.addItemView.textView.height;
     }];
 }
 
@@ -323,12 +330,11 @@
     
     // Start editing new cell
     self.editingTextView.tag = [self.tableView indexPathForCell:cell].row;
-    [self.tableView reloadData];
-    
-    self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
     self.editingTextView.text = ((LSingleListViewCell *)cell).item.text;
     self.editingTextView.hidden = NO;
     [self.editingTextView becomeFirstResponder];
+    
+    [self.tableView reloadData];
 }
 
 - (void)didSwipeCell:(LSwipeCell *)cell {

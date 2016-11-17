@@ -101,6 +101,8 @@
         item.text = text;
         [item addPositionsObject:pos];
         [item addListsObject:list];
+        
+        [DataStore save];
     }
 }
 
