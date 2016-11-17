@@ -37,6 +37,8 @@ static const CGFloat kSeparatorTopLineHeight = 0.75;
 static const CGFloat kSeparatorBottomLineHeight = 0.25;
 static const CGFloat kSeparatorHeight = 7;
 
+static const CGFloat kSeparatorSingleHeight = 0.5;
+
 static const CGFloat kIconHeight = 18;
 
 static const CGFloat kColorTagWidth = 15;

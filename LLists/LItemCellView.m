@@ -25,16 +25,12 @@
     self.textView.font = F_MAIN_TEXT;
     self.textView.lDelegate = self;
     
-    // Separator
-    self.separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorBottomLineHeight];
-    self.separator.backgroundColor = C_SEPARATOR;
-    
     return self;
 }
 
 - (void)centerTextView {
-    if (self.textView.height + kSeparatorBottomLineHeight < self.height) {
-        self.textView.centerY = (kSingleListCellMinHeight - kSeparatorBottomLineHeight) / 2;
+    if (self.textView.height < self.height) {
+        self.textView.centerY = self.height / 2;
     }
     else {
         self.textView.top = 0;
@@ -44,8 +40,7 @@
 #pragma mark - LTextViewDelegate
 
 - (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
-    
-    self.height = height + kSeparatorBottomLineHeight > kSingleListCellMinHeight ? height + kSeparatorBottomLineHeight : kSingleListCellMinHeight;
+    self.height = height > kSingleListCellMinHeight ? height : kSingleListCellMinHeight;
 }
 
 - (void)textViewDidChangeHeight:(LTextView *)textView {

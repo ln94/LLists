@@ -16,8 +16,6 @@
 @property (nonatomic) NSString *placeholder;
 @property (nonatomic, readonly) CGFloat minHeight;
 
-@property (nonatomic) LSingleListViewCell *cell;
-
 @property (nonatomic, strong) id<LTextViewDelegate> lDelegate;
 
 - (CGFloat)heightForText:(NSString *)text;

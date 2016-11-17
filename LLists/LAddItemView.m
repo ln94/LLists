@@ -8,11 +8,6 @@
 
 #import "LAddItemView.h"
 
-@interface LAddItemView () <LTextViewDelegate>
-
-@end
-
-
 @implementation LAddItemView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -39,23 +34,6 @@
     [UIView transitionWithView:self.plusButton duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:nil completion:^(BOOL finished) {
         if (completion) completion();
     }];
-}
-
-#pragma mark - LTextViewDelegate
-
-- (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
-    
-    self.height = height + kSeparatorBottomLineHeight > kSingleListCellMinHeight ? height + kSeparatorBottomLineHeight : kSingleListCellMinHeight;
-}
-
-- (void)textViewDidChangeHeight:(LTextView *)textView {
-    
-    if (textView.height + kSeparatorBottomLineHeight < self.height) {
-        self.textView.centerY = (kSingleListCellMinHeight - kSeparatorBottomLineHeight) / 2;
-    }
-    else {
-        self.textView.top = 0;
-    }
 }
 
 @end

@@ -16,6 +16,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 @property (nonatomic) LItemCellView *itemView;
 @property (nonatomic) LDoneButton *doneButton;
+@property (nonatomic, strong) UIView *separator;
 
 @end
 
@@ -28,7 +29,7 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // Item View
-    self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView];
+    self.itemView = [[LItemCellView alloc] initFullInSuperview:self.contentView insets:inset_bottom(1)];
     self.mainView = self.itemView;
     
     // Right Swipe View
@@ -41,6 +42,10 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     // Text View
     self.itemView.textView.userInteractionEnabled = NO;
     
+    // Separator
+    self.separator = [[UIView alloc] initInSuperview:self.itemView edge:UIViewEdgeBottom length:kSeparatorSingleHeight];
+    self.separator.backgroundColor = C_SEPARATOR;
+    
     return self;
 }
 
@@ -50,27 +55,33 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 
 + (CGFloat)rowHeightForText:(NSString *)text {
     LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    CGFloat height = [cell.itemView.textView heightForText:text] + kSeparatorBottomLineHeight;
-    return height >= kSingleListCellMinHeight ? height : kSingleListCellMinHeight + kSeparatorBottomLineHeight;
+    CGFloat height = ceilf([cell.itemView.textView heightForText:text] + 1);
+    return height > kSingleListCellMinHeight ? height : kSingleListCellMinHeight;
 }
 
 - (CGRect)getTextViewFrame {
-    CGFloat height = self.itemView.textView.height < self.height ? self.itemView.textView.height : self.itemView.height;
-    return r(self.itemView.textView.left, self.frame.origin.y + self.itemView.textView.frame.origin.y, self.itemView.textView.width, height);
+    [self updateViews];
+    self.itemView.textView.textColor = C_CLEAR;
+    return r(self.itemView.textView.left, self.frame.origin.y + self.itemView.textView.frame.origin.y, self.itemView.textView.width, self.itemView.textView.height);
 }
 
 - (void)setItem:(Item *)item {
     _item = item;
     
-    self.itemView.height = self.height;
-    
     self.itemView.textView.text = item.text;
-    self.itemView.textView.height = [self.itemView.textView heightForText:item.text];
+    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
     [self.itemView centerTextView];
+    
+    self.itemView.textView.textColor = C_MAIN_TEXT;
 }
 
-- (void)setTextViewShowing:(BOOL)showing {
-    self.itemView.textView.hidden = !showing;
+- (void)updateViews {
+
+    [self.itemView setEdge:UIViewEdgeTop length:self.contentView.height - 1];
+    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
+    [self.itemView centerTextView];
+    
+    [self.separator setEdge:UIViewEdgeBottom length:kSeparatorSingleHeight insets:inset_bottom(0.1)];
 }
 
 #pragma mark - LDoneButtonDelegate

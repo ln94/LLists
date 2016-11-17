@@ -18,6 +18,6 @@
 
 - (CGRect)getTextViewFrame;
 
-- (void)setTextViewShowing:(BOOL)showing;
+- (void)updateViews;
 
 @end

@@ -53,13 +53,6 @@ static const CGFloat kTextContainerInsetBottom = 7;
     self.placeholderLabel.text = placeholder;
 }
 
-- (void)setCell:(LSingleListViewCell *)cell {
-    _cell = cell;
-    
-    if (cell) {
-        self.text = cell.item.text;
-    }
-}
 
 #pragma mark - Height
 
