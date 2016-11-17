@@ -7,16 +7,16 @@
 //
 
 #import "LSingleListViewCell.h"
-#import "LItemCellView.h"
 #import "LDoneButton.h"
 
 static NSString *const reuseIdentifier = @"singleListViewCell";
 
 @interface LSingleListViewCell () <LDoneButtonDelegate>
 
-@property (nonatomic) LItemCellView *itemView;
-@property (nonatomic) LDoneButton *doneButton;
+@property (nonatomic, strong) LDoneButton *doneButton;
 @property (nonatomic, strong) UIView *separator;
+
+@property (nonatomic, strong) UIView *testView;
 
 @end
 
@@ -54,35 +54,32 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
 }
 
 + (CGFloat)rowHeightForText:(NSString *)text {
-    LSingleListViewCell *cell = [[LSingleListViewCell alloc] initWithSize:[UIScreen mainScreen].bounds.size];
-    CGFloat height = ceilf([cell.itemView.textView heightForText:text] + 1);
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    LTextView *sampleTextView = [[LTextView alloc] initWithSize:s(screenWidth - kSingleListCellLeftViewWidth, 0)];
+    sampleTextView.font = F_MAIN_TEXT;
+    
+    CGFloat height = ceilf([sampleTextView heightForText:text]) + 1;
     return height > kSingleListCellMinHeight ? height : kSingleListCellMinHeight;
 }
 
 - (CGRect)getTextViewFrame {
-    [self updateViews];
-    self.itemView.textView.textColor = C_CLEAR;
-    return r(self.itemView.textView.left, self.frame.origin.y + self.itemView.textView.frame.origin.y, self.itemView.textView.width, self.itemView.textView.height);
+    return rect_origin(p(self.itemView.textView.left, self.frame.origin.y + self.itemView.textView.frame.origin.y), self.itemView.textView.size);
 }
 
 - (void)setItem:(Item *)item {
     _item = item;
     
     self.itemView.textView.text = item.text;
-    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
-    [self.itemView centerTextView];
-    
-    self.itemView.textView.textColor = C_MAIN_TEXT;
 }
 
-- (void)updateViews {
-
-    [self.itemView setEdge:UIViewEdgeTop length:self.contentView.height - 1];
-    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
-    [self.itemView centerTextView];
-    
-    [self.separator setEdge:UIViewEdgeBottom length:kSeparatorSingleHeight insets:inset_bottom(0.1)];
-}
+//- (void)updateViews {
+//
+//    [self.itemView setEdge:UIViewEdgeTop length:self.contentView.height - 1];
+//    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
+//    [self.itemView centerTextView];
+//    
+//    [self.separator setEdge:UIViewEdgeBottom length:kSeparatorSingleHeight insets:inset_bottom(0.1)];
+//}
 
 #pragma mark - LDoneButtonDelegate
 

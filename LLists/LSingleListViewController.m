@@ -118,7 +118,6 @@
     itemRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN lists" argumentArray:@[self.list]];
     itemRequest.sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"currentIndex" ascending:YES];
     self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:itemRequest];
-//    self.items.delegate = self;
     [self.items performFetch];
 }
 
@@ -140,25 +139,35 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat height = [LSingleListViewCell rowHeightForText:[self.items objectAtIndexPath:indexPath].text];
+    LOG(@"- Row %ld Height %.2f", indexPath.row, height);
     return height;
 }
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Center Text View
+    LTextView *textView = ((LSingleListViewCell *)cell).itemView.textView;
+    textView.height = [textView heightForText:textView.text];
+    [((LSingleListViewCell *)cell).itemView centerTextView];
+    
+    // Hide Text View for editing cell
+    textView.hidden = self.editingTextView.tag == indexPath.row;
+}
+
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self.tableView setEditing:NO];
     
+    // End editing cell
+    if (self.editingTextView.tag >= 0) {
+        [self textViewShouldEndEditing:self.editingTextView];
+    }
+    
+    // Show Add Item View
     if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
         [self showAddItemView];
     }
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [DataStore save];
-    
-    // Reload last edited cell
-    
-    [self.editingTextView resignFirstResponder];
 }
 
 
@@ -236,37 +245,6 @@
     }];
 }
 
-#pragma mark - LTextViewDelegate
-
-- (void)textViewShouldBeginEditing:(LTextView *)textView {
-    
-}
-
-- (void)textViewShouldEndEditing:(LTextView *)textView {
-    // Update text
-    self.items.fetchedObjects[textView.tag].text = [ListsManager updateText:textView.text];
-    textView.tag = -1;
-    
-    textView.hidden = YES;
-}
-
-- (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text {
-    self.items.fetchedObjects[textView.tag].text = text;
-}
-
-- (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
-    // Reload editing cell
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:textView.tag inSection:0];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)textViewDidChangeHeight:(LTextView *)textView {
-    // Get new frame
-    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
-    textView.frame = [cell getTextViewFrame];
-}
-
-
 #pragma mark - LShadowViewDelegate
 
 - (void)shadowViewDidSwipeUp {
@@ -292,11 +270,62 @@
 }
 
 
+#pragma mark - LTextViewDelegate
+
+- (void)textViewShouldBeginEditing:(LTextView *)textView {
+    
+}
+
+- (void)textViewShouldEndEditing:(LTextView *)textView {
+    // Update last editing cell
+    [self updateLastEditedCell];
+
+    [self.tableView reloadData];
+    
+    // Null Editing Text View
+    textView.tag = -1;
+    textView.hidden = YES;
+}
+
+- (void)textViewShouldChangeText:(LTextView *)textView to:(NSString *)text {
+    self.items.fetchedObjects[textView.tag].text = text;
+}
+
+- (void)textViewShouldChangeHeight:(LTextView *)textView to:(CGFloat)height {
+    // Reload editing cell
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:textView.tag inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)textViewDidChangeHeight:(LTextView *)textView {
+    // Get new frame
+    LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:textView.tag inSection:0]];
+    textView.frame = [cell getTextViewFrame];
+}
+
+#pragma mark - Editing Text View
+
+- (void)updateLastEditedCell {
+    if (self.editingTextView.tag >= 0) {
+        LSingleListViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.editingTextView.tag inSection:0]];
+        cell.item.text = [ListsManager updateText:self.editingTextView.text];
+        
+        [DataStore save];
+    }
+}
+
+
 #pragma mark - LSwipeCellDelegate
 
 - (void)didTapCell:(LSwipeCell *)cell {
-    self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
+    // Update last edited cell
+    [self updateLastEditedCell];
+    
+    // Start editing new cell
     self.editingTextView.tag = [self.tableView indexPathForCell:cell].row;
+    [self.tableView reloadData];
+    
+    self.editingTextView.frame = [(LSingleListViewCell *)cell getTextViewFrame];
     self.editingTextView.text = ((LSingleListViewCell *)cell).item.text;
     self.editingTextView.hidden = NO;
     [self.editingTextView becomeFirstResponder];

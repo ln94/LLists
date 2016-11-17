@@ -21,7 +21,7 @@
     self.backgroundColor = C_CLEAR;
     
     // Text View
-    self.textView = [[LTextView alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorBottomLineHeight, kSingleListCellLeftViewWidth)];
+    self.textView = [[LTextView alloc] initFullInSuperview:self insets:inset_left(kSingleListCellLeftViewWidth)];
     self.textView.font = F_MAIN_TEXT;
     self.textView.lDelegate = self;
     
@@ -29,6 +29,10 @@
 }
 
 - (void)centerTextView {
+    if (self.textView.height > self.height) {
+        self.textView.height = [self.textView heightForText:self.textView.text];
+    }
+    
     if (self.textView.height < self.height) {
         self.textView.centerY = self.height / 2;
     }

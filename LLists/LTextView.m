@@ -66,7 +66,7 @@ static const CGFloat kTextContainerInsetBottom = 7;
     
     CGFloat height = rect.size.height + self.textContainerInset.top + self.textContainerInset.bottom;
 //    LOG(@"--- %.2f", height);
-    return height;
+    return ceilf(height);
 }
 
 - (CGFloat)minHeight {

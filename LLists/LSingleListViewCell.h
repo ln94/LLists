@@ -7,10 +7,12 @@
 //
 
 #import "LSwipeCell.h"
+#import "LItemCellView.h"
 
 @interface LSingleListViewCell : LSwipeCell
 
 @property (nonatomic, strong) Item *item;
+@property (nonatomic, strong) LItemCellView *itemView;
 
 + (NSString *)reuseIdentifier;
 
