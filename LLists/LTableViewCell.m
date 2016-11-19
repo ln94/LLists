@@ -49,7 +49,7 @@
     self.swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeRight)];
     self.swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     
-    self.swiped = NO;
+    _swiped = NO;
     
     // Tap
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
@@ -85,41 +85,37 @@
 
 - (void)setSwiped:(BOOL)swiped {
     
-    if (self.mainView && self.rightSwipeView) {
+    if (self.mainView && self.rightSwipeView && _swiped != swiped) {
         
-        if (swiped && !_swiped) {
+        _swiped = swiped;
+        
+        if (swiped) {
             // Reveal Right Swipe View
-            [UIView animateWithDuration:kAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
                 self.mainView.left = -self.rightSwipeView.width;
                 self.rightSwipeView.right = self.contentView.width;
             }];
         }
-        else if (!swiped && _swiped) {
+        else if (!swiped) {
             // Hide Right Swipe View
-            [UIView animateWithDuration:kAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
                 self.mainView.left = 0;
                 self.rightSwipeView.left = self.contentView.width;
             }];
         }
+        
+        if (self.delegate) {
+            [self.delegate didSwipeCell:self];
+        }
     }
-    
-    _swiped = swiped;
 }
 
 - (void)didSwipeLeft {
     self.swiped = YES;
-    
-    if (self.delegate) {
-        [self.delegate didSwipeCell:self];
-    }
 }
 
 - (void)didSwipeRight {
     self.swiped = NO;
-    
-    if (self.delegate) {
-        [self.delegate didSwipeCell:self];
-    }
 }
 
 #pragma mark - Tap

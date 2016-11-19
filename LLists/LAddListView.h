@@ -2,14 +2,13 @@
 //  LAddListView.h
 //  LLists
 //
-//  Created by Lana Shatonova on 9/11/16.
+//  Created by Lana Shatonova on 20/11/16.
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import "LListCellView.h"
+#import "LAddView.h"
+#import "LListViewProtocol.h"
 
-@interface LAddListView : LListCellView
-
-- (void)animateColorTagShowing:(BOOL)showing completion:(void (^)())completion;
+@interface LAddListView : LAddView <LListViewProtocol>
 
 @end

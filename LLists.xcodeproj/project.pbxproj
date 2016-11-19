@@ -26,6 +26,10 @@
 		875F65CB1DD5D5E200142531 /* Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 875F65CA1DD5D5E200142531 /* Position.m */; };
 		875F65CE1DD5D5E800142531 /* _Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 875F65CD1DD5D5E800142531 /* _Position.m */; };
 		87D178671DDFF4D2007E6C27 /* LScrollTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D178661DDFF4D2007E6C27 /* LScrollTimer.m */; };
+		87D1786B1DE06356007E6C27 /* LAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D1786A1DE06356007E6C27 /* LAddView.m */; };
+		87D1786E1DE06A7A007E6C27 /* LListViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D1786D1DE06A7A007E6C27 /* LListViewProtocol.m */; };
+		87D178711DE07DD8007E6C27 /* LSecondClassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D178701DE07DD8007E6C27 /* LSecondClassView.m */; };
+		87D178761DE08D67007E6C27 /* LAddListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D178751DE08D67007E6C27 /* LAddListView.m */; };
 		87D3C1921DD3E9510038895D /* LTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1911DD3E9510038895D /* LTableViewController.m */; };
 		87D3C19D1DD3F0C30038895D /* LAddItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C19C1DD3F0C30038895D /* LAddItemView.m */; };
 		87D3C1A11DD3F1F20038895D /* LItemCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D3C1A01DD3F1F20038895D /* LItemCellView.m */; };
@@ -57,7 +61,6 @@
 		87F746781DD0359900C6DF7C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746771DD0359900C6DF7C /* Item.m */; };
 		87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7467A1DD1429800C6DF7C /* LTextView.m */; };
 		87F746851DD2C2C800C6DF7C /* LHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746841DD2C2C800C6DF7C /* LHeaderView.m */; };
-		87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746871DD2D10800C6DF7C /* LAddListView.m */; };
 		87F7468B1DD2D20600C6DF7C /* LListCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F7468A1DD2D20600C6DF7C /* LListCellView.m */; };
 		87F746921DD3B38800C6DF7C /* LSeparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F746911DD3B38800C6DF7C /* LSeparator.m */; };
 /* End PBXBuildFile section */
@@ -73,6 +76,14 @@
 		875F65CD1DD5D5E800142531 /* _Position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Position.m; path = Model/_Position.m; sourceTree = "<group>"; };
 		87D178651DDFF4D2007E6C27 /* LScrollTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LScrollTimer.h; sourceTree = "<group>"; };
 		87D178661DDFF4D2007E6C27 /* LScrollTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LScrollTimer.m; sourceTree = "<group>"; };
+		87D178691DE06356007E6C27 /* LAddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAddView.h; sourceTree = "<group>"; };
+		87D1786A1DE06356007E6C27 /* LAddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAddView.m; sourceTree = "<group>"; };
+		87D1786C1DE06A7A007E6C27 /* LListViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListViewProtocol.h; sourceTree = "<group>"; };
+		87D1786D1DE06A7A007E6C27 /* LListViewProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListViewProtocol.m; sourceTree = "<group>"; };
+		87D1786F1DE07DD8007E6C27 /* LSecondClassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSecondClassView.h; sourceTree = "<group>"; };
+		87D178701DE07DD8007E6C27 /* LSecondClassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSecondClassView.m; sourceTree = "<group>"; };
+		87D178741DE08D67007E6C27 /* LAddListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAddListView.h; sourceTree = "<group>"; };
+		87D178751DE08D67007E6C27 /* LAddListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAddListView.m; sourceTree = "<group>"; };
 		87D3C1901DD3E9510038895D /* LTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTableViewController.h; sourceTree = "<group>"; };
 		87D3C1911DD3E9510038895D /* LTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTableViewController.m; sourceTree = "<group>"; };
 		87D3C19B1DD3F0C30038895D /* LAddItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAddItemView.h; sourceTree = "<group>"; };
@@ -135,8 +146,6 @@
 		87F7467A1DD1429800C6DF7C /* LTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTextView.m; sourceTree = "<group>"; };
 		87F746831DD2C2C800C6DF7C /* LHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHeaderView.h; sourceTree = "<group>"; };
 		87F746841DD2C2C800C6DF7C /* LHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHeaderView.m; sourceTree = "<group>"; };
-		87F746861DD2D10800C6DF7C /* LAddListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAddListView.h; sourceTree = "<group>"; };
-		87F746871DD2D10800C6DF7C /* LAddListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAddListView.m; sourceTree = "<group>"; };
 		87F746891DD2D20600C6DF7C /* LListCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LListCellView.h; sourceTree = "<group>"; };
 		87F7468A1DD2D20600C6DF7C /* LListCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LListCellView.m; sourceTree = "<group>"; };
 		87F746901DD3B38800C6DF7C /* LSeparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSeparator.h; sourceTree = "<group>"; };
@@ -176,6 +185,7 @@
 		87374CC21DD5BDD1003C14AC /* Customs Objects */ = {
 			isa = PBXGroup;
 			children = (
+				87D178731DE085C8007E6C27 /* Add View */,
 				87D178681DDFF4D7007E6C27 /* Scroll Timer */,
 				87D3C1951DD3ED0E0038895D /* Header */,
 				87374CC71DD5BE4A003C14AC /* Separator */,
@@ -289,6 +299,28 @@
 			name = "Scroll Timer";
 			sourceTree = "<group>";
 		};
+		87D178721DE07DDC007E6C27 /* Second Class View */ = {
+			isa = PBXGroup;
+			children = (
+				87D1786F1DE07DD8007E6C27 /* LSecondClassView.h */,
+				87D178701DE07DD8007E6C27 /* LSecondClassView.m */,
+				87D178691DE06356007E6C27 /* LAddView.h */,
+				87D1786A1DE06356007E6C27 /* LAddView.m */,
+				87D1786C1DE06A7A007E6C27 /* LListViewProtocol.h */,
+				87D1786D1DE06A7A007E6C27 /* LListViewProtocol.m */,
+				87D178741DE08D67007E6C27 /* LAddListView.h */,
+				87D178751DE08D67007E6C27 /* LAddListView.m */,
+			);
+			name = "Second Class View";
+			sourceTree = "<group>";
+		};
+		87D178731DE085C8007E6C27 /* Add View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Add View";
+			sourceTree = "<group>";
+		};
 		87D3C1941DD3ED020038895D /* Text View */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,8 +405,6 @@
 		87D3C1BB1DD54C410038895D /* Add View */ = {
 			isa = PBXGroup;
 			children = (
-				87F746861DD2D10800C6DF7C /* LAddListView.h */,
-				87F746871DD2D10800C6DF7C /* LAddListView.m */,
 			);
 			name = "Add View";
 			sourceTree = "<group>";
@@ -510,6 +540,7 @@
 			isa = PBXGroup;
 			children = (
 				87D3C1971DD3ED210038895D /* Table View Controller */,
+				87D178721DE07DDC007E6C27 /* Second Class View */,
 				87374CC61DD5BE1B003C14AC /* Text Field */,
 				87D3C1941DD3ED020038895D /* Text View */,
 				87374CC21DD5BDD1003C14AC /* Customs Objects */,
@@ -622,6 +653,7 @@
 			files = (
 				87D3C1A11DD3F1F20038895D /* LItemCellView.m in Sources */,
 				87D3C1921DD3E9510038895D /* LTableViewController.m in Sources */,
+				87D1786E1DE06A7A007E6C27 /* LListViewProtocol.m in Sources */,
 				87F746781DD0359900C6DF7C /* Item.m in Sources */,
 				87F746621DD01E6F00C6DF7C /* LSettingsManager.m in Sources */,
 				87F5D5711DDE4287003F2775 /* LItemCellRightSwipeView.m in Sources */,
@@ -643,11 +675,13 @@
 				87F7465A1DD01E0A00C6DF7C /* LSingleListViewController.m in Sources */,
 				87D3C1B91DD54B080038895D /* LListCellRightSwipeView.m in Sources */,
 				87374CC11DD5BDC8003C14AC /* LTextField.m in Sources */,
+				87D178711DE07DD8007E6C27 /* LSecondClassView.m in Sources */,
 				87374CCE1DD5CA80003C14AC /* LShadowView.m in Sources */,
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
-				87F746881DD2D10900C6DF7C /* LAddListView.m in Sources */,
 				87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */,
 				87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */,
+				87D1786B1DE06356007E6C27 /* LAddView.m in Sources */,
+				87D178761DE08D67007E6C27 /* LAddListView.m in Sources */,
 				87F7465E1DD01E2C00C6DF7C /* LListsManager.m in Sources */,
 				87D178671DDFF4D2007E6C27 /* LScrollTimer.m in Sources */,
 				875F65CE1DD5D5E800142531 /* _Position.m in Sources */,

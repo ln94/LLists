@@ -23,16 +23,12 @@
     CGSize buttonSize = s(kHeaderViewButtonWidth, kHeaderViewButtonHeight);
     
     // Add Button: on the right
-    self.addButton = [[LIconButton alloc] initInSuperview:self corner:UIViewCornerBottomRight size:buttonSize];
+    self.addButton = [[LIconButton alloc] initInSuperview:self corner:UIViewCornerBottomRight size:buttonSize insets:inset_right(-12.5)];
     self.addButton.icon = LIconPlus;
-    [self.addButton moveIcon:LMoveDirectionRight by:12.5];
-    
-    self.showingAddButton = YES;
     
     // Back Button: on the left
-    self.backButton = [[LIconButton alloc] initInSuperview:self corner:UIViewCornerBottomLeft size:buttonSize];
+    self.backButton = [[LIconButton alloc] initInSuperview:self corner:UIViewCornerBottomLeft size:buttonSize insets:inset_left(-22)];
     self.backButton.icon = LIconBack;
-    [self.backButton moveIcon:LMoveDirectionLeft by:22];
     
     // Settings Button: in the middle
     self.settingsButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeBottom size:buttonSize];
@@ -43,14 +39,6 @@
     separator.backgroundColor = C_SEPARATOR;
     
     return self;
-}
-
-- (void)setShowingAddButton:(BOOL)showingAddButton {
-    _showingAddButton = showingAddButton;
-    
-    [UIView transitionWithView:self.addButton duration:kAnimationDuration options:(showingAddButton ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft) animations:^{
-        self.addButton.hidden = !showingAddButton;
-    } completion:nil];
 }
 
 @end

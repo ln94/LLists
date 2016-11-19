@@ -9,6 +9,11 @@
 #ifndef Constants_h
 #define Constants_h
 
+typedef NS_ENUM(NSInteger, LTableType) {
+    LTableTypeList = 0,
+    LTableTypeItem
+};
+
 // Fonts
 #define F_MAIN_TEXT [UIFont systemFontOfSize:16]
 #define F_TITLE [UIFont systemFontOfSize:17]
@@ -18,10 +23,10 @@
 #define C_SEPARATOR C_GRAY(0.82)
 #define C_ICON C_GRAY(0.75)
 #define C_SHADOW C_BLACK_ALPHA(0.2)
-#define C_SELECTED C_GRAY(0.95)
+#define C_SELECTED C_GRAY(0.97)
 #define C_EMPTY_VIEW C_GRAY(0.98)
 //#define C_MOVING_CELL C_GRAY(0.99)
-#define C_MOVING_SEPARATOR C_GRAY(0.8)
+#define C_MOVING_SEPARATOR C_GRAY(0.85)
 
 // Padding
 static const CGFloat kPaddingTiny = 5;
@@ -62,7 +67,10 @@ static const CGFloat kMovingCellLeftOffset = 21;
 
 
 // Animation
-static const CGFloat kAnimationDuration = 0.3;
+static const CGFloat kAnimationDurationTiny = 0.2;
+static const CGFloat kAnimationDurationSmall = 0.3;
+static const CGFloat kAnimationDurationMed = 0.4;
+
 
 static const UIViewAnimationOptions kShowingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;
 static const UIViewAnimationOptions kHidingAnimation = UIViewAnimationOptionTransitionFlipFromRight;

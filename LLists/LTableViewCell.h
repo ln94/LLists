@@ -21,6 +21,8 @@
 
 @property (nonatomic) id<LSwipeCellDelegate> delegate;
 
++ (NSString *)reuseIdentifier;
+
 @end
 
 

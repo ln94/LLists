@@ -14,7 +14,7 @@
 
 - (void)createDefaultLists:(void (^)(BOOL success))completion;
 
-- (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position;
+- (void)saveListWithTitle:(NSString *)title color:(UIColor *)color onPosition:(NSInteger)position;
 - (void)deleteList:(List *)list completion:(void (^)(BOOL finished))completion ;
 
 - (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list;

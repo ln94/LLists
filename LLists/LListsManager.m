@@ -56,14 +56,14 @@
 
 #pragma mark - List
 
-- (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position {
+- (void)saveListWithTitle:(NSString *)title color:(UIColor *)color onPosition:(NSInteger)position {
     if (!title.isEmpty) {
         [self changeListIndexesFrom:position by:1];
         
         List *list = [List create];
         list.title = title;
         list.index = [NSNumber numberWithInteger:position];
-        list.color = C_RANDOM;
+        list.color = color;
         
         [DataStore save];
     }

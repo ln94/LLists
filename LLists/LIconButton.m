@@ -61,11 +61,11 @@
     }
 }
 
-- (void)moveIcon:(LMoveDirection)direction by:(CGFloat)by {
-    
-    self.iconView.x += direction == LMoveDirectionLeft ? -by : by;
+- (void)setHidden:(BOOL)hidden {
+    [UIView transitionWithView:self duration:kAnimationDurationMed options:(hidden ? kHidingAnimation : kShowingAnimation) animations:^{
+        [super setHidden:hidden];
+    } completion:nil];
 }
-
 
 #pragma mark - Draw
 

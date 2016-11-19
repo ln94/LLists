@@ -37,7 +37,7 @@
 
 - (void)setShowingPlusButton:(BOOL)showing completion:(void (^)())completion {
     
-    [UIView transitionWithView:self.plusButton duration:kAnimationDuration options:(showing ? kShowingAnimation : kHidingAnimation) animations:nil completion:^(BOOL finished) {
+    [UIView transitionWithView:self.plusButton duration:kAnimationDurationSmall options:(showing ? kShowingAnimation : kHidingAnimation) animations:nil completion:^(BOOL finished) {
         if (completion) completion();
     }];
 }

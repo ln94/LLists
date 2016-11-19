@@ -199,7 +199,7 @@
     [self unswipeCell];
     
     // Show Add Item View
-    if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
+    if (scrollView.contentOffset.y < -kPaddingSmall && !self.header.addButton.hidden) {
         [self showAddItemView];
     }
 }
@@ -230,12 +230,12 @@
         [self unswipeCell];
         
         // Hide Add Button
-        [self.header setShowingAddButton:NO];
+        self.header.addButton.hidden = YES;
         
         // Show Add Item View
         self.addItemView.hidden = NO;
         
-        [UIView animateWithDuration:kAnimationDuration animations:^{
+        [UIView animateWithDuration:kAnimationDurationSmall animations:^{
             self.addItemView.top = self.header.bottom;
             self.shadowView.hidden = NO;
             
@@ -248,7 +248,7 @@
             }];
             
             // Disable Table View scrolling
-            [UIView animateWithDuration:kAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
                 self.tableView.scrollEnabled = NO;
             }];
         }];
@@ -264,7 +264,7 @@
         
         // Hide Add Item View
         [self.addItemView setShowingPlusButton:NO completion:^{
-            [UIView animateWithDuration:kAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
                 self.addItemView.bottom = self.header.bottom;
                 self.shadowView.hidden = YES;
                 
@@ -281,7 +281,7 @@
             }];
             
             // Show Add button
-            [self.header setShowingAddButton:YES];
+            self.header.addButton.hidden = NO;
         }];
     }
 }

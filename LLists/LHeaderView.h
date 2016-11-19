@@ -12,7 +12,6 @@
 @interface LHeaderView : UIView
 
 @property (nonatomic) LIconButton *addButton;
-@property (nonatomic) BOOL showingAddButton;
 
 @property (nonatomic) LIconButton *backButton;
 @property (nonatomic) LIconButton *settingsButton;

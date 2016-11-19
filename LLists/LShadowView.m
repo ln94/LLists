@@ -31,6 +31,12 @@
     return self;
 }
 
+- (void)setHidden:(BOOL)hidden {
+    [UIView transitionWithView:self duration:kAnimationDurationMed options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [super setHidden:hidden];
+    } completion:nil];
+}
+
 - (void)didSwipeUp {
     if (self.delegate) {
         [self.delegate shadowViewDidSwipeUp];
