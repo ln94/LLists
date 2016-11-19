@@ -48,7 +48,7 @@
 - (void)setShowingAddButton:(BOOL)showingAddButton {
     _showingAddButton = showingAddButton;
     
-    [UIView transitionWithView:self.addButton duration:plusButtonAnimationDuration options:(showingAddButton ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft) animations:^{
+    [UIView transitionWithView:self.addButton duration:kAnimationDuration options:(showingAddButton ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft) animations:^{
         self.addButton.hidden = !showingAddButton;
     } completion:nil];
 }

@@ -64,13 +64,16 @@
         list.title = title;
         list.index = [NSNumber numberWithInteger:position];
         list.color = C_RANDOM;
+        
+        [DataStore save];
     }
 }
 
-- (void)deleteList:(List *)list completion:(void (^)(BOOL))completion {
+- (void)deleteList:(List *)list completion:(void (^)(BOOL finished))completion  {
     [self changeListIndexesFrom:[list.index integerValue]+1 by:-1];
     
     [list destroy];
+    [DataStore save];
 }
 
 - (void)changeListIndexesFrom:(NSInteger)index by:(NSInteger)value {
@@ -104,6 +107,13 @@
         
         [DataStore save];
     }
+}
+
+- (void)deleteItem:(Item *)item inList:(List *)list completion:(void (^)(BOOL finished))completion {
+    [self changeItemIndexesFrom:[item.currentIndex integerValue]+1 by:-1 inList:list];
+    
+    [item destroy];
+    [DataStore save];
 }
 
 - (void)changeItemIndexesFrom:(NSInteger)index by:(NSInteger)value inList:(List *)list {

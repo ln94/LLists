@@ -10,6 +10,7 @@
 #import "LAllListsViewCell.h"
 #import "LAddListView.h"
 #import "LSingleListViewController.h"
+#import "LScrollTimer.h"
 
 
 @interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LShadowViewDelegate, LSwipeCellDelegate>
@@ -18,16 +19,22 @@
 
 @property (nonatomic) LAddListView *addListView;
 
-@property (nonatomic) List *movingList;
-
-@property (nonatomic) LSwipeCell *swipedCell;
+@property (nonatomic) LTableViewCell *swipedCell;
 
 @property (nonatomic) UIAlertController *deleteListAlert;
+
+@property (nonatomic) List *movingList;
+@property (nonatomic) UIView *movingCellSnapshot;
+@property (nonatomic) LScrollTimer *scrollTimer;
 
 @end
 
 
-@implementation LAllListsViewController
+@implementation LAllListsViewController {
+    BOOL addViewAnimationInProgress;
+    BOOL cellMovingInProgress;
+    CGFloat maxScrollTouchOffset;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -66,12 +73,18 @@
         [self unswipeCell];
     }];
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list completion:nil];
-        [self unswipeCell];
+        [self deleteList];
     }];
     [self.deleteListAlert addAction:cancelAction];
     [self.deleteListAlert addAction:deleteAction];
     
+    // Scroll Timer
+    maxScrollTouchOffset = kAllListsCellHeight / 2;
+    self.scrollTimer = [[LScrollTimer alloc] initWithScrollingTableView:self.tableView andMaxTouchOffset:maxScrollTouchOffset];
+    
+    // Variables
+    addViewAnimationInProgress = NO;
+    cellMovingInProgress = NO;
     
     [self.view bringSubviewToFront:self.header];
 }
@@ -82,17 +95,8 @@
     if (!self.lists.numberOfObjects) {
         self.emptyView.hidden = NO;
     }
-    [self.tableView reloadData];
 }
 
-#pragma mark - Actions
-
-- (void)unswipeCell {
-    if (self.swipedCell) {
-        self.swipedCell.swiped = NO;
-        self.swipedCell = nil;
-    }
-}
 
 #pragma mark - UITableViewDataSource
 
@@ -106,11 +110,43 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LAllListsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[LAllListsViewCell reuseIdentifier]];
-    cell.backgroundColor = C_CLEAR;
     cell.list = [self.lists objectAtIndexPath:indexPath];
+//    cell.moving = cell.list == self.movingList;
     cell.delegate = self;
     
     return cell;
+}
+
+
+#pragma mark - NSFetchedResultsControllerDelegate
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+
+    // Table animation
+    switch (type) {
+        case NSFetchedResultsChangeInsert:{
+            
+        }
+            break;
+            
+        case NSFetchedResultsChangeDelete:{
+            
+        }
+            break;
+            
+        case NSFetchedResultsChangeMove:{
+            
+        }
+            break;
+            
+        case NSFetchedResultsChangeUpdate:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
@@ -124,17 +160,11 @@
     [self unswipeCell];
     
     // Open Add List view if scrolled at the top
-    if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
+    if (!scrollView.isDecelerating && scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
         [self showAddListView];
     }
 }
 
-
-#pragma mark - NSFetchedResultsControllerDelegate
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView reloadData];
-}
 
 #pragma mark - Add List
 
@@ -143,52 +173,73 @@
 }
 
 - (void)showAddListView {
-    // Hide Add Button
-    [self.header setShowingAddButton:NO];
-    
-    // Show Add List View
-    self.addListView.hidden = NO;
+    if (!addViewAnimationInProgress) {
+        addViewAnimationInProgress = YES;
+        
+        // Hide swiped cell
+        [self unswipeCell];
+        
+        // Hide Add Button
+        [self.header setShowingAddButton:NO];
+        
+        // Show Add List View
+        self.addListView.hidden = NO;
+        
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.addListView.top = self.header.bottom;
+            self.shadowView.hidden = NO;
+            
+        } completion:^(BOOL finished) {
+            [self.addListView animateColorTagShowing:YES completion:^{
+                // Show keyboard
+                run_main(^{
+                    [self.addListView.textField becomeFirstResponder];
 
-    [UIView animateWithDuration:addViewAnimationDuration animations:^{
-        self.addListView.top = self.header.bottom;
-        self.shadowView.hidden = NO;
-        
-    } completion:^(BOOL finished) {
-        
-        [self.addListView animateColorTagShowing:YES completion:^{
-            // Show keyboard
-            run_main(^{
-                [self.addListView.textField becomeFirstResponder];
-            });
+                    addViewAnimationInProgress = NO;
+                });
+            }];
+            
+            // Disable Table View scrolling
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.tableView.scrollEnabled = NO;
+            }];
         }];
-    }];
+    }
 }
 
 - (void)hideAddListView:(void (^)())completion {
-    // Hide keyboard
-    [self.addListView.textField resignFirstResponder];
-    
-    // Hide Add List View
-    [self.addListView animateColorTagShowing:NO completion:^{
+    if (!addViewAnimationInProgress) {
+        addViewAnimationInProgress = YES;
         
-        [UIView animateWithDuration:addViewAnimationDuration animations:^{
-            self.addListView.bottom = self.header.bottom;
-            self.shadowView.hidden = YES;
+        // Hide keyboard
+        [self.addListView.textField resignFirstResponder];
+        
+        // Hide Add List View
+        [self.addListView animateColorTagShowing:NO completion:^{
             
-        } completion:^(BOOL finished) {
-            self.addListView.hidden = YES;
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.addListView.bottom = self.header.bottom;
+                self.shadowView.hidden = YES;
+                
+            } completion:^(BOOL finished) {
+                self.addListView.hidden = YES;
+                addViewAnimationInProgress = NO;
+                
+                // Enable Table View scrolling
+                self.tableView.scrollEnabled = YES;
+                
+                if (completion) {
+                    completion();
+                }
+            }];
             
-            if (completion) {
-                completion();
-            }
+            // Show Add button
+            [self.header setShowingAddButton:YES];
         }];
-        
-        // Show Add button
-        [self.header setShowingAddButton:YES];
-    }];
+    }
 }
 
-- (void)addNewList {
+- (void)addList {
     if (!self.addListView.textField.text.isEmpty) {
         // Save new list
         NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
@@ -201,13 +252,27 @@
     }
 }
 
+#pragma mark - Add / Delete List
+
+- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell {
+    // Show alert
+    self.deleteListAlert.message = string(@"Are you sure you want to delete list '%@'?", ((LAllListsViewCell *)cell).list.title);
+    [self presentViewController:self.deleteListAlert animated:YES completion:nil];
+}
+
+- (void)deleteList {
+    [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list completion:nil];
+    [self unswipeCell];
+}
+
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     if (textField == self.addListView.textField) {
         // Add List
-        [self addNewList];
+        [self addList];
     }
     
     return YES;
@@ -224,9 +289,9 @@
     if (self.addListView.textField.text.isEmpty) {
         [self hideAddListView:nil];
     }
-    else {
-        [self addNewList];
-    }
+//    else {
+//        [self addList];
+//    }
 }
 
 - (void)shadowViewDidSwipeDown {
@@ -234,75 +299,194 @@
         [self hideAddListView:nil];
     }
     else {
-        [self addNewList];
+        [self addList];
     }
 }
 
 
-#pragma mark - LSwipeCellDelegate
+#pragma mark - Swipe
 
-- (void)didSwipeCell:(LSwipeCell *)cell {
+- (void)didSwipeCell:(LTableViewCell *)cell {
     // Hide previously swiped cell
     [self unswipeCell];
     self.swipedCell = cell.swiped ? cell : nil;
 }
 
-- (void)didPressDeleteButtonForCell:(LSwipeCell *)cell {
-    // Show alert
-    self.deleteListAlert.message = string(@"Are you sure you want to delete list '%@'?", ((LAllListsViewCell *)self.swipedCell).list.title);
-    [self presentViewController:self.deleteListAlert animated:YES completion:nil];
+- (void)unswipeCell {
+    if (self.swipedCell) {
+        self.swipedCell.swiped = NO;
+        self.swipedCell = nil;
+    }
 }
 
-- (void)didTapCell:(LSwipeCell *)cell {
+
+#pragma mark - Tap
+
+- (void)didTapCell:(LTableViewCell *)cell {
+    // Hide swiped cell
+    [self unswipeCell];
+    
     cell.backgroundColor = C_SELECTED;
     
     // Open Single List screen
     LSingleListViewController *vc = [[LSingleListViewController alloc] initWithList:((LAllListsViewCell *)cell).list];
-    [self presentViewController:vc animated:YES completion:nil];
+    [self presentViewController:vc animated:YES completion:^{
+        cell.backgroundColor = C_CLEAR;
+    }];
 }
 
-- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LSwipeCell *)cell {
-    // Move cell in the list
-//    switch (longPress.state) {
-//            
-//        case UIGestureRecognizerStateBegan: {
-//            // Update cell
-//            self.movingList = ((LAllListsViewCell *)cell).list;
-//            [self.tableView reloadRowsAtIndexPaths:@[[self.lists indexPathForObject:self.movingList]] withRowAnimation:UITableViewRowAnimationFade];
-//        }
-//            break;
-//            
-//        case UIGestureRecognizerStateChanged: {
-//            
-//            LOG(@"Move");
-//            // Move cell within the table
-//            CGFloat y = [longPress locationInView:self.tableView].y;
-//            for (LAllListsViewCell *otherCell in self.tableView.visibleCells) {
-//                if (otherCell.list != self.movingList && y == otherCell.frame.origin.y) {
-//                    // Swipe cells
-//                    LOG(@"Swipe");
-//                    NSArray *indexPaths = @[[self.tableView indexPathForCell:cell], [self.tableView indexPathForCell:otherCell]];
-//                    
-//                    NSNumber *movingListIndex = self.movingList.index;
-//                    self.movingList.index = otherCell.list.index;
-//                    otherCell.list.index = movingListIndex;
-//                    
-//                    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-//                }
-//            }
-//        }
-//            break;
-//            
-//        case UIGestureRecognizerStateEnded: {
-//            // Save cell's position
-//            LOG(@"End");
-//            [DataStore save];
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
+
+#pragma mark - Long Press
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress {
+    // Move cell within the table
+    
+    switch (longPress.state) {
+            
+        case UIGestureRecognizerStateBegan: {
+            
+            cellMovingInProgress = YES;
+            
+            // Hide swiped cell
+            [self unswipeCell];
+            
+            // Update moving cell
+            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[longPress locationInView:self.tableView]];
+            LAllListsViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            self.movingList = cell.list;
+            
+            [UIView animateWithDuration:0.2 animations:^{
+                cell.moving = YES;
+                
+            } completion:^(BOOL finished) {
+                cellMovingInProgress = NO;
+            }];
+        }
+            break;
+            
+        case UIGestureRecognizerStateChanged: {
+            
+            // Get touch position
+            CGFloat y = [longPress locationInView:self.tableView].y;
+            
+            // Get moving cell position
+            LAllListsViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.lists indexPathForObject:self.movingList]];
+            
+            NSInteger row = [self.tableView indexPathForCell:cell].row;
+            NSUInteger visibleIndex = [self.tableView.visibleCells indexOfObject:cell];
+            LOG(@"- Row: %ld", row);
+            LOG(@"- Visible Index: %ld", visibleIndex);
+            
+            if (row >= 0 && row < self.lists.numberOfObjects) {
+                
+                // Scroll table
+                if (y < self.tableView.contentOffset.y + maxScrollTouchOffset && self.tableView.contentOffset.y > 0) {
+                    
+                    // Scroll up
+                    CGFloat offset = y - self.tableView.contentOffset.y;
+                    if (!self.scrollTimer.isValid) {
+                        [self.scrollTimer startForScrollDirection:LScrollDirectionUp touchOffset:offset];
+                    }
+                    else {
+                        [self.scrollTimer changeTimeIntervalForTouchOffset:offset];
+                    }
+                }
+                else if (y > self.tableView.contentOffset.y + self.tableView.height - 2 * maxScrollTouchOffset && self.tableView.contentOffset.y + self.tableView.height < self.tableView.contentSize.height) {
+                    
+                    // Scroll down
+                    CGFloat offset = self.tableView.contentOffset.y + self.tableView.height - y - maxScrollTouchOffset;
+                    if (!self.scrollTimer.isValid) {
+                        [self.scrollTimer startForScrollDirection:LScrollDirectionDown touchOffset:offset];
+                    }
+                    else {
+                        [self.scrollTimer changeTimeIntervalForTouchOffset:offset];
+                    }
+                }
+                else {
+                    // Stop scrolling
+                    if (self.scrollTimer.isValid) {
+                        [self.scrollTimer stop];
+                    }
+                }
+                
+                // Move cell
+                if (!cellMovingInProgress && visibleIndex > 0) {
+                    
+                    LOG(@"--- Move to previous");
+                    // Compare to previous visible cell
+                    LAllListsViewCell *prevCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row-1 inSection:0]];
+                    
+                    if (y <= prevCell.centerY) {
+                        
+                        // Swap cells
+                        cellMovingInProgress = YES;
+                        
+                        cell.list.indexValue -= 1;
+                        prevCell.list.indexValue += 1;
+                        
+                        [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] toIndexPath:[NSIndexPath indexPathForRow:row-1 inSection:0]];
+                        
+                        cellMovingInProgress = NO;
+                        
+                        return;
+                    }
+                }
+                
+                if (!cellMovingInProgress && visibleIndex < self.tableView.visibleCells.count - 1) {
+                    
+                    // Compare to next visible cell
+                    LAllListsViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row+1 inSection:0]];
+                    
+                    if (y >= nextCell.centerY) {
+                        
+                        // Swap cells
+                        cellMovingInProgress = YES;
+                        
+                        cell.list.indexValue += 1;
+                        nextCell.list.indexValue -= 1;
+                        
+                        [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] toIndexPath:[NSIndexPath indexPathForRow:row+1 inSection:0]];
+                        
+                        cellMovingInProgress = NO;
+                        return;
+                    }
+                }
+            }
+            else {
+                // Invalid cell
+                longPress.enabled = NO;
+            }
+            
+        }
+            break;
+            
+        default: {
+            // Stop Scroll Timer
+            if (self.scrollTimer.isValid) {
+                [self.scrollTimer stop];
+            }
+            
+            // Update moving cell
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                LAllListsViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.lists indexPathForObject:self.movingList]];
+                cell.moving = NO;
+                
+            } completion:^(BOOL finished) {
+                self.movingList = nil;
+                
+                // Save changes
+                [DataStore save];
+                [self.tableView reloadData];
+            }];
+            
+            // Enable GR
+            if (!longPress.isEnabled) {
+                longPress.enabled = YES;
+            }
+        }
+            break;
+    }
 }
+
 
 @end

@@ -49,12 +49,20 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
     return reuseIdentifier;
 }
 
+- (void)setMoving:(BOOL)moving {
+    [super setMoving:moving];
+    
+    self.listView.colorTag.left = moving ? kPaddingSmall + kMovingCellLeftOffset : kPaddingSmall;
+    self.listView.textField.left = moving ? kAllListsCellLeftViewWidth + kMovingCellLeftOffset : kAllListsCellLeftViewWidth;
+}
+
+#pragma mark - Setters
+
 - (void)setList:(List *)list {
     _list = list;
     self.listView.textField.text = list.title;
     self.listView.colorTag.color = list.color;
 }
-
 
 #pragma mark - Delete List
 

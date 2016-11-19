@@ -15,6 +15,5 @@
 
 @property (nonatomic, strong) LColorTag *colorTag;
 @property (nonatomic, strong) LTextField *textField;
-@property (nonatomic, strong) LSeparator *separator;
 
 @end

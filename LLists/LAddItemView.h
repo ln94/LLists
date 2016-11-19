@@ -13,6 +13,8 @@
 
 @property (nonatomic) LIconButton *plusButton;
 
+- (void)clear;
+
 - (void)setShowingPlusButton:(BOOL)showing completion:(void (^)())completion;
 
 @end

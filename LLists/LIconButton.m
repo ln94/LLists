@@ -23,11 +23,11 @@
     if (!self) return nil;
     
     self.backgroundColor = C_CLEAR;
-//    self.backgroundColor = C_RANDOM;
     
     // Icon View
     self.iconView = [[UIButton alloc] initFullInSuperview:self];
     self.iconView.userInteractionEnabled = NO;
+//    self.iconView.backgroundColor = C_RANDOM;
     
     return self;
 }
@@ -42,6 +42,10 @@
             
         case LIconBack:
             [self drawBack];
+            break;
+            
+        case LIconForward:
+            [self drawForward];
             break;
             
         case LIconCircle:
@@ -89,6 +93,19 @@
     line2.backgroundColor = C_ICON;
     line2.top = self.height/2 - 3;
     line2.rotation = -M_PI_4;
+}
+
+- (void)drawForward {
+    CGFloat lineWidth = 2;
+    CGFloat lineLength = kIconHeight - 3;
+    
+    UIView *line1 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineWidth, lineLength) insets:i(3, 0, 0, 3 *lineLength)];
+    line1.backgroundColor = C_ICON;
+    
+    UIView *line2 = [[UIView alloc] initCenterInSuperview:self.iconView size:s(lineLength, lineWidth) insets:i((lineLength + lineWidth) / 2, 0, 0, 1.5 * lineLength)];
+    line2.backgroundColor = C_ICON;
+    
+    self.iconView.rotation = -M_PI_4;
 }
 
 - (void)drawCircle {

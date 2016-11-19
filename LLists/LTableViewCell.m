@@ -1,25 +1,28 @@
 //
-//  LSwipeCell.m
+//  LTableViewCell.m
 //  LLists
 //
 //  Created by Lana Shatonova on 11/11/16.
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import "LSwipeCell.h"
+#import "LTableViewCell.h"
 #import "LIconButton.h"
 
-@interface LSwipeCell ()
+@interface LTableViewCell ()
+
+@property (nonatomic) UIView *movingTopSeparator;
+@property (nonatomic) UIView *movingBottomSeparator;
 
 @property (nonatomic) UISwipeGestureRecognizer *swipeLeft;
 @property (nonatomic) UISwipeGestureRecognizer *swipeRight;
 @property (nonatomic) UITapGestureRecognizer *tap;
-@property (nonatomic) UILongPressGestureRecognizer *longPress;
+
 
 @end
 
 
-@implementation LSwipeCell
+@implementation LTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -28,18 +31,28 @@
     self.backgroundColor = C_CLEAR;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.swiped = NO;
+    // Move
+    self.movingTopSeparator = [[UIView alloc] initInSuperview:self.contentView edge:UIViewEdgeTop length:kMovingCellSeparatorHeight];
+//    self.movingTopSeparator.backgroundColor = C_SEPARATOR;
+    self.movingTopSeparator.backgroundColor = C_MOVING_SEPARATOR;
     
-    // GR
+    self.movingBottomSeparator = [[UIView alloc] initInSuperview:self.contentView edge:UIViewEdgeBottom length:kMovingCellSeparatorHeight];
+//    self.movingBottomSeparator.backgroundColor = C_SEPARATOR;
+    self.movingBottomSeparator.backgroundColor = C_MOVING_SEPARATOR;
+    
+    self.moving = NO;
+    
+    // Swipe
     self.swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeLeft)];
     self.swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
     
     self.swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeRight)];
     self.swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     
-    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    self.swiped = NO;
     
-    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress:)];
+    // Tap
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     
     return self;
 }
@@ -50,7 +63,22 @@
     [mainView addGestureRecognizer:self.swipeLeft];
     [mainView addGestureRecognizer:self.swipeRight];
     [mainView addGestureRecognizer:self.tap];
-    [mainView addGestureRecognizer:self.longPress];
+}
+
+#pragma mark - Move
+
+- (void)setMoving:(BOOL)moving {
+    _moving = moving;
+    
+//    self.mainView.backgroundColor = moving ? C_MOVING_CELL : C_CLEAR;
+    
+    self.movingTopSeparator.hidden = !moving;
+    self.movingBottomSeparator.hidden = !moving;
+    
+    if (moving) {
+        [self.contentView bringSubviewToFront:self.movingTopSeparator];
+        [self.contentView bringSubviewToFront:self.movingBottomSeparator];
+    }
 }
 
 #pragma mark - Swipe
@@ -61,14 +89,14 @@
         
         if (swiped && !_swiped) {
             // Reveal Right Swipe View
-            [UIView animateWithDuration:swipeAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDuration animations:^{
                 self.mainView.left = -self.rightSwipeView.width;
                 self.rightSwipeView.right = self.contentView.width;
             }];
         }
         else if (!swiped && _swiped) {
             // Hide Right Swipe View
-            [UIView animateWithDuration:swipeAnimationDuration animations:^{
+            [UIView animateWithDuration:kAnimationDuration animations:^{
                 self.mainView.left = 0;
                 self.rightSwipeView.left = self.contentView.width;
             }];
@@ -99,14 +127,6 @@
 - (void)didTap:(UITapGestureRecognizer *)tap {
     if (self.delegate) {
         [self.delegate didTapCell:self];
-    }
-}
-
-#pragma mark - Long Press
-
-- (void)didLongPress:(UILongPressGestureRecognizer *)longPress {
-    if (self.delegate) {
-        [self.delegate didLongPress:longPress cell:self];
     }
 }
 

@@ -8,15 +8,14 @@
 
 #import "LSingleListViewCell.h"
 #import "LDoneButton.h"
+#import "LItemCellRightSwipeView.h"
 
 static NSString *const reuseIdentifier = @"singleListViewCell";
 
 @interface LSingleListViewCell () <LDoneButtonDelegate>
 
 @property (nonatomic, strong) LDoneButton *doneButton;
-@property (nonatomic, strong) UIView *separator;
-
-@property (nonatomic, strong) UIView *testView;
+@property (nonatomic, strong) LItemCellRightSwipeView *swipeView;
 
 @end
 
@@ -33,7 +32,8 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.mainView = self.itemView;
     
     // Right Swipe View
-    self.rightSwipeView = [[UIView alloc] init];
+    self.swipeView = [[LItemCellRightSwipeView alloc] initInSuperview:self.contentView edge:UIViewEdgeRight length:[LItemCellRightSwipeView width] insets:inset_right(-[LItemCellRightSwipeView width])];
+    self.rightSwipeView = self.swipeView;
     
     // Done Button
     self.doneButton = [[LDoneButton alloc] initInSuperview:self.itemView edge:UIViewEdgeLeft length:kSingleListCellLeftViewWidth insets:i(0, 0, 1, 2)];
@@ -41,6 +41,9 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     
     // Text View
     self.itemView.textView.userInteractionEnabled = NO;
+    
+    // Delete Button
+    [self.swipeView.deleteButton addTarget:self action:@selector(didPressDeleteButton)];
     
     return self;
 }
@@ -68,19 +71,18 @@ static NSString *const reuseIdentifier = @"singleListViewCell";
     self.itemView.textView.text = item.text;
 }
 
-//- (void)updateViews {
-//
-//    [self.itemView setEdge:UIViewEdgeTop length:self.contentView.height - 1];
-//    self.itemView.textView.height = [self.itemView.textView heightForText:self.itemView.textView.text];
-//    [self.itemView centerTextView];
-//    
-//    [self.separator setEdge:UIViewEdgeBottom length:kSeparatorSingleHeight insets:inset_bottom(0.1)];
-//}
-
 #pragma mark - LDoneButtonDelegate
 
 - (void)didPressDoneButton:(LDoneButton *)button {
     
+}
+
+#pragma mark - Delete List
+
+- (void)didPressDeleteButton {
+    if (self.delegate) {
+        [self.delegate didPressDeleteButtonForCell:self];
+    }
 }
 
 @end

@@ -22,10 +22,16 @@
 
 @property (nonatomic) LTextView *editingTextView;
 
+@property (nonatomic) LTableViewCell *swipedCell;
+
+@property (nonatomic) UIAlertController *deleteItemAlert;
+
 @end
 
 
-@implementation LSingleListViewController
+@implementation LSingleListViewController {
+    BOOL addViewAnimationInProgress;
+}
 
 - (instancetype)initWithList:(List *)list {
     self = [super init];
@@ -66,15 +72,31 @@
     self.editingTextView.lDelegate = self;
     
     // Add Item View
-    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListCellMinHeight+kSeparatorBottomLineHeight insets:inset_top(LLists.statusBarHeight)];
+    self.addItemView = [[LAddItemView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kSingleListCellMinHeight insets:inset_top(LLists.statusBarHeight)];
     self.addItemView.hidden = YES;
     [self.addItemView.plusButton addTarget:self action:@selector(addNewItem)];
+    
+    // Delete List Alert
+    self.deleteItemAlert = [UIAlertController alertControllerWithTitle:@"Delete Item" message:@"Are you sure you want to delete this item?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self unswipeCell];
+    }];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [ListsManager deleteItem:((LSingleListViewCell *)self.swipedCell).item inList:self.list completion:^(BOOL finished) {
+            
+        }];
+        [self unswipeCell];
+    }];
+    [self.deleteItemAlert addAction:cancelAction];
+    [self.deleteItemAlert addAction:deleteAction];
     
     // GR
     UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didPressBackButton)];
     swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swipeRight];
     
+    
+    addViewAnimationInProgress = NO;
     
     [self.view bringSubviewToFront:self.header];
 }
@@ -94,6 +116,9 @@
 - (void)didPressBackButton {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+#pragma mark - FRC
 
 - (void)setupPositionFRC {
     // Get position
@@ -120,6 +145,7 @@
     self.items = [NSFetchedResultsController fetchedResultsControllerWithFetchRequest:itemRequest];
     [self.items performFetch];
 }
+
 
 #pragma mark - UITableViewDataSource
 
@@ -169,6 +195,9 @@
         [self textViewShouldEndEditing:self.editingTextView];
     }
     
+    // Hide swiped view
+    [self unswipeCell];
+    
     // Show Add Item View
     if (scrollView.contentOffset.y < -kPaddingSmall && self.header.showingAddButton) {
         [self showAddItemView];
@@ -194,45 +223,67 @@
 }
 
 - (void)showAddItemView {
-    // Hide Add Button
-    [self.header setShowingAddButton:NO];
-    
-    // Show Add Item View
-    self.addItemView.hidden = NO;
-    
-    [UIView animateWithDuration:addViewAnimationDuration animations:^{
-        self.addItemView.top = self.header.bottom;
-        self.shadowView.hidden = NO;
+    if (!addViewAnimationInProgress) {
+        addViewAnimationInProgress = YES;
+     
+        // Hide swiped cell
+        [self unswipeCell];
         
-    } completion:^(BOOL finished) {
-        // Show keyboard
-        [self.addItemView.textView becomeFirstResponder];
+        // Hide Add Button
+        [self.header setShowingAddButton:NO];
         
-        [self.addItemView setShowingPlusButton:YES completion:nil];
-    }];
+        // Show Add Item View
+        self.addItemView.hidden = NO;
+        
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.addItemView.top = self.header.bottom;
+            self.shadowView.hidden = NO;
+            
+        } completion:^(BOOL finished) {
+            // Show keyboard
+            [self.addItemView.textView becomeFirstResponder];
+            
+            [self.addItemView setShowingPlusButton:YES completion:^{
+                addViewAnimationInProgress = NO;
+            }];
+            
+            // Disable Table View scrolling
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.tableView.scrollEnabled = NO;
+            }];
+        }];
+    }
 }
 
 - (void)hideAddItemView:(void (^)())completion {
-    // Hide keyboard
-    [self.addItemView.textView resignFirstResponder];
-    
-    // Hide Add Item View
-    [self.addItemView setShowingPlusButton:NO completion:^{
-        [UIView animateWithDuration:addViewAnimationDuration animations:^{
-            self.addItemView.bottom = self.header.bottom;
-            self.shadowView.hidden = YES;
-            
-        } completion:^(BOOL finished) {
-            self.addItemView.hidden = YES;
-            
-            if (completion) {
-                completion();
-            }
-        }];
+    if (!addViewAnimationInProgress) {
+        addViewAnimationInProgress = YES;
         
-        // Show Add button
-        [self.header setShowingAddButton:YES];
-    }];
+        // Hide keyboard
+        [self.addItemView.textView resignFirstResponder];
+        
+        // Hide Add Item View
+        [self.addItemView setShowingPlusButton:NO completion:^{
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.addItemView.bottom = self.header.bottom;
+                self.shadowView.hidden = YES;
+                
+            } completion:^(BOOL finished) {
+                self.addItemView.hidden = YES;
+                addViewAnimationInProgress = NO;
+                
+                // Enable Table View scrolling
+                self.tableView.scrollEnabled = YES;
+                
+                if (completion) {
+                    completion();
+                }
+            }];
+            
+            // Show Add button
+            [self.header setShowingAddButton:YES];
+        }];
+    }
 }
 
 - (void)addNewItem {
@@ -246,9 +297,7 @@
     
     // Hide and clear Add List View
     [self hideAddItemView:^{
-        self.addItemView.textView.text = @"";
-        self.addItemView.textView.height = [self.addItemView.textView heightForText:@""];
-        self.addItemView.height = self.addItemView.textView.height;
+        [self.addItemView clear];
     }];
 }
 
@@ -324,7 +373,10 @@
 
 #pragma mark - LSwipeCellDelegate
 
-- (void)didTapCell:(LSwipeCell *)cell {
+- (void)didTapCell:(LTableViewCell *)cell {
+    // Hide swiped cell
+    [self unswipeCell];
+    
     // Update last edited cell
     [self updateLastEditedCell];
     
@@ -337,16 +389,28 @@
     [self.tableView reloadData];
 }
 
-- (void)didSwipeCell:(LSwipeCell *)cell {
+- (void)didSwipeCell:(LTableViewCell *)cell {
+    // Hide previously swiped cell
+    [self unswipeCell];
+    self.swipedCell = cell.swiped ? cell : nil;
+}
+
+- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell {
+    // Show alert
+    [self presentViewController:self.deleteItemAlert animated:YES completion:nil];
+}
+
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LTableViewCell *)cell {
     
 }
 
-- (void)didPressDeleteButtonForCell:(LSwipeCell *)cell {
-    
-}
+#pragma mark - Swipe
 
-- (void)didLongPress:(UILongPressGestureRecognizer *)longPress cell:(LSwipeCell *)cell {
-    
+- (void)unswipeCell {
+    if (self.swipedCell) {
+        self.swipedCell.swiped = NO;
+        self.swipedCell = nil;
+    }
 }
 
 @end

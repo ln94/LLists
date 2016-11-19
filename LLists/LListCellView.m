@@ -17,17 +17,16 @@
     self.backgroundColor = C_CLEAR;
     
     // Color Tag
-    self.colorTag = [[LColorTag alloc] initInSuperview:self edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kSeparatorHeight, kPaddingSmall)];
+    self.colorTag = [[LColorTag alloc] initInSuperview:self edge:UIViewEdgeLeft length:kColorTagWidth insets:i(0, 0, kAllListsSeparatorHeight, kPaddingSmall)];
     
     // Text Field
-    self.textField = [[LTextField alloc] initFullInSuperview:self insets:i(0, 0, kSeparatorHeight, kAllListsCellLeftViewWidth)];
+    self.textField = [[LTextField alloc] initFullInSuperview:self insets:i(0, 0, kAllListsSeparatorHeight, kAllListsCellLeftViewWidth)];
     self.textField.font = F_TITLE;
     
     // Separator
-    self.separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
+    LSeparator *separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kAllListsSeparatorHeight];
     
     return self;
 }
-
 
 @end

@@ -26,7 +26,7 @@
     self.textView.lDelegate = self;
     
     // Separator
-    UIView *separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorSingleHeight];
+    UIView *separator = [[UIView alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSingleListSeparatorHeight];
     separator.backgroundColor = C_SEPARATOR;
     
     return self;

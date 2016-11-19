@@ -6,10 +6,10 @@
 //  Copyright © 2016 Lana. All rights reserved.
 //
 
-#import "LSwipeCell.h"
+#import "LTableViewCell.h"
 #import "LItemCellView.h"
 
-@interface LSingleListViewCell : LSwipeCell
+@interface LSingleListViewCell : LTableViewCell
 
 @property (nonatomic, strong) Item *item;
 @property (nonatomic, strong) LItemCellView *itemView;

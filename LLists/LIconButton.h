@@ -11,6 +11,7 @@
 typedef NS_ENUM(NSInteger, LIcon) {
     LIconPlus = 0,
     LIconBack,
+    LIconForward,
     LIconCircle,
     LIconCross
 };

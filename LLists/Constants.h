@@ -20,6 +20,8 @@
 #define C_SHADOW C_BLACK_ALPHA(0.2)
 #define C_SELECTED C_GRAY(0.95)
 #define C_EMPTY_VIEW C_GRAY(0.98)
+//#define C_MOVING_CELL C_GRAY(0.99)
+#define C_MOVING_SEPARATOR C_GRAY(0.8)
 
 // Padding
 static const CGFloat kPaddingTiny = 5;
@@ -33,11 +35,11 @@ static const CGFloat kAllListsCellLeftViewWidth = 36;
 static const CGFloat kSingleListCellMinHeight = 43;
 static const CGFloat kSingleListCellLeftViewWidth = 43;
 
-static const CGFloat kSeparatorTopLineHeight = 0.75;
-static const CGFloat kSeparatorBottomLineHeight = 0.25;
-static const CGFloat kSeparatorHeight = 7;
+static const CGFloat kAllListsSeparatorTopLineHeight = 0.75;
+static const CGFloat kAllListsSeparatorBottomLineHeight = 0.25;
+static const CGFloat kAllListsSeparatorHeight = 7;
 
-static const CGFloat kSeparatorSingleHeight = 0.5;
+static const CGFloat kSingleListSeparatorHeight = 0.5;
 
 static const CGFloat kIconHeight = 18;
 
@@ -54,13 +56,15 @@ static const CGFloat kHeaderViewButtonHeight = 50;
 static const CGFloat kRightSwipeViewWidth = 100;
 static const CGFloat kSwipeViewIconButtonWidth = 50;
 
-// Animation
-static const CGFloat addViewAnimationDuration = 0.3;
-static const CGFloat plusButtonAnimationDuration = 0.5;
-static const CGFloat viewControllerTransitionDuration = 0.3;
-static const CGFloat swipeAnimationDuration = 0.3;
+//static const CGFloat kMovingCellAlpha = 0.7;
+static const CGFloat kMovingCellSeparatorHeight = 0.6;
+static const CGFloat kMovingCellLeftOffset = 21;
 
-static const UIViewAnimationOptions showingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;
-static const UIViewAnimationOptions hidingAnimation = UIViewAnimationOptionTransitionFlipFromRight;
+
+// Animation
+static const CGFloat kAnimationDuration = 0.3;
+
+static const UIViewAnimationOptions kShowingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;
+static const UIViewAnimationOptions kHidingAnimation = UIViewAnimationOptionTransitionFlipFromRight;
 
 #endif

@@ -21,4 +21,6 @@
 
 @property (nonatomic) LShadowView *shadowView;
 
+- (void)didLongPress:(UILongPressGestureRecognizer *)longPress;
+
 @end

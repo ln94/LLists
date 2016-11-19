@@ -29,7 +29,7 @@
     self.textField.placeholder = @"New List";
     
     // Plus Icon
-    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kAllListsCellLeftViewWidth insets:inset_bottom(kSeparatorHeight)];
+    self.plusButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:kAllListsCellLeftViewWidth insets:inset_bottom(kAllListsSeparatorHeight)];
     self.plusButton.icon = LIconPlus;
     self.plusButton.userInteractionEnabled = NO;
     
@@ -46,11 +46,11 @@
     UIView *fromView = showing ? self.plusButton : self.colorTag;
     UIView *toView = showing ? self.colorTag : self.plusButton;
     
-    [UIView transitionWithView:fromView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:^{
+    [UIView transitionWithView:fromView duration:kAnimationDuration options:(showing ? kShowingAnimation : kHidingAnimation) animations:^{
         fromView.hidden = YES;
     } completion:nil];
     
-    [UIView transitionWithView:toView duration:plusButtonAnimationDuration options:(showing ? showingAnimation : hidingAnimation) animations:^{
+    [UIView transitionWithView:toView duration:kAnimationDuration options:(showing ? kShowingAnimation : kHidingAnimation) animations:^{
         toView.hidden = NO;
     } completion:^(BOOL finished) {
         

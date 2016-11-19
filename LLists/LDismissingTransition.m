@@ -11,7 +11,7 @@
 @implementation LDismissingTransition
 
 - (CGFloat)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext{
-    return viewControllerTransitionDuration;
+    return kAnimationDuration;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -22,7 +22,7 @@
     [container addSubview:toVC.view];
     toVC.view.right = 0;
     
-    [UIView animateWithDuration:viewControllerTransitionDuration animations:^{
+    [UIView animateWithDuration:kAnimationDuration animations:^{
         fromVC.view.left = container.width;
         toVC.view.left = 0;
         

@@ -53,6 +53,12 @@ static const CGFloat kTextContainerInsetBottom = 7;
     self.placeholderLabel.text = placeholder;
 }
 
+- (void)setText:(NSString *)text {
+    [super setText:text];
+    
+    self.placeholderLabel.hidden = !text.isEmpty;
+}
+
 
 #pragma mark - Height
 

@@ -15,9 +15,10 @@
 - (void)createDefaultLists:(void (^)(BOOL success))completion;
 
 - (void)saveListWithTitle:(NSString *)title onPosition:(NSInteger)position;
-- (void)deleteList:(List *)list completion:(void (^)(BOOL success))completion;
+- (void)deleteList:(List *)list completion:(void (^)(BOOL finished))completion ;
 
 - (void)saveItemWithText:(NSString *)text onPosition:(NSInteger)position inList:(List *)list;
+- (void)deleteItem:(Item *)item inList:(List *)list completion:(void (^)(BOOL finished))completion;
 
 - (NSString *)updateText:(NSString *)text;
 

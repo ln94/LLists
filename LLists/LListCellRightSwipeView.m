@@ -16,22 +16,22 @@
     if (!self) return nil;
     
     // Delete Button
-    self.deleteButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:i(0, kPaddingTiny, kSeparatorHeight, 0)];
+    self.deleteButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:i(0, kPaddingTiny, kAllListsSeparatorHeight, 0)];
     self.deleteButton.icon = LIconCross;
-//    self.deleteButton.backgroundColor = C_RANDOM;
+    
     // Edit Button
-    self.editButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:inset_bottom(kSeparatorHeight)];
+    self.editButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeRight length:kSwipeViewIconButtonWidth insets:inset_bottom(kAllListsSeparatorHeight)];
     self.editButton.right = self.deleteButton.left;
     self.editButton.icon = LIconCircle;
     
     // Separator
-    LSeparator *separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kSeparatorHeight];
+    LSeparator *separator = [[LSeparator alloc] initInSuperview:self edge:UIViewEdgeBottom length:kAllListsSeparatorHeight];
     
     return self;
 }
 
 + (CGFloat)width {
-    return 90;
+    return 2 * kSwipeViewIconButtonWidth + kPaddingTiny;
 }
 
 @end

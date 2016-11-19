@@ -11,7 +11,7 @@
 @implementation LPresentingTransition
 
 - (CGFloat)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext{
-    return viewControllerTransitionDuration;
+    return kAnimationDuration;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -22,7 +22,7 @@
     [container addSubview:toVC.view];
     toVC.view.left = container.width;
     
-    [UIView animateWithDuration:viewControllerTransitionDuration animations:^{
+    [UIView animateWithDuration:kAnimationDuration animations:^{
         fromVC.view.right = 0;
         toVC.view.left = 0;
         
