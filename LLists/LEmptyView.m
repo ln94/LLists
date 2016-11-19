@@ -16,8 +16,8 @@
 
 @implementation LEmptyView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (instancetype)initInTableView:(UITableView *)tableView forType:(LTableType)type {
+    self = [super initFullInSuperview:tableView];
     if (!self) return nil;
     
     self.backgroundColor = C_EMPTY_VIEW;
@@ -27,13 +27,21 @@
     self.textLabel.font = F_TITLE;
     self.textLabel.textColor = C_SEPARATOR;
     self.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.textLabel.text = type == LTableTypeList ? @"Your List of Lists is empty" : @"Your List is empty";
     
     return self;
 }
 
-- (void)setText:(NSString *)text {
-    _text = text;
-    self.textLabel.text = text;
+- (void)setHidden:(BOOL)hidden {
+    if (self.window && self.hidden != hidden) {
+        
+        [UIView transitionWithView:self duration:kAnimationDurationMed options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            self.alpha = hidden ? 0 : 1;
+        } completion:^(BOOL finished) {
+            [super setHidden:hidden];
+        }];
+    }
+    
 }
 
 @end

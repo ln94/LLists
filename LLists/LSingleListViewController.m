@@ -11,7 +11,7 @@
 #import "LAddItemView.h"
 
 
-@interface LSingleListViewController () <NSFetchedResultsControllerDelegate, LTextViewDelegate, LShadowViewDelegate, LSwipeCellDelegate>
+@interface LSingleListViewController () <NSFetchedResultsControllerDelegate, LTextViewDelegate, LShadowViewDelegate, LTableCellDelegate>
 
 @property (nonatomic, strong) List *list;
 
@@ -59,9 +59,6 @@
     
     // Shadow View
     self.shadowView.delegate = self;
-    
-    // Empty View
-    self.emptyView.text = @"Your List is empty";
     
     //  Editing Text View
     self.editingTextView = [[LTextView alloc] initInSuperview:self.tableView];
@@ -371,7 +368,7 @@
 }
 
 
-#pragma mark - LSwipeCellDelegate
+#pragma mark - LTableCellDelegate
 
 - (void)didTapCell:(LTableViewCell *)cell {
     // Hide swiped cell

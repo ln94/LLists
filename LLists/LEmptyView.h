@@ -10,6 +10,6 @@
 
 @interface LEmptyView : UIView
 
-@property (nonatomic) NSString *text;
+- (instancetype)initInTableView:(UITableView *)tableView forType:(LTableType)type;
 
 @end

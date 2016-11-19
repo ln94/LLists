@@ -23,6 +23,7 @@
 /* Begin PBXBuildFile section */
 		87374CC11DD5BDC8003C14AC /* LTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 87374CC01DD5BDC8003C14AC /* LTextField.m */; };
 		87374CCE1DD5CA80003C14AC /* LShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87374CCD1DD5CA80003C14AC /* LShadowView.m */; };
+		875E81E21DE107B30096E0F3 /* LViewAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 875E81E11DE107B30096E0F3 /* LViewAnimationDelegate.m */; };
 		875F65CB1DD5D5E200142531 /* Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 875F65CA1DD5D5E200142531 /* Position.m */; };
 		875F65CE1DD5D5E800142531 /* _Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 875F65CD1DD5D5E800142531 /* _Position.m */; };
 		87D178671DDFF4D2007E6C27 /* LScrollTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D178661DDFF4D2007E6C27 /* LScrollTimer.m */; };
@@ -70,6 +71,8 @@
 		87374CC01DD5BDC8003C14AC /* LTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTextField.m; sourceTree = "<group>"; };
 		87374CCC1DD5CA80003C14AC /* LShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LShadowView.h; sourceTree = "<group>"; };
 		87374CCD1DD5CA80003C14AC /* LShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LShadowView.m; sourceTree = "<group>"; };
+		875E81E01DE107B30096E0F3 /* LViewAnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LViewAnimationDelegate.h; sourceTree = "<group>"; };
+		875E81E11DE107B30096E0F3 /* LViewAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LViewAnimationDelegate.m; sourceTree = "<group>"; };
 		875F65C91DD5D5E200142531 /* Position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Position.h; path = Model/Position.h; sourceTree = "<group>"; };
 		875F65CA1DD5D5E200142531 /* Position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Position.m; path = Model/Position.m; sourceTree = "<group>"; };
 		875F65CC1DD5D5E800142531 /* _Position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Position.h; path = Model/_Position.h; sourceTree = "<group>"; };
@@ -288,6 +291,13 @@
 				87374CCD1DD5CA80003C14AC /* LShadowView.m */,
 			);
 			name = "Shadow View";
+			sourceTree = "<group>";
+		};
+		875E81DF1DE106EB0096E0F3 /* UIViewAnimation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UIViewAnimation;
 			sourceTree = "<group>";
 		};
 		87D178681DDFF4D7007E6C27 /* Scroll Timer */ = {
@@ -539,6 +549,9 @@
 		87F746661DD01E9700C6DF7C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				875E81E01DE107B30096E0F3 /* LViewAnimationDelegate.h */,
+				875E81E11DE107B30096E0F3 /* LViewAnimationDelegate.m */,
+				875E81DF1DE106EB0096E0F3 /* UIViewAnimation */,
 				87D3C1971DD3ED210038895D /* Table View Controller */,
 				87D178721DE07DDC007E6C27 /* Second Class View */,
 				87374CC61DD5BE1B003C14AC /* Text Field */,
@@ -680,6 +693,7 @@
 				87F746591DD01E0A00C6DF7C /* LSingleListViewCell.m in Sources */,
 				87F7461D1DD0150E00C6DF7C /* AppDelegate.m in Sources */,
 				87F7467B1DD1429800C6DF7C /* LTextView.m in Sources */,
+				875E81E21DE107B30096E0F3 /* LViewAnimationDelegate.m in Sources */,
 				87D1786B1DE06356007E6C27 /* LAddView.m in Sources */,
 				87D178761DE08D67007E6C27 /* LAddListView.m in Sources */,
 				87F7465E1DD01E2C00C6DF7C /* LListsManager.m in Sources */,

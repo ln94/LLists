@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol LSwipeCellDelegate;
+@protocol LTableCellDelegate;
 
 
 @interface LTableViewCell : UITableViewCell
@@ -19,14 +19,21 @@
 @property (nonatomic) BOOL swiped;
 @property (nonatomic) BOOL moving;
 
-@property (nonatomic) id<LSwipeCellDelegate> delegate;
+@property (nonatomic) id<LTableCellDelegate> delegate;
 
++ (Class)classForType:(LTableType)type;
++ (NSString *)reuseIdentifierForType:(LTableType)type;
 + (NSString *)reuseIdentifier;
 
 @end
 
 
-@protocol LSwipeCellDelegate <NSObject>
+@interface LPlaceholderTableViewCell : LTableViewCell
+
+@end
+
+
+@protocol LTableCellDelegate <NSObject>
 
 @required
 - (void)didSwipeCell:(LTableViewCell *)cell;
@@ -34,3 +41,4 @@
 - (void)didTapCell:(LTableViewCell *)cell;
 
 @end
+

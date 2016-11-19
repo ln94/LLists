@@ -12,8 +12,13 @@
 #import "LAddView.h"
 #import "LShadowView.h"
 #import "LTableViewCell.h"
+#import "LScrollTimer.h"
 
-@interface LTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface LTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    BOOL deletingInProgress;
+    BOOL cellMovingInProgress;
+    CGFloat maxScrollTouchOffset;
+}
 
 @property (nonatomic) LTableType type;
 
@@ -22,10 +27,12 @@
 @property (nonatomic) LEmptyView *emptyView;
 @property (nonatomic) LShadowView *shadowView;
 @property (nonatomic) LAddView *addView;
+@property (nonatomic) UIAlertController *deleteAlert;
 
 @property (nonatomic) LTableViewCell *swipedCell;
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
+@property (nonatomic) LScrollTimer *scrollTimer;
 
 - (id)initForType:(LTableType)type;
 
@@ -33,8 +40,14 @@
 
 - (void)showAddView;
 - (void)hideAddView;
+
 - (void)addObject;
-- (void)addObjectOnPosition:(NSInteger)position;
+- (void)animateAddObject;
+
+- (void)deleteObject;
+- (void)animateDeleteObject;
+
+//@property (nonatomic) UIAlertController *deleteListAlert;
 
 @end
 

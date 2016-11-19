@@ -27,8 +27,7 @@
     // Icon View
     self.iconView = [[UIButton alloc] initFullInSuperview:self];
     self.iconView.userInteractionEnabled = NO;
-//    self.iconView.backgroundColor = C_RANDOM;
-    
+
     return self;
 }
 

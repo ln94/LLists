@@ -57,6 +57,7 @@ static const CGFloat kTextContainerInsetBottom = 7;
     [super setText:text];
     
     self.placeholderLabel.hidden = !text.isEmpty;
+    self.returnKeyType = text.isEmpty ? UIReturnKeyDefault : UIReturnKeyDone;
 }
 
 

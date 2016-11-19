@@ -13,23 +13,16 @@
 #import "LScrollTimer.h"
 
 
-@interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LSwipeCellDelegate>
+@interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LTableCellDelegate>
 
 @property (nonatomic) NSFetchedResultsController<List *> *lists;
 
-@property (nonatomic) UIAlertController *deleteListAlert;
-
 @property (nonatomic) List *movingList;
-@property (nonatomic) LScrollTimer *scrollTimer;
 
 @end
 
 
-@implementation LAllListsViewController {
-    BOOL addListAnimationInProgress;
-    BOOL cellMovingInProgress;
-    CGFloat maxScrollTouchOffset;
-}
+@implementation LAllListsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,39 +39,17 @@
     
     // Table View
     self.tableView.rowHeight = kAllListsCellHeight;
-    [self.tableView registerClass:[LAllListsViewCell class] forCellReuseIdentifier:[LAllListsViewCell reuseIdentifier]];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    
-    // Empty View
-    self.emptyView.text = @"Your List of Lists is empty";
     
     // Add List View
     self.addView.textField.delegate = self;
     
     // Delete List Alert
-    self.deleteListAlert = [UIAlertController alertControllerWithTitle:@"Delete List" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        // Hide swiped cell
-        if (self.swipedCell) {
-            self.swipedCell.swiped = NO;
-        }
-    }];
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [self deleteList];
-    }];
-    [self.deleteListAlert addAction:cancelAction];
-    [self.deleteListAlert addAction:deleteAction];
+    self.deleteAlert.title = @"Delete List";
+    self.deleteAlert.message = @"Are you sure you want to delete list?";
     
     // Scroll Timer
     maxScrollTouchOffset = kAllListsCellHeight / 2;
     self.scrollTimer = [[LScrollTimer alloc] initWithScrollingTableView:self.tableView andMaxTouchOffset:maxScrollTouchOffset];
-    
-    // Variables
-    addListAnimationInProgress = NO;
-    cellMovingInProgress = NO;
-    
-//    [self.view bringSubviewToFront:self.header];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -118,23 +89,16 @@
 
 #pragma mark - Add / Delete List
 
-- (void)addObjectOnPosition:(NSInteger)position {
+- (void)addObject {
     // Save new list
     self.addView.colorTag.color = C_RANDOM;
+    NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
     [ListsManager saveListWithTitle:self.addView.textField.text
                               color:self.addView.colorTag.color
                          onPosition:position];
 }
 
-#pragma mark - Delete List
-
-- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell {
-    // Show alert
-    self.deleteListAlert.message = string(@"Are you sure you want to delete list '%@'?", ((LAllListsViewCell *)cell).list.title);
-    [self presentViewController:self.deleteListAlert animated:YES completion:nil];
-}
-
-- (void)deleteList {
+- (void)deleteObject {
     [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list completion:nil];
 }
 
@@ -149,7 +113,7 @@
         }
         else {
             // Add List
-            [self addObject];
+            [self animateAddObject];
         }
     }
     else {
@@ -168,9 +132,7 @@
     }
     else {
         // Hide swiped cell
-        if (self.swipedCell) {
-            self.swipedCell.swiped = NO;
-        }
+        self.swipedCell.swiped = NO;
         
         [UIView transitionWithView:cell.contentView duration:kAnimationDurationTiny options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             cell.contentView.backgroundColor = C_SELECTED;
@@ -199,9 +161,7 @@
             self.view.userInteractionEnabled = NO;
             
             // Hide swiped cell
-            if (self.swipedCell) {
-                self.swipedCell.swiped = NO;
-            }
+            self.swipedCell.swiped = NO;
             
             // Update moving cell
             NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[longPress locationInView:self.tableView]];

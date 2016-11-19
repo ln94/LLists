@@ -16,7 +16,6 @@
 
     self.backgroundColor = C_CLEAR;
     self.textColor = C_MAIN_TEXT;
-    self.returnKeyType = UIReturnKeyDone;
     self.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.spellCheckingType = UITextSpellCheckingTypeYes;
@@ -28,6 +27,12 @@
 - (void)setPlaceholder:(NSString *)placeholder {
     NSDictionary *attributes = @{ NSForegroundColorAttributeName:C_SEPARATOR };
     self.attributedPlaceholder = [NSAttributedString attributedStringWithAttributes:attributes format:@"%@", placeholder];
+}
+
+- (void)setText:(NSString *)text {
+    [super setText:text];
+    
+    self.returnKeyType = text.isEmpty ? UIReturnKeyDefault : UIReturnKeyDone;
 }
 
 @end

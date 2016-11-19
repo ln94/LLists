@@ -8,6 +8,10 @@
 
 #import "LTableViewCell.h"
 #import "LIconButton.h"
+#import "LAllListsViewCell.h"
+#import "LSingleListViewCell.h"
+
+#pragma mark - Class
 
 @interface LTableViewCell ()
 
@@ -23,6 +27,24 @@
 
 
 @implementation LTableViewCell
+
++ (id)alloc {
+    if ([self class] == [LTableViewCell class]) {
+        LPlaceholderTableViewCell *placeholder = [LPlaceholderTableViewCell alloc];
+        return placeholder;
+    }
+    else {
+        return [super alloc];
+    }
+}
+
++ (Class)classForType:(LTableType)type {
+    return [LPlaceholderTableViewCell classForType:type];
+}
+
++ (NSString *)reuseIdentifierForType:(LTableType)type {
+    return [LPlaceholderTableViewCell reuseIdentifierForType:type];
+}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -63,6 +85,12 @@
     [mainView addGestureRecognizer:self.swipeLeft];
     [mainView addGestureRecognizer:self.swipeRight];
     [mainView addGestureRecognizer:self.tap];
+}
+
+- (void)setHidden:(BOOL)hidden {
+    [UIView transitionWithView:self duration:kAnimationDurationSmall options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        self.alpha = 0;
+    } completion:nil];
 }
 
 #pragma mark - Move
@@ -127,3 +155,48 @@
 }
 
 @end
+
+
+
+#pragma mark - Placeholder
+
+@implementation LPlaceholderTableViewCell
+
+//- (instancetype)init {
+//    return [self initForType:-1];
+//}
+//
+//- (id)initForType:(LTableType)type {
+//    Class class = [self classForType:type];
+//    LTableViewController *instance = [(LTableViewController *)[class alloc] initForType:type];
+//    return instance;
+//}
+
++ (Class)classForType:(LTableType)type {
+    switch (type) {
+        case LTableTypeList:
+            return [LAllListsViewCell class];
+            
+        case LTableTypeItem:
+            return [LSingleListViewCell class];
+            
+        default:
+            return [LTableViewCell class];
+    }
+}
+
++ (NSString *)reuseIdentifierForType:(LTableType)type {
+    switch (type) {
+        case LTableTypeList:
+            return [LAllListsViewCell reuseIdentifier];
+            
+        case LTableTypeItem:
+            return [LSingleListViewCell reuseIdentifier];
+            
+        default:
+            return nil;
+    }
+}
+
+@end
+
