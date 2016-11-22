@@ -10,6 +10,9 @@
 
 @implementation LTextField
 
+@synthesize transitionType = _transitionType;
+@synthesize transitionDuration = _transitionDuration;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
@@ -20,6 +23,11 @@
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.spellCheckingType = UITextSpellCheckingTypeYes;
     self.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.returnKeyType;
+    
+    // Transition
+    self.transitionType = LViewTransitionTypeFade;
+    self.transitionDuration = kAnimationDurationLong;
     
     return self;
 }
@@ -27,12 +35,6 @@
 - (void)setPlaceholder:(NSString *)placeholder {
     NSDictionary *attributes = @{ NSForegroundColorAttributeName:C_SEPARATOR };
     self.attributedPlaceholder = [NSAttributedString attributedStringWithAttributes:attributes format:@"%@", placeholder];
-}
-
-- (void)setText:(NSString *)text {
-    [super setText:text];
-    
-    self.returnKeyType = text.isEmpty ? UIReturnKeyDefault : UIReturnKeyDone;
 }
 
 @end

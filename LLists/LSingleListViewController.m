@@ -392,7 +392,7 @@
     self.swipedCell = cell.swiped ? cell : nil;
 }
 
-- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell {
+- (void)didPressDeleteCell:(LTableViewCell *)cell {
     // Show alert
     [self presentViewController:self.deleteItemAlert animated:YES completion:nil];
 }
@@ -405,7 +405,7 @@
 
 - (void)unswipeCell {
     if (self.swipedCell) {
-        self.swipedCell.swiped = NO;
+        [self.swipedCell setSwiped:NO animated:YES];
         self.swipedCell = nil;
     }
 }

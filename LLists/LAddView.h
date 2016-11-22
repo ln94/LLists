@@ -9,23 +9,24 @@
 #import "LSecondClassView.h"
 #import "LIconButton.h"
 
-typedef NS_ENUM(NSInteger, LAddViewState) {
-    LAddViewStateHide = 0,
-    LAddViewStateShow,
-    LAddViewStateAdd
-};
+@protocol LTextViewProtocol;
 
-@interface LAddView : LSecondClassView
+@interface LAddView : LSecondClassView {
+    
+    CGFloat leftViewLength;
+    CGFloat separatorLength;
+    CGFloat height;
+}
 
-@property (nonatomic, strong) UIView *leftView;
-@property (nonatomic, strong) UIView *textView;
+@property (nonatomic, strong) LIconButton *addButton;
+@property (nonatomic, strong) UIView <LViewTransitionProtocol> *leftView;
+@property (nonatomic, strong) UIView <LTextViewProtocol, UITextInputTraits, LViewTransitionProtocol> *textView;
 
-@property (nonatomic, readonly) BOOL isEmpty;
-
-//- (id)initForType:(LTableType)type;
 - (id)initInSuperview:(UIView *)superview forType:(LTableType)type;
 
-- (void)setState:(LAddViewState)state completion:(void (^)(void))completion;
+- (void)animateShowing:(void (^)(void))completion;
+- (void)animateHiding:(void (^)(void))completion;
+- (void)animateAdding:(void (^)(void))completion;
 
 - (void)reset;
 
@@ -35,3 +36,11 @@ typedef NS_ENUM(NSInteger, LAddViewState) {
 @interface LPlaceholderAddView : LAddView
 
 @end
+
+
+@protocol LTextViewProtocol <NSObject>
+
+@property (nonatomic, strong) NSString *text;
+
+@end
+

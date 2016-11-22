@@ -14,14 +14,15 @@
 @protocol LListViewProtocol <LSecondClassViewProtocol>
 
 @required
+
 @property (nonatomic, strong) LColorTag *colorTag;
 @property (nonatomic, strong) LTextField *textField;
 @property (nonatomic, strong) LSeparator *separator;
 
+- (void)initInView:(UIView *)view;
+
 @end
 
 @interface UIView (LListViewProtocol) <LListViewProtocol>
-
-- (void)initInView:(UIView *)view;
 
 @end

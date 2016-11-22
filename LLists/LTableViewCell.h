@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
 
 @protocol LTableCellDelegate;
 
 
-@interface LTableViewCell : UITableViewCell
+@interface LTableViewCell : UITableViewCell <LViewTransitionProtocol>
 
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIView *rightSwipeView;
@@ -21,9 +22,13 @@
 
 @property (nonatomic) id<LTableCellDelegate> delegate;
 
+
 + (Class)classForType:(LTableType)type;
 + (NSString *)reuseIdentifierForType:(LTableType)type;
 + (NSString *)reuseIdentifier;
+
+- (void)setSwiped:(BOOL)swiped animated:(BOOL)animated;
+- (void)setSwiped:(BOOL)swiped animated:(BOOL)animated completion:(void (^)())completion;
 
 @end
 
@@ -37,7 +42,7 @@
 
 @required
 - (void)didSwipeCell:(LTableViewCell *)cell;
-- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell;
+- (void)didPressDeleteCell:(LTableViewCell *)cell;
 - (void)didTapCell:(LTableViewCell *)cell;
 
 @end

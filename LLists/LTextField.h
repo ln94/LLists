@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
+#import "LAddView.h"
 
-@interface LTextField : UITextField
+@interface LTextField : UITextField <LTextViewProtocol, LViewTransitionProtocol>
 
 @end

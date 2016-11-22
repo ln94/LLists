@@ -69,7 +69,7 @@
     }
 }
 
-- (void)deleteList:(List *)list completion:(void (^)(BOOL finished))completion  {
+- (void)deleteList:(List *)list {
     [self changeListIndexesFrom:[list.index integerValue]+1 by:-1];
     
     [list destroy];

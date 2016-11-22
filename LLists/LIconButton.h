@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
 
 typedef NS_ENUM(NSInteger, LIcon) {
     LIconPlus = 0,
@@ -16,15 +17,8 @@ typedef NS_ENUM(NSInteger, LIcon) {
     LIconCross
 };
 
-typedef NS_ENUM(NSInteger, LMoveDirection) {
-    LMoveDirectionLeft = 0,
-    LMoveDirectionRight
-};
-
-@interface LIconButton : UIButton
+@interface LIconButton : UIButton <LViewTransitionProtocol>
 
 @property (nonatomic) LIcon icon;
-
-- (void)moveIcon:(LMoveDirection)direction by:(CGFloat)by;
 
 @end

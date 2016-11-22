@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, LScrollDirection) {
 
 @property (nonatomic, readonly) BOOL isValid;
 
-- (instancetype)initWithScrollingTableView:(UITableView *)tableView andMaxTouchOffset:(CGFloat)offset;
+- (instancetype)initWithTableView:(UITableView *)tableView andMaxTouchOffset:(CGFloat)offset;
 
 - (void)startForScrollDirection:(LScrollDirection)direction touchOffset:(CGFloat)offset;
 - (void)changeTimeIntervalForTouchOffset:(CGFloat)offset;

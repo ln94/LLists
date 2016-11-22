@@ -24,7 +24,7 @@ static const CGFloat scrollOffset = 10;
 
 @implementation LScrollTimer
 
-- (instancetype)initWithScrollingTableView:(UITableView *)tableView andMaxTouchOffset:(CGFloat)offset {
+- (instancetype)initWithTableView:(UITableView *)tableView andMaxTouchOffset:(CGFloat)offset {
     self = [super init];
     if (!self) return nil;
     

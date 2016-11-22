@@ -10,11 +10,15 @@
 
 @implementation LShadowView
 
+@synthesize transitionType = _transitionType;
+@synthesize transitionDuration = _transitionDuration;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
     self.backgroundColor = C_SHADOW;
+    self.hidden = YES;
     
     // GR
     UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeUp)];
@@ -28,13 +32,11 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap)];
     [self addGestureRecognizer:tap];
     
+    // Transition
+    self.transitionType = LViewTransitionTypeFade;
+    self.transitionDuration = kAnimationDurationSmall;
+    
     return self;
-}
-
-- (void)setHidden:(BOOL)hidden {
-    [UIView transitionWithView:self duration:kAnimationDurationMed options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [super setHidden:hidden];
-    } completion:nil];
 }
 
 - (void)didSwipeUp {

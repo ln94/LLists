@@ -54,8 +54,8 @@
     self.transitioningDelegate = self.transition;
     
     // Header
-    self.header = [[LHeaderView alloc] initInSuperview:self.view edge:UIViewEdgeTop length:kHeaderViewHeight];
-    [self.header.addButton addTarget:self action:@selector(showAddView)];
+    self.header = [[LHeaderView alloc] initInSuperview:self.view];
+    [self.header.addButton addTarget:self action:@selector(animateShowingAddView) forControlEvents:UIControlEventTouchUpInside];
     
     // Table View
     self.tableView = [[UITableView alloc] initFullInSuperview:self.view insets:inset_top(self.header.bottom)];
@@ -69,35 +69,51 @@
     self.emptyView = [[LEmptyView alloc] initInTableView:self.tableView forType:self.type];
     
     // Shadow View
-    self.shadowView = [[LShadowView alloc] initFullInSuperview:self.tableView];
+    self.shadowView = [[LShadowView alloc] initFullInSuperview:self.view insets:inset_top(self.tableView.top)];
     self.shadowView.delegate = self;
     
     // Add View
     self.addView = [[LAddView alloc] initInSuperview:self.view forType:LTableTypeList];
+    [self.addView.addButton addTarget:self action:@selector(animateAddingObject)];
     
     // Delete Alert
     self.deleteAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         // Hide swiped cell
-        self.swipedCell.swiped = NO;
+        [self.swipedCell setSwiped:NO animated:YES];
     }];
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [self animateDeleteObject];
+        [self animateDeletingObject];
     }];
     [self.deleteAlert addAction:cancelAction];
     [self.deleteAlert addAction:deleteAction];
     
     // GR
-    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress:)];
+    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPress)];
     self.longPress.minimumPressDuration = 0.2;
     self.longPress.allowableMovement = 1000;
     [self.tableView addGestureRecognizer:self.longPress];
     
     // Variables
-    deletingInProgress = NO;
-    cellMovingInProgress = NO;
+    animationInProgress = NO;
     
     [self.view bringSubviewToFront:self.header];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self updateViews];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (!self.emptyView.hidden) {
+        run_delayed(0.25, ^{
+            [self animateShowingAddView];
+        });
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -107,152 +123,169 @@
     [self.tableView endEditing:YES];
     
     // Hide swiped view
-    self.swipedCell.swiped = NO;
+    [self.swipedCell setSwiped:NO animated:YES];
     
     // Open Add List view if scrolled at the top
-    if (!scrollView.isDecelerating && scrollView.contentOffset.y < -kPaddingSmall && !self.header.addButton.hidden) {
-        [self showAddView];
+    if (!scrollView.isDecelerating && scrollView.contentOffset.y < -kPaddingSmall && !self.header.addButton.hidden && !animationInProgress) {
+        [self animateShowingAddView];
     }
 }
 
-#pragma mark - Add Object
+#pragma mark - Show / Hide Add View
 
-- (void)showAddView {
-    // Hide swiped cell and Add Button, show Shadow View
-    self.swipedCell.swiped = NO;
-    self.header.addButton.hidden = YES;
-    self.shadowView.hidden = NO;
-    
-    [self.addView setState:LAddViewStateShow completion:^{
+- (void)animateShowingAddView {
+    if (!animationInProgress) {
+        animationInProgress = YES;
         
-        // Disable Table View scrolling
-        [UIView animateWithDuration:kAnimationDurationSmall animations:^{
-            self.tableView.scrollEnabled = NO;
+        // Hide Swiped cell and Add Button
+        [self.swipedCell setSwiped:NO animated:YES];
+        [self.header.addButton setHidden:YES animated:YES];
+        
+        // Show Shadow View and Add View
+        [self.shadowView setHidden:NO animated:YES];
+        [self.addView animateShowing:^{
+            
+            // Smoothly disable Table View scrolling
+            [UIView animateWithDuration:kAnimationDurationMed animations:^{
+                self.tableView.scrollEnabled = NO;
+            }];
+            
+            animationInProgress = NO;
         }];
-    }];
+    }
 }
 
-- (void)hideAddView {
-    // Show Add button and hide Shadow View
-    self.header.addButton.hidden = NO;
-    self.shadowView.hidden = YES;
-    
-    [self.addView setState:LAddViewStateHide completion:^{
+- (void)animateHidingAddView {
+    if (!animationInProgress) {
+        animationInProgress = YES;
         
-        // Enable Table View scrolling
-        self.tableView.scrollEnabled = YES;
-    }];
-}
-
-- (void)animateAddObject {
-    NSInteger row = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
-    
-    // Save new object
-    [self addObject];
-    
-    // Hide Shadow View and show Add Button
-    self.shadowView.hidden = YES;
-    self.header.addButton.hidden = NO;
-    
-    // Animate Add View
-    [self.addView setState:LAddViewStateAdd completion:nil];
-    
-    // Animate Table View
-    [UIView animateWithDuration:kAnimationDurationMed animations:^{
-        // Move Table View cells down
-        CGFloat offset = self.tableView.contentOffset.y - [self.tableView.visibleCells firstObject].top;
-        for (LTableViewCell *cell in self.tableView.visibleCells) {
-            cell.top += offset + kAllListsCellHeight;
-        }
+        // Show Add Button
+        [self.header.addButton setHidden:NO animated:YES];
         
-    } completion:^(BOOL finished) {
-        [self.tableView reloadData];
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        self.tableView.scrollEnabled = YES;
-        [self.addView reset];
-    }];
+        // Hide Shadow View and Add View
+        [self.shadowView setHidden:YES animated:YES];
+        [self.addView animateHiding:^{
+            
+            // Enable Table View scrolling
+            self.tableView.scrollEnabled = YES;
+            
+            animationInProgress = NO;
+        }];
+    }
 }
 
+#pragma mark - Add / Delete Object
 
-#pragma mark - Delete Object
-
-- (void)didPressDeleteButtonForCell:(LTableViewCell *)cell {
-    [self presentViewController:self.deleteAlert animated:YES completion:nil];
-}
-
-- (void)animateDeleteObject {
-    deletingInProgress = YES;
-    
-    NSInteger row = [self.tableView indexPathForCell:self.swipedCell].row;
-    CGFloat offset = self.swipedCell.height;
-    
-    // Hide swiped cell
-    self.swipedCell.swiped = NO;
-    
-    // Delete object
-    [self deleteObject];
-    
-    // Animate Table View
-    [UIView animateWithDuration:kAnimationDurationMed delay:kAnimationDurationMed options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+- (void)animateAddingObject {
+    if (self.addView.textView.text.isEmpty) {
+        [self animateHidingAddView];
+    }
+    else if (!animationInProgress) {
+        animationInProgress = YES;
         
-        // Move Table View cells up
-        for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
-            if (indexPath.row > row) {
-                LTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                cell.top -= offset;
+        // Save new object
+        [self addObject];
+        
+        // Animate Add View
+        [self.addView animateAdding:nil];
+        
+        // Hide Shadow View
+        [self.shadowView setHidden:YES animated:YES];
+        
+        // Show Add Button
+        [self.header.addButton setHidden:NO animated:YES];
+        
+        // Move all visible Table View cells down
+        NSInteger row = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
+        [UIView animateWithDuration:kAnimationDurationMed animations:^{
+            CGFloat offset = self.tableView.contentOffset.y - [self.tableView.visibleCells firstObject].top;
+            for (LTableViewCell *cell in self.tableView.visibleCells) {
+                cell.top += offset + kAllListsCellHeight;
             }
             
-            if (indexPath == [self.tableView.indexPathsForVisibleRows lastObject]) {
-                LTableViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0]];
-                if (nextCell) {
-                    nextCell.top -= offset;
+        } completion:^(BOOL finished) {
+            
+            // Update Table View
+            [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            self.tableView.scrollEnabled = YES;
+            
+            // Reset Add View
+            [self.addView reset];
+            
+            animationInProgress = NO;
+        }];
+    }
+}
+
+- (void)animateDeletingObject {
+    if (!animationInProgress) {
+        animationInProgress = YES;
+        
+        // Delete object
+        [self deleteObject];
+        
+        // Hide Swiped Cell
+        [self.swipedCell setSwiped:NO animated:YES completion:^{
+            [self.swipedCell setHidden:YES animated:YES];
+            
+            // Move Table View cells up
+            NSInteger row = [self.tableView indexPathForCell:self.swipedCell].row;
+            CGFloat offset = self.swipedCell.height;
+            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
+                
+                for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows) {
+                    if (indexPath.row > row) {
+                        LTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                        cell.top -= offset;
+                    }
+                    
+                    if (indexPath == [self.tableView.indexPathsForVisibleRows lastObject]) {
+                        LTableViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0]];
+                        if (nextCell) {
+                            nextCell.top -= offset;
+                        }
+                    }
                 }
-            }
-        }
-        
-    } completion:^(BOOL finished) {
-        
-        [self.tableView reloadData];
-        self.swipedCell = nil;
-        
-        deletingInProgress = NO;
-    }];
-    
+                
+            } completion:^(BOOL finished) {
+                [self.tableView reloadData];
+                self.swipedCell = nil;
+                
+                animationInProgress = NO;
+            }];
+        }];
+    }
 }
 
 #pragma mark - LShadowViewDelegate
 
 - (void)shadowViewDidSwipeUp {
-    [self hideAddView];
+    [self animateHidingAddView];
 }
 
 - (void)shadowViewDidSwipeDown {
-    if (self.addView.isEmpty) {
-        [self hideAddView];
-    }
-    else {
-        [self animateAddObject];
-    }
+    [self animateAddingObject];
 }
 
 - (void)shadowViewDidTap {
-    [self shadowViewDidSwipeDown];
+    [self animateAddingObject];
 }
 
 
-#pragma mark - Swipe
+#pragma mark - LTableCellDelegate
 
 - (void)didSwipeCell:(LTableViewCell *)cell {
 
     if (cell.swiped) {
         // Hide previously swiped cell
-        self.swipedCell.swiped = NO;
+        [self.swipedCell setSwiped:NO animated:YES];
         self.swipedCell = cell;
     }
-    else if (deletingInProgress) {
-        // Hide deleting cell
-        self.swipedCell.hidden = YES;
-    }
+}
+
+- (void)didPressDeleteCell:(LTableViewCell *)cell {
+    [self presentViewController:self.deleteAlert animated:YES completion:nil];
 }
 
 @end

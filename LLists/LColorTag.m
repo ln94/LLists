@@ -10,13 +10,19 @@
 
 @implementation LColorTag
 
+@synthesize transitionType = _transitionType;
+@synthesize transitionDuration = _transitionDuration;
+
 - (instancetype)initWithFrame:(CGRect)frame {
-    
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
     self.alpha = 0.5;
 
+    // Transition
+    self.transitionType = LViewTransitionTypeFlip;
+    self.transitionDuration = kAnimationDurationMed;
+    
     return self;
 }
 

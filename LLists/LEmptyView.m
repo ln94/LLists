@@ -8,13 +8,10 @@
 
 #import "LEmptyView.h"
 
-@interface LEmptyView ()
-
-@property (nonatomic) UILabel *textLabel;
-
-@end
-
 @implementation LEmptyView
+
+@synthesize transitionType = _transitionType;
+@synthesize transitionDuration = _transitionDuration;
 
 - (instancetype)initInTableView:(UITableView *)tableView forType:(LTableType)type {
     self = [super initFullInSuperview:tableView];
@@ -23,25 +20,17 @@
     self.backgroundColor = C_EMPTY_VIEW;
     
     // Label
-    self.textLabel = [[UILabel alloc] initFullInSuperview:self];
-    self.textLabel.font = F_TITLE;
-    self.textLabel.textColor = C_SEPARATOR;
-    self.textLabel.textAlignment = NSTextAlignmentCenter;
-    self.textLabel.text = type == LTableTypeList ? @"Your List of Lists is empty" : @"Your List is empty";
+    UILabel *textLabel = [[UILabel alloc] initFullInSuperview:self];
+    textLabel.font = F_TITLE;
+    textLabel.textColor = C_SEPARATOR;
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.text = type == LTableTypeList ? @"Your List of Lists is empty" : @"Your List is empty";
+    
+    // Transition
+    self.transitionType = LViewTransitionTypeFade;
+    self.transitionDuration = kAnimationDurationMed;
     
     return self;
-}
-
-- (void)setHidden:(BOOL)hidden {
-    if (self.window && self.hidden != hidden) {
-        
-        [UIView transitionWithView:self duration:kAnimationDurationMed options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            self.alpha = hidden ? 0 : 1;
-        } completion:^(BOOL finished) {
-            [super setHidden:hidden];
-        }];
-    }
-    
 }
 
 @end

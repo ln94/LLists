@@ -10,8 +10,6 @@
 #import "LAllListsViewCell.h"
 #import "LAddListView.h"
 #import "LSingleListViewController.h"
-#import "LScrollTimer.h"
-
 
 @interface LAllListsViewController () <NSFetchedResultsControllerDelegate, UITextFieldDelegate, LTableCellDelegate>
 
@@ -45,20 +43,17 @@
     
     // Delete List Alert
     self.deleteAlert.title = @"Delete List";
-    self.deleteAlert.message = @"Are you sure you want to delete list?";
+    self.deleteAlert.message = @"Are you sure you want to delete this list?";
     
     // Scroll Timer
     maxScrollTouchOffset = kAllListsCellHeight / 2;
-    self.scrollTimer = [[LScrollTimer alloc] initWithScrollingTableView:self.tableView andMaxTouchOffset:maxScrollTouchOffset];
+    self.scrollTimer = [[LScrollTimer alloc] initWithTableView:self.tableView andMaxTouchOffset:maxScrollTouchOffset];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    self.emptyView.hidden = self.lists.numberOfObjects;
+- (void)updateViews {
+    [self.emptyView setHidden:self.lists.numberOfObjects animated:YES];
     self.longPress.enabled = self.lists.numberOfObjects;
 }
-
 
 #pragma mark - UITableViewDataSource
 
@@ -82,28 +77,36 @@
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    self.emptyView.hidden = self.lists.numberOfObjects;
-    self.longPress.enabled = self.lists.numberOfObjects;
+    [self updateViews];
 }
 
 
 #pragma mark - Add / Delete List
 
 - (void)addObject {
-    // Save new list
     self.addView.colorTag.color = C_RANDOM;
     NSInteger position = self.tableView.indexPathsForVisibleRows.count ? [self.tableView.indexPathsForVisibleRows firstObject].row : 0;
+    
     [ListsManager saveListWithTitle:self.addView.textField.text
                               color:self.addView.colorTag.color
                          onPosition:position];
 }
 
 - (void)deleteObject {
-    [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list completion:nil];
+    [ListsManager deleteList:((LAllListsViewCell *)self.swipedCell).list];
 }
 
 
 #pragma mark - UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == self.addView.textField) {
+        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.returnKeyType = newText.isEmpty ? UIReturnKeyDefault : UIReturnKeyDone;
+        [textField reloadInputViews];
+    }
+    return YES;
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 
@@ -113,7 +116,7 @@
         }
         else {
             // Add List
-            [self animateAddObject];
+            [self animateAddingObject];
         }
     }
     else {
@@ -128,11 +131,11 @@
 
 - (void)didTapCell:(LTableViewCell *)cell {
     if (cell.swiped) {
-        cell.swiped = NO;
+        [cell setSwiped:NO animated:YES];
     }
     else {
         // Hide swiped cell
-        self.swipedCell.swiped = NO;
+        [self.swipedCell setSwiped:NO animated:YES];
         
         [UIView transitionWithView:cell.contentView duration:kAnimationDurationTiny options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             cell.contentView.backgroundColor = C_SELECTED;
@@ -156,12 +159,12 @@
             
         case UIGestureRecognizerStateBegan: {
             
-            cellMovingInProgress = YES;
+            animationInProgress = YES;
             
             self.view.userInteractionEnabled = NO;
             
             // Hide swiped cell
-            self.swipedCell.swiped = NO;
+            [self.swipedCell setSwiped:NO animated:YES];
             
             // Update moving cell
             NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[longPress locationInView:self.tableView]];
@@ -172,7 +175,7 @@
                 cell.moving = YES;
                 
             } completion:^(BOOL finished) {
-                cellMovingInProgress = NO;
+                animationInProgress = NO;
             }];
         }
             break;
@@ -223,7 +226,7 @@
                 }
                 
                 // Move cell
-                if (!cellMovingInProgress && visibleIndex > 0) {
+                if (!animationInProgress && visibleIndex > 0) {
                     
                     LOG(@"--- Move to previous");
                     // Compare to previous visible cell
@@ -232,20 +235,20 @@
                     if (y <= prevCell.centerY) {
                         
                         // Swap cells
-                        cellMovingInProgress = YES;
+                        animationInProgress = YES;
                         
                         cell.list.indexValue -= 1;
                         prevCell.list.indexValue += 1;
                         
                         [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] toIndexPath:[NSIndexPath indexPathForRow:row-1 inSection:0]];
                         
-                        cellMovingInProgress = NO;
+                        animationInProgress = NO;
                         
                         return;
                     }
                 }
                 
-                if (!cellMovingInProgress && visibleIndex < self.tableView.visibleCells.count - 1) {
+                if (!animationInProgress && visibleIndex < self.tableView.visibleCells.count - 1) {
                     
                     // Compare to next visible cell
                     LAllListsViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row+1 inSection:0]];
@@ -253,14 +256,14 @@
                     if (y >= nextCell.centerY) {
                         
                         // Swap cells
-                        cellMovingInProgress = YES;
+                        animationInProgress = YES;
                         
                         cell.list.indexValue += 1;
                         nextCell.list.indexValue -= 1;
                         
                         [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] toIndexPath:[NSIndexPath indexPathForRow:row+1 inSection:0]];
                         
-                        cellMovingInProgress = NO;
+                        animationInProgress = NO;
                         return;
                     }
                 }

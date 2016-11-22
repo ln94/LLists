@@ -55,11 +55,9 @@
     
     // Move
     self.movingTopSeparator = [[UIView alloc] initInSuperview:self.contentView edge:UIViewEdgeTop length:kMovingCellSeparatorHeight];
-//    self.movingTopSeparator.backgroundColor = C_SEPARATOR;
     self.movingTopSeparator.backgroundColor = C_MOVING_SEPARATOR;
     
     self.movingBottomSeparator = [[UIView alloc] initInSuperview:self.contentView edge:UIViewEdgeBottom length:kMovingCellSeparatorHeight];
-//    self.movingBottomSeparator.backgroundColor = C_SEPARATOR;
     self.movingBottomSeparator.backgroundColor = C_MOVING_SEPARATOR;
     
     self.moving = NO;
@@ -71,10 +69,14 @@
     self.swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeRight)];
     self.swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
     
-    _swiped = NO;
+    self.swiped = NO;
     
     // Tap
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    
+    // Transition
+    self.transitionType = LViewTransitionTypeFade;
+    self.transitionDuration = kAnimationDurationSmall;
     
     return self;
 }
@@ -87,11 +89,6 @@
     [mainView addGestureRecognizer:self.tap];
 }
 
-- (void)setHidden:(BOOL)hidden {
-    [UIView transitionWithView:self duration:kAnimationDurationSmall options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        self.alpha = 0;
-    } completion:nil];
-}
 
 #pragma mark - Move
 
@@ -109,42 +106,68 @@
     }
 }
 
+
 #pragma mark - Swipe
 
 - (void)setSwiped:(BOOL)swiped {
-    
-    if (self.mainView && self.rightSwipeView && _swiped != swiped) {
-        
-        _swiped = swiped;
-        
-        if (swiped) {
-            // Reveal Right Swipe View
-            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
-                self.mainView.left = -self.rightSwipeView.width;
-                self.rightSwipeView.right = self.contentView.width;
-            }];
+    [self setSwiped:swiped animated:NO];
+}
+
+- (void)setSwiped:(BOOL)swiped animated:(BOOL)animated {
+    [self setSwiped:swiped animated:animated completion:nil];
+}
+
+- (void)setSwiped:(BOOL)swiped animated:(BOOL)animated completion:(void (^)())completion {
+    if (_swiped != swiped) {
+        if (self.mainView && self.rightSwipeView) {
+            
+            _swiped = swiped;
+            
+            if (animated) {
+                if (swiped) {
+                    // Show Right Swipe View
+                    [UIView animateWithDuration:kAnimationDurationSmall animations:^{
+                        self.mainView.left = -self.rightSwipeView.width;
+                        self.rightSwipeView.right = self.contentView.width;
+                    } completion:^(BOOL finished) {
+                        if (completion) {
+                            completion();
+                        }
+                    }];
+                }
+                else {
+                    // Hide Right Swipe View
+                    [UIView animateWithDuration:kAnimationDurationSmall animations:^{
+                        self.mainView.left = 0;
+                        self.rightSwipeView.left = self.contentView.width;
+                    } completion:^(BOOL finished) {
+                        if (completion) {
+                            completion();
+                        }
+                    }];
+                }
+            }
         }
-        else if (!swiped) {
-            // Hide Right Swipe View
-            [UIView animateWithDuration:kAnimationDurationSmall animations:^{
-                self.mainView.left = 0;
-                self.rightSwipeView.left = self.contentView.width;
-            }];
-        }
-        
-        if (self.delegate) {
-            [self.delegate didSwipeCell:self];
+        else {
+            _swiped = NO;
         }
     }
 }
 
 - (void)didSwipeLeft {
-    self.swiped = YES;
+    [self setSwiped:YES animated:YES];
+    if (self.delegate) {
+        [self.delegate didSwipeCell:self];
+    }
 }
 
 - (void)didSwipeRight {
-    self.swiped = NO;
+    [self setSwiped:NO animated:YES];
+    if (self.delegate) {
+        [self.delegate didSwipeCell:self];
+    }
 }
+
 
 #pragma mark - Tap
 
@@ -161,16 +184,6 @@
 #pragma mark - Placeholder
 
 @implementation LPlaceholderTableViewCell
-
-//- (instancetype)init {
-//    return [self initForType:-1];
-//}
-//
-//- (id)initForType:(LTableType)type {
-//    Class class = [self classForType:type];
-//    LTableViewController *instance = [(LTableViewController *)[class alloc] initForType:type];
-//    return instance;
-//}
 
 + (Class)classForType:(LTableType)type {
     switch (type) {

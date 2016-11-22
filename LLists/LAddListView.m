@@ -15,6 +15,10 @@
 @synthesize separator = _separator;
 
 - (id)initInSuperview:(UIView *)superview forType:(LTableType)type {
+    leftViewLength = kAllListsCellLeftViewWidth;
+    separatorLength = kAllListsSeparatorHeight;
+    height = kAllListsCellHeight;
+    
     self = [super initInSuperview:superview forType:type];
     if (!self) return nil;
     
@@ -23,15 +27,9 @@
     self.textView = self.textField;
     
     // Color Tag
-    self.colorTag.backgroundColor = C_ICON;
-    self.colorTag.hidden = YES;
     self.leftView = self.colorTag;
     
     return self;
-}
-
-- (void)reset {
-    self.textField.text = @"";
 }
 
 @end

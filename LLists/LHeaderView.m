@@ -14,8 +14,8 @@
 
 @implementation LHeaderView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (id)initInSuperview:(UIView *)superview {
+    self = [super initInSuperview:superview edge:UIViewEdgeTop length:kHeaderViewHeight];
     if (!self) return nil;
     
     self.backgroundColor = C_WHITE;

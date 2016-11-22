@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
 
-@interface LEmptyView : UIView
+@interface LEmptyView : UIView <LViewTransitionProtocol>
 
 - (instancetype)initInTableView:(UITableView *)tableView forType:(LTableType)type;
 

@@ -13,13 +13,125 @@
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
 
 
+#pragma mark - Class
+
+@implementation LAddView
+
++ (id)alloc {
+    if ([self class] == [LAddView class]) {
+        LPlaceholderAddView *placeholder = [LPlaceholderAddView alloc];
+        return placeholder;
+    }
+    else {
+        return [super alloc];
+    }
+}
+
+- (id)initInSuperview:(UIView *)superview forType:(LTableType)type {
+    self = [super initInSuperview:superview edge:UIViewEdgeTop length:height insets:inset_top(kHeaderViewHeight - height)];
+    if (!self) return nil;
+    
+    self.backgroundColor = C_WHITE;
+    self.hidden = YES;
+    
+    // Add Button
+    self.addButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:leftViewLength insets:inset_bottom(separatorLength)];
+    self.addButton.icon = LIconPlus;
+    self.addButton.hidden = YES;
+
+    return self;
+}
+
+- (void)reset {
+    self.hidden = YES;
+    self.height = height;
+    self.bottom = kHeaderViewHeight;
+    
+    self.addButton.hidden = YES;
+    self.leftView.hidden = YES;
+    self.textView.text = @"";
+    self.textView.hidden = YES;
+}
+
+
+#pragma mark - Setters
+
+- (void)setLeftView:(UIView *)leftView {
+    _leftView = leftView;
+    leftView.hidden = YES;
+}
+
+- (void)setTextView:(UIView<LTextViewProtocol,UITextInputTraits,LViewTransitionProtocol> *)textView {
+    _textView = textView;
+    textView.returnKeyType = UIReturnKeyDefault;
+    textView.hidden = YES;
+}
+
+
+#pragma mark - Animation
+
+- (void)animateShowing:(void (^)(void))completion {
+    self.hidden = NO;
+    
+    // Show Add View
+    [UIView animateWithDuration:kAnimationDurationMed animations:^{
+        self.top = kHeaderViewHeight;
+        
+    } completion:^(BOOL finished) {
+        //Show keyboard
+        [self.textView becomeFirstResponder];
+        
+        if (completion) {
+            completion();
+        }
+    }];
+    
+    // Show Add Button and Text View
+    [self.addButton setHidden:NO animated:YES];
+    [self.textView setHidden:NO animated:YES];
+}
+
+- (void)animateHiding:(void (^)(void))completion {
+    // Hide keyboard, Text View and Add Button
+    [self.textView resignFirstResponder];
+    [self.textView setHidden:YES animated:YES];
+    [self.addButton setHidden:YES animated:YES completion:^{
+        
+        // Hide Add View
+        [UIView animateWithDuration:kAnimationDurationSmall animations:^{
+            self.bottom = kHeaderViewHeight;
+            
+        } completion:^(BOOL finished) {
+            self.hidden = YES;
+            
+            if (completion) {
+                completion();
+            }
+        }];
+
+    }];
+}
+
+- (void)animateAdding:(void (^)(void))completion {
+    // Hide keyboard
+    [self.textView resignFirstResponder];
+    
+    // Transition from Add Button to Left View
+    [self.addButton setHidden:YES animated:YES];
+    [self.leftView setHidden:NO animated:YES];
+    
+    if (completion) {
+        completion();
+    }
+}
+
+@end
+
+
+
 #pragma mark - Placeholder
 
 @implementation LPlaceholderAddView
-
-- (instancetype)init {
-    return [self initInSuperview:nil forType:-1];
-}
 
 - (id)initInSuperview:(UIView *)superview forType:(LTableType)type {
     Class class = [self classForType:type];
@@ -36,177 +148,7 @@
             return [LAddItemView class];
             
         default:
-            return [NSObject class];
-    }
-}
-
-@end
-
-
-
-
-@interface LAddView ()
-
-@property (nonatomic, strong) LIconButton *addButton;
-
-@end
-
-@implementation LAddView {
-    BOOL animationInProgress;
-}
-
-+ (id)alloc {
-    if ([self class] == [LAddView class]) {
-        LPlaceholderAddView *placeholder = [LPlaceholderAddView alloc];
-        return placeholder;
-    }
-    else {
-        return [super alloc];
-    }
-}
-
-- (id)initInSuperview:(UIView *)superview forType:(LTableType)type {
-    CGFloat leftViewLength = type == LTableTypeList ? kAllListsCellLeftViewWidth : kSingleListCellLeftViewWidth;
-    CGFloat separatorLength = type == LTableTypeList ? kAllListsSeparatorHeight : kSingleListSeparatorHeight;
-    CGFloat height = type == LTableTypeList ? kAllListsCellHeight : kSingleListCellMinHeight;
-    
-    self = [super initInSuperview:superview edge:UIViewEdgeTop length:height insets:inset_top(kHeaderViewHeight - height)];
-    if (!self) return nil;
-    
-    self.backgroundColor = C_WHITE;
-    
-    // Add Button
-    self.addButton = [[LIconButton alloc] initInSuperview:self edge:UIViewEdgeLeft length:leftViewLength insets:inset_bottom(separatorLength)];
-    self.addButton.icon = LIconPlus;
-    [self.addButton addTarget:self action:@selector(add:)];
-    self.addButton.hidden = YES;
-    
-    self.hidden = YES;
-    
-    animationInProgress = NO;
-
-    return self;
-}
-
-- (BOOL)isEmpty {
-    if ([self.textView isKindOfClass:[UITextField class]]) {
-        return ((UITextField *)self.textView).text.isEmpty;
-    }
-    else if ([self.textView isKindOfClass:[UITextView class]]) {
-        return ((UITextView *)self.textView).text.isEmpty;
-    }
-    else return YES;
-}
-
-#pragma mark - Setters
-
-- (void)setLeftView:(UIView *)leftView {
-    _leftView = leftView;
-    leftView.hidden = YES;
-}
-
-- (void)setTextView:(UIView *)textView {
-    _textView = textView;
-    textView.hidden = YES;
-}
-
-#pragma mark - Change State
-
-- (void)setState:(LAddViewState)state completion:(void (^)(void))completion {
-    if (!animationInProgress) {
-        animationInProgress = YES;
-        
-        switch (state) {
-                
-            case LAddViewStateHide:
-                [self hide:completion];
-                break;
-                
-            case LAddViewStateShow:
-                [self show:completion];
-                break;
-                
-            case LAddViewStateAdd:
-                [self add:completion];
-                break;
-                
-            default:
-                break;
-        }
-    }
-}
-
-- (void)hide:(void (^)(void))completion {
-    // Hide keyboard, Add Button and Text View
-    [self.textView resignFirstResponder];
-    self.addButton.hidden = YES;
-    
-    run_delayed(kAnimationDurationSmall, ^{
-        // Pull up
-        [UIView animateWithDuration:kAnimationDurationSmall animations:^{
-            self.bottom = kHeaderViewHeight;
-            self.textView.hidden = YES;
-            
-        } completion:^(BOOL finished) {
-            self.hidden = YES;
-            
-            animationInProgress = NO;
-            
-            if (completion) {
-                completion();
-            }
-        }];
-    });
-}
-
-- (void)show:(void (^)(void))completion {
-    self.hidden = NO;
-    
-    // Drop down
-    [UIView animateWithDuration:kAnimationDurationSmall animations:^{
-        self.top = kHeaderViewHeight;
-        self.textView.hidden = NO;
-        
-    } completion:^(BOOL finished) {
-        [self.textView becomeFirstResponder];
-        
-        animationInProgress = NO;
-        
-        if (completion) {
-            completion();
-        }
-    }];
-    
-    // Show add button
-    run_delayed(kAnimationDurationTiny, ^{
-        self.addButton.hidden = NO;
-    });
-}
-
-- (void)add:(void (^)(void))completion {
-    if (!self.isEmpty) {
-        // Hide keyboard
-        [self.textView resignFirstResponder];
-        
-        // Transition from Add Button to Color Tag
-        self.addButton.hidden = YES;
-        
-        [UIView transitionWithView:self.leftView duration:kAnimationDurationMed options:kShowingAnimation animations:^{
-            self.leftView.hidden = NO;
-            self.textView.hidden = YES;
-            
-        } completion:^(BOOL finished) {
-            self.bottom = kHeaderViewHeight;
-            self.leftView.hidden = YES;
-            self.addButton.hidden = YES;
-            self.hidden = YES;
-            
-            animationInProgress = NO;
-            
-            if (completion) {
-                completion();
-            }
-        }];
+            return [LAddView class];
     }
 }
 

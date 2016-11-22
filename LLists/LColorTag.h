@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
 
-@interface LColorTag : UIButton
-
+@interface LColorTag : UIView <LViewTransitionProtocol>
 @property (nonatomic) UIColor *color;
 
 @end

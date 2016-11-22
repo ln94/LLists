@@ -8,15 +8,17 @@
 
 #import "LIconButton.h"
 
-
 @interface LIconButton ()
 
-@property (nonatomic) UIButton *iconView;
+@property (nonatomic) UIImageView *iconView;
 
 @end
 
 
 @implementation LIconButton
+
+@synthesize transitionType = _transitionType;
+@synthesize transitionDuration = _transitionDuration;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -25,8 +27,11 @@
     self.backgroundColor = C_CLEAR;
     
     // Icon View
-    self.iconView = [[UIButton alloc] initFullInSuperview:self];
-    self.iconView.userInteractionEnabled = NO;
+    self.iconView = [[UIImageView alloc] initFullInSuperview:self];
+    
+    // Transition
+    self.transitionType = LViewTransitionTypeFlip;
+    self.transitionDuration = kAnimationDurationLong;
 
     return self;
 }
@@ -58,12 +63,6 @@
         default:
             break;
     }
-}
-
-- (void)setHidden:(BOOL)hidden {
-    [UIView transitionWithView:self duration:kAnimationDurationMed options:(hidden ? kHidingAnimation : kShowingAnimation) animations:^{
-        [super setHidden:hidden];
-    } completion:nil];
 }
 
 #pragma mark - Draw

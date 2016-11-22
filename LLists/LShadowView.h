@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LViewTransitionProtocol.h"
 
 @protocol LShadowViewDelegate;
 
 
-@interface LShadowView : UIView
+@interface LShadowView : UIView <LViewTransitionProtocol>
 
 @property (nonatomic, strong) id<LShadowViewDelegate> delegate;
 

@@ -68,7 +68,7 @@ static NSString *const reuseIdentifier = @"allListsViewCell";
 
 - (void)didPressDeleteButton {
     if (self.delegate) {
-        [self.delegate didPressDeleteButtonForCell:self];
+        [self.delegate didPressDeleteCell:self];
     }
 }
 

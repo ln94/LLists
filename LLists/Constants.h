@@ -70,6 +70,7 @@ static const CGFloat kMovingCellLeftOffset = 21;
 static const CGFloat kAnimationDurationTiny = 0.2;
 static const CGFloat kAnimationDurationSmall = 0.3;
 static const CGFloat kAnimationDurationMed = 0.4;
+static const CGFloat kAnimationDurationLong = 0.6;
 
 
 static const UIViewAnimationOptions kShowingAnimation = UIViewAnimationOptionTransitionFlipFromLeft;

@@ -15,8 +15,7 @@
 #import "LScrollTimer.h"
 
 @interface LTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    BOOL deletingInProgress;
-    BOOL cellMovingInProgress;
+    BOOL animationInProgress;
     CGFloat maxScrollTouchOffset;
 }
 
@@ -26,6 +25,7 @@
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) LEmptyView *emptyView;
 @property (nonatomic) LShadowView *shadowView;
+
 @property (nonatomic) LAddView *addView;
 @property (nonatomic) UIAlertController *deleteAlert;
 
@@ -36,18 +36,17 @@
 
 - (id)initForType:(LTableType)type;
 
-- (void)didLongPress:(UILongPressGestureRecognizer *)longPress;
+- (void)updateViews;
 
-- (void)showAddView;
-- (void)hideAddView;
+- (void)animateShowingAddView;
+- (void)animateHidingAddView;
+- (void)animateAddingObject;
+- (void)animateDeletingObject;
 
 - (void)addObject;
-- (void)animateAddObject;
-
 - (void)deleteObject;
-- (void)animateDeleteObject;
 
-//@property (nonatomic) UIAlertController *deleteListAlert;
+- (void)didLongPress;
 
 @end
 
