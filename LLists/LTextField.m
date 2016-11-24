@@ -23,7 +23,6 @@
     self.autocorrectionType = UITextAutocorrectionTypeNo;
     self.spellCheckingType = UITextSpellCheckingTypeYes;
     self.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.returnKeyType;
     
     // Transition
     self.transitionType = LViewTransitionTypeFade;

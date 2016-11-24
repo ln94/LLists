@@ -152,10 +152,10 @@
 
 #pragma mark - Long Press
 
-- (void)didLongPress:(UILongPressGestureRecognizer *)longPress {
+- (void)didLongPress {
     // Move cell within the table
     
-    switch (longPress.state) {
+    switch (self.longPress.state) {
             
         case UIGestureRecognizerStateBegan: {
             
@@ -167,7 +167,7 @@
             [self.swipedCell setSwiped:NO animated:YES];
             
             // Update moving cell
-            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[longPress locationInView:self.tableView]];
+            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[self.longPress locationInView:self.tableView]];
             LAllListsViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
             self.movingList = cell.list;
             
@@ -183,7 +183,7 @@
         case UIGestureRecognizerStateChanged: {
             
             // Get touch position
-            CGFloat y = [longPress locationInView:self.tableView].y;
+            CGFloat y = [self.longPress locationInView:self.tableView].y;
             
             // Get moving cell position
             LAllListsViewCell *cell = [self.tableView cellForRowAtIndexPath:[self.lists indexPathForObject:self.movingList]];
@@ -270,7 +270,7 @@
             }
             else {
                 // Invalid cell
-                longPress.enabled = NO;
+                self.longPress.enabled = NO;
             }
             
         }
@@ -299,8 +299,8 @@
             }];
             
             // Enable GR
-            if (!longPress.isEnabled) {
-                longPress.enabled = YES;
+            if (!self.longPress.isEnabled) {
+                self.longPress.enabled = YES;
             }
         }
             break;

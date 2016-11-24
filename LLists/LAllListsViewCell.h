@@ -7,10 +7,13 @@
 //
 
 #import "LTableViewCell.h"
+#import "LListViewProtocol.h"
 
 @interface LAllListsViewCell : LTableViewCell
 
 @property (nonatomic) List *list;
+
+@property (nonatomic, strong) LSecondClassView<LListViewProtocol> *mainView;
 
 + (NSString *)reuseIdentifier;
 

@@ -53,6 +53,9 @@
     self.backgroundColor = C_CLEAR;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    // Main View
+    self.mainView = [[LSecondClassView alloc] initFullInSuperview:self.contentView];
+    
     // Move
     self.movingTopSeparator = [[UIView alloc] initInSuperview:self.contentView edge:UIViewEdgeTop length:kMovingCellSeparatorHeight];
     self.movingTopSeparator.backgroundColor = C_MOVING_SEPARATOR;
@@ -81,13 +84,13 @@
     return self;
 }
 
-- (void)setMainView:(UIView *)mainView {
-    _mainView = mainView;
-    
-    [mainView addGestureRecognizer:self.swipeLeft];
-    [mainView addGestureRecognizer:self.swipeRight];
-    [mainView addGestureRecognizer:self.tap];
-}
+//- (void)setMainView:(UIView *)mainView {
+//    _mainView = mainView;
+//    
+//    [mainView addGestureRecognizer:self.swipeLeft];
+//    [mainView addGestureRecognizer:self.swipeRight];
+//    [mainView addGestureRecognizer:self.tap];
+//}
 
 
 #pragma mark - Move

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LSecondClassView.h"
 #import "LViewTransitionProtocol.h"
 
 @protocol LTableCellDelegate;
@@ -14,7 +15,7 @@
 
 @interface LTableViewCell : UITableViewCell <LViewTransitionProtocol>
 
-@property (nonatomic, strong) UIView *mainView;
+@property (nonatomic, strong) LSecondClassView *mainView;
 @property (nonatomic, strong) UIView *rightSwipeView;
 
 @property (nonatomic) BOOL swiped;
